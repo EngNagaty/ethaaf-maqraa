@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>المقرأة — المعلم</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap">
+<style>
+:root{--g:#F4F2EC;--exD:#3A3D2A;--exO:#4F5238;--exBr:#8D7652;--exOr:#F0901E;--ol:#555942;--olK:#313425;--ink:#22241A;--ink2:#5D5F52;--ink3:#7A796E;--line:#E8E3D3;--beige:#F5F0E5;--tag:#EADFC4;--lime:#ECF6BC;--ok:#E7F5EC;--okT:#1E6B39;--err:#FBEDE8;--errT:#A8321F;--warn:#FEF4E0;--warnT:#8A4B12;--info:#EAEDFF;--infoT:#3B4BC4;--gray:#EEEEE9;--grayT:#4A4A43;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:#E7E5DD;color:var(--ink);font-family:Cairo,Tahoma,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer}
+svg.i{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.top{background:#2F3224;color:#fff;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top h1{margin:0;font-size:16px}.top p{margin:0;font-size:12px;color:#CBCDB8}
+.wrap{max-width:1150px;margin:0 auto;display:grid;grid-template-columns:280px 1fr;gap:28px;padding-block:22px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.panel{background:#FBFAF6;border:1px solid var(--line);border-radius:16px;padding:10px;align-self:start;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto}
+.panel h2{font-size:11.5px;color:var(--ink3);margin:12px 8px 4px}
+.sc{display:block;width:100%;text-align:start;padding:7px 9px;border-radius:9px;font-size:13px;color:var(--ink2);line-height:1.5}
+.sc:hover{background:#EFEDE4}.sc[aria-current=true]{background:var(--ol);color:#fff}
+.stage{display:flex;flex-direction:column;align-items:center;gap:12px;min-width:0}
+.cap{max-width:440px;text-align:center;font-size:13px;color:var(--ink2);line-height:1.7}
+.msel{display:none;width:100%}.msel select{width:100%;height:44px;border-radius:10px;border:1px solid var(--line);padding:0 10px;background:#fff}
+@media (max-width:780px){.wrap{grid-template-columns:1fr}.panel{display:none}.msel{display:block}}
+.phone{box-sizing:content-box;width:390px;max-width:calc(100vw - 52px);height:844px;border:10px solid #1B1C15;border-radius:48px;background:var(--g);position:relative;overflow:hidden;box-shadow:0 30px 60px -30px rgba(40,38,20,.5)}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column}
+.sb{height:44px;flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:0 26px;font-size:15px;font-weight:700;direction:ltr;position:relative;z-index:2;color:#fff}
+.pat{position:absolute;inset:0;width:100%;height:100%;opacity:.1;pointer-events:none}
+.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.col{display:flex;flex-direction:column}
+.hd{background:var(--exD);color:#fff;margin-top:-44px;padding:50px 14px 14px;position:relative;flex-shrink:0;border-radius:0 0 18px 18px;overflow:hidden}
+.hd>*:not(.pat){position:relative}
+.ic{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center;color:#fff;flex-shrink:0;position:relative}
+.ic svg{width:18px;height:18px}
+.bd{position:absolute;top:-4px;left:-6px;background:#C0392B;color:#fff;font-style:normal;font-size:10px;font-weight:700;border-radius:9px;padding:0 5px;line-height:16px}
+.search{margin-top:12px;height:42px;border-radius:21px;background:#fff;color:#9A988C;font-size:13px;display:flex;align-items:center;gap:8px;padding:0 14px}
+.scr{flex:1;overflow-y:auto;padding:12px 14px 24px;display:flex;flex-direction:column;gap:10px;scrollbar-width:none}
+.scr>*{flex-shrink:0}
+.tab{flex-shrink:0;background:var(--exD);display:grid;grid-template-columns:repeat(4,1fr);padding:10px 8px 26px;gap:4px}
+.tab span{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:700;color:#D9DBC8;padding:6px 4px;border-radius:12px}
+.tab span.on{background:var(--beige);color:var(--exD)}
+/* halaqat list */
+.hc{background:#fff;border-radius:16px;box-shadow:0 1px 3px rgba(60,58,40,.12);padding:14px;display:flex;flex-direction:column;gap:10px;text-align:start;width:100%}
+.hc h3{margin:0;font-size:16.5px;font-weight:800}
+.hc .m{font-size:12.5px;color:var(--ink2);display:flex;gap:12px;flex-wrap:wrap}
+.tg{font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--tag);color:#3C382E;white-space:nowrap}
+.tg2{font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;background:#F1F0EB;color:#3B3D33;white-space:nowrap}
+.stt{font-size:11.5px;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.stt:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.s-wait{background:#F1F0EB;color:#55574A}.s-run{background:var(--ok);color:var(--okT)}.s-late{background:var(--err);color:var(--errT)}.s-end{background:#EFEEE8;color:#6A6B60}
+.btn{height:48px;border-radius:12px;background:var(--exO);color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;width:100%}
+.btn[disabled]{background:#E3E2DC;color:#8F8F85;cursor:not-allowed}
+.btn2{height:44px;border-radius:12px;border:1.5px solid var(--exO);color:var(--exO);background:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px;width:100%}
+.btnR{background:#A8321F}
+/* session bar */
+.ses{background:#fff;border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px;box-shadow:0 1px 3px rgba(60,58,40,.12)}
+.ses.run{background:var(--exO);color:#fff}
+.ses .k{font-size:12.5px;color:var(--ink2)}.ses.run .k{color:var(--tag)}
+.ses b.big{font-size:17px}
+.ses .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ses.run .btn{background:#fff;color:var(--exO)}
+.ses.run .btn2{background:transparent;border-color:rgba(255,255,255,.6);color:#fff}
+.timer{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+/* attendance strip */
+.att{display:flex;align-items:center;gap:8px;background:#fff;border-radius:14px;padding:8px 10px;box-shadow:0 1px 3px rgba(60,58,40,.12)}
+.att .n{display:flex;flex-direction:column;align-items:center;min-width:54px;font-size:11px;color:var(--ink2)}.att .n b{font-size:17px;color:var(--ink)}
+.att .sep{width:1px;height:30px;background:var(--line)}
+.refresh{height:40px;padding:0 12px;border-radius:10px;border:1.5px solid var(--exO);color:var(--exO);font-weight:700;font-size:13px;display:inline-flex;align-items:center;gap:6px;margin-inline-start:auto;white-space:nowrap}
+.refresh[disabled]{opacity:.5}
+.allbtn{height:40px;padding:0 10px;border-radius:10px;background:var(--exO);color:#fff;font-weight:700;font-size:12.5px;white-space:nowrap}
+.upd{font-size:11.5px;color:var(--ink3);text-align:center;margin-top:-4px}
+/* student card (existing) */
+.ex{background:#fff;border-radius:14px;box-shadow:0 1px 3px rgba(60,58,40,.12);position:relative;overflow:hidden}
+.tri{position:absolute;top:0;right:0;width:0;height:0;border-top:22px solid var(--exOr);border-left:22px solid transparent}
+.extop{display:flex;align-items:center;gap:10px;padding:14px 16px 12px;width:100%;text-align:start}
+.exn{font-size:15.5px;font-weight:700}
+.exm{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.chev{width:30px;height:30px;border-radius:50%;background:var(--exO);color:#fff;display:grid;place-items:center;flex-shrink:0}
+.chev svg{width:18px;height:18px;stroke-width:2.4}.chev.up svg{transform:rotate(180deg)}
+.a-p{background:var(--ok);color:var(--okT)}.a-n{background:#F1F0EB;color:#6A6B60}.a-l{background:var(--warn);color:var(--warnT)}.a-a{background:var(--err);color:var(--errT)}.a-x{background:var(--info);color:var(--infoT)}.a-act{background:#F3ECF8;color:#6B3F8C}
+.req{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;border-radius:999px;padding:2px 9px;background:#FFF1DC;color:#9A5A0A;min-height:24px}
+.exb{padding:0 14px 14px;display:flex;flex-direction:column;gap:10px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg button{height:34px;border-radius:17px;border:1px solid #8E8C7C;font-size:13px;color:#55544A}
+.seg button[aria-pressed=true]{background:linear-gradient(90deg,#20221A,var(--exO));border-color:transparent;color:#fff}
+.exr{display:flex;align-items:center;gap:6px}
+.exl{flex:1;min-width:0;font-size:12.5px;line-height:1.55}.exl b{font-weight:800}
+.dd{height:36px;border-radius:7px;background:var(--exO);color:#fff;font-size:11.5px;font-weight:600;display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0}
+.mp{height:36px;padding:0 10px;border-radius:7px;border:1px solid var(--exO);color:var(--exO);background:#fff;font-size:12px;font-weight:700;flex-shrink:0}
+.save{height:40px;border-radius:8px;background:var(--exO);color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px}
+.b2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.b2 button{height:38px;border-radius:8px;background:var(--exO);color:#fff;font-size:13px}.b2 button:first-child{background:var(--exBr)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.ch{height:32px;padding:0 12px;border-radius:16px;font-size:12px;font-weight:700;border:1px solid}
+.ch.p{border-color:#2E9B57;color:#2E9B57}.ch.a{border-color:#D9534F;color:#C0392B}.ch.l{border-color:#E0A23A;color:#B7791F}.ch.x{border-color:#6B7BD6;color:#3B4BC4}.ch.act{border-color:#9B6CC0;color:#6B3F8C}
+.ch.p[aria-pressed=true]{background:#2E9B57;color:#fff}.ch.a[aria-pressed=true]{background:#E46A66;color:#fff}.ch.l[aria-pressed=true]{background:#F6D9A2;color:#8A5A12}.ch.x[aria-pressed=true]{background:#6B7BD6;color:#fff}.ch.act[aria-pressed=true]{background:#9B6CC0;color:#fff}
+.note{display:flex;gap:6px;align-items:flex-start;font-size:11.5px;line-height:1.6;color:var(--grayT);background:var(--gray);border-radius:8px;padding:6px 8px}
+.note svg{width:14px;height:14px;margin-top:2px}
+.banner{display:flex;gap:10px;align-items:flex-start;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.7}
+.banner b{display:block;font-size:13px}
+.b-err{background:var(--err);color:var(--errT)}.b-warn{background:var(--warn);color:var(--warnT)}.b-info{background:var(--info);color:var(--infoT)}.b-ok{background:var(--ok);color:var(--okT)}.b-gray{background:#EAE9E3;color:#45473A}
+/* overlays */
+.push{position:absolute;top:50px;left:10px;right:10px;z-index:8;background:rgba(250,250,247,.97);border-radius:20px;padding:12px 14px;display:flex;gap:10px;align-items:center;text-align:start;box-shadow:0 12px 30px -10px rgba(0,0,0,.45);animation:dn .25s ease}
+@keyframes dn{from{transform:translateY(-12px);opacity:0}}
+.lsi{width:40px;height:40px;border-radius:10px;background:var(--exO);display:grid;place-items:center;color:#fff;flex-shrink:0}
+.dim{position:absolute;inset:0;background:rgba(20,20,14,.45);z-index:9;display:flex;align-items:flex-end}
+.sheet{background:#fff;width:100%;border-radius:22px 22px 0 0;padding:10px 18px 30px;display:flex;flex-direction:column;gap:12px;animation:up .25s ease;max-height:90%;overflow:auto}
+@keyframes up{from{transform:translateY(30px);opacity:0}}
+.grab{width:40px;height:5px;border-radius:3px;background:#D9D7CE;align-self:center}
+.sheet h4{margin:0;font-size:17px;text-align:center}
+.sheet p{margin:0;font-size:13.5px;color:var(--ink2);text-align:center;line-height:1.8}
+.spin{width:44px;height:44px;border-radius:50%;border:4px solid #E5E7D6;border-top-color:var(--exO);animation:sp .9s linear infinite;align-self:center}
+@keyframes sp{to{transform:rotate(360deg)}}
+.meta{border:1px solid var(--line);border-radius:12px;padding:2px 12px}
+.meta div{display:flex;justify-content:space-between;gap:10px;padding:10px 0;font-size:13px;border-bottom:1px solid #EFEDE5}
+.meta div:last-child{border:0}.meta span{color:var(--ink2)}.meta b{text-align:end}
+.attf{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:12.5px;background:#FAFAF7;min-height:44px}
+textarea{border:1px solid #DDDACF;border-radius:10px;padding:10px 12px;min-height:96px;resize:none;font-size:14px;width:100%}
+.toast{position:absolute;top:52px;left:50%;transform:translateX(-50%);background:#23251C;color:#fff;border-radius:999px;padding:9px 16px;font-size:13px;font-weight:600;z-index:10;white-space:nowrap}
+.offline{background:#3B3D33;color:#fff;font-size:12.5px;padding:8px 14px;display:flex;gap:8px;align-items:center;flex-shrink:0}
+.sk{background:linear-gradient(90deg,#ECEBE5 0,#F6F5F1 50%,#ECEBE5 100%);background-size:200% 100%;animation:sh 1.2s linear infinite;border-radius:14px}
+@keyframes sh{to{background-position:-200% 0}}
+</style>
+</head><body>
+
+<div dir="rtl" lang="ar">
+<header class="top"><h1>المقرأة الإلكترونية · المعلم (تطبيق)</h1><p>نموذج تفاعلي مبني على تطبيق المعلم الحالي · بيانات افتراضية · المعلم في الرياض</p></header>
+<div class="wrap">
+ <aside class="panel" id="list"></aside>
+ <main class="stage">
+  <div class="msel"><select id="msel" aria-label="الشاشة"></select></div>
+  <div class="phone" id="ph"></div>
+  <div class="cap" id="cap"></div>
+ </main>
+</div>
+</div>
+
+<script>
+const sv=p=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`,sm=(k,s)=>I[k].replace('class="i"',`class="i" style="width:${s||16}px;height:${s||16}px"`);
+const I={back:sv('<path d="M9 6l6 6-6 6"/>'),list:sv('<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'),bell:sv('<path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/>'),
+ search:sv('<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>'),chev:sv('<path d="M6 9l6 6 6-6"/>'),video:sv('<rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/>'),
+ play:sv('<path d="M7 5l12 7-12 7z"/>'),stop:sv('<rect x="6" y="6" width="12" height="12" rx="2"/>'),ref:sv('<path d="M20 11a8 8 0 0 0-14.9-3M4 5v4h4M4 13a8 8 0 0 0 14.9 3M20 19v-4h-4"/>'),
+ clock:sv('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),cal:sv('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'),clip:sv('<path d="M21 11l-8.5 8.5a5 5 0 0 1-7-7L14 4a3.5 3.5 0 0 1 5 5l-8.5 8.5a2 2 0 0 1-3-3L15 7"/>'),
+ info:sv('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'),alert:sv('<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/>'),ok:sv('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
+ wifi:sv('<path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0M12 19h.01M3 3l18 18"/>'),copy:sv('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/>'),
+ home:sv('<path d="M3 10.5 12 3l9 7.5V21H3z"/>'),chat:sv('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'),user:sv('<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>'),book:sv('<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/>')};
+const pat='<svg class="pat" aria-hidden="true"><defs><pattern id="pp" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M22 8l3.3 10.7L36 22l-10.7 3.3L22 36l-3.3-10.7L8 22l10.7-3.3z" fill="none" stroke="#ECF6BC" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#pp)"/></svg>';
+const HQ={n:'حلقة الأعشار المسائية',mq:'مقرأة النور الإلكترونية',rw:'حفص',tm:'7:00 م',end:'8:00 م',hall:'قاعة الضحى · Zoom'};
+const ST0=()=>[
+ {n:'عبدالله يوسف الحسن',a:'n',t:null,arrive:'6:58 م'},
+ {n:'أنس محمود الخطيب',a:'p',t:'6:57 م'},
+ {n:'سلمان ناصر العمري',a:'n',t:null,req:'open'},
+ {n:'عبدالرحمن ديالو',a:'p',t:'6:59 م'},
+ {n:'عمر حسن عثمان',a:'n',t:null,arrive:'7:03 م'},
+ {n:'حمزة رياض الكبيسي',a:'n',t:null},
+ {n:'زياد فهد السالم',a:'p',t:'7:01 م'},
+ {n:'مصعب علي الهاشمي',a:'n',t:null},
+ {n:'إلياس كريم بوعزة',a:'p',t:'6:56 م'}];
+const AL={p:'حاضر',n:'بدون تحضير',l:'متأخر',a:'غائب',x:'غائب بعذر',act:'نشاط'};
+const fresh=()=>({scr:'list',ss:'window',open:2,tab:{},ST:ST0(),upd:'6:55 م',ov:null,offline:false,loading:false,failOpen:false,summary:'',toast:null,noneIn:false,allIn:false,reqDone:false});
+let S=fresh();
+const sbar=()=>`<div class="sb"><span>${S.ss==='before'?'6:20':S.ss==='late'?'7:12':S.ss==='run'?'7:14':S.ss==='ended'||S.ss==='auto'?'8:03':'6:52'}</span><span>●●● 71%</span></div>`;
+const tabbar=a=>`<nav class="tab">${[['الرئيسية','home','list'],['المحادثات','chat',''],['الإشعارات','bell',''],['حسابي','user','']].map(([l,i,k])=>`<span class="${k===a?'on':''}" ${k?`data-act="go" data-v="${k}" role="button"`:''}>${I[i]}${l}</span>`).join('')}</nav>`;
+const cnt=()=>{const c={p:0,n:0,o:0};S.ST.forEach(s=>s.a==='p'?c.p++:s.a==='n'?c.n++:c.o++);return c};
+/* ---------- list ---------- */
+function stt(){return {before:['لم تبدأ','s-wait'],window:['لم تبدأ','s-wait'],late:['متأخرة 12 د','s-late'],run:['جارية','s-run'],ended:['انتهت','s-end'],auto:['أُغلقت تلقائيًا','s-end']}[S.ss]}
+function list(){
+ const st=stt(),canStart=['window','late'].includes(S.ss);
+ return `<div class="screen">${sbar()}<div class="hd">${pat}<div class="row between"><b style="font-size:20px">حلقاتي</b><div class="row" style="gap:8px"><span class="ic">${I.bell}<i class="bd">3</i></span></div></div><div class="search">${sm('search')}البحث عن طالب أو حلقة</div></div>
+ ${S.offline?`<div class="offline">${sm('wifi')}لا يوجد اتصال بالإنترنت · التطبيق يحتاج اتصالًا</div>`:''}
+ <div class="scr">${S.loading?[1,2,3].map(()=>'<div class="sk" style="height:130px"></div>').join(''):`
+  <button class="hc" data-act="open" style="${canStart?'box-shadow:0 0 0 2px var(--exO)':''}"><div class="row between"><div class="row" style="gap:6px"><span class="tg">مقرأة</span><span class="tg2">رواية ${HQ.rw}</span></div><span class="stt ${st[1]}">${st[0]}</span></div>
+   <h3>${HQ.n}</h3><div class="m"><span>${sm('clock',14)} اليوم ${HQ.tm} – ${HQ.end} · بتوقيتك</span><span>9 طلاب</span></div>
+   ${canStart?`<span class="btn" data-act="start" role="button">${I.play}بدء الحلقة</span>`:S.ss==='before'?`<span class="btn" style="background:#E3E2DC;color:#8F8F85">${I.play}بدء الحلقة · يُتاح 6:50 م</span>`:''}</button>
+  <button class="hc" data-act="say" data-v="حلقة مسجد: كما هي"><div class="row between"><span class="tg2">مسجد سعد بن حباب الجبر</span><span class="stt s-end">انتهت</span></div><h3>حلقة ابن كثير</h3><div class="m"><span>بعد العصر</span><span>15 طالبًا</span></div></button>
+  <button class="hc" data-act="say" data-v="حلقة غدًا"><div class="row between"><div class="row" style="gap:6px"><span class="tg">مقرأة</span><span class="tg2">رواية ${HQ.rw}</span></div><span class="stt s-wait">غدًا</span></div><h3>حلقة الفجر</h3><div class="m"><span>${sm('clock',14)} الأربعاء 5:00 ص · بتوقيتك</span><span>12 طالبًا</span></div></button>
+  <p style="margin:0;font-size:12px;color:var(--ink3);text-align:center">قائمة حلقات واحدة؛ حلقات المقرأة بشارة «مقرأة» دون مفتاح تبديل.</p>`}
+ </div>${tabbar('list')}${overlay()}</div>`;
+}
+/* ---------- halaqa ---------- */
+function sesBar(){
+ const s=S.ss;
+ if(s==='before')return `<div class="ses"><div class="row between"><div class="col"><span class="k">موعد الحلقة</span><b class="big">اليوم ${HQ.tm} – ${HQ.end}</b></div><span class="stt s-wait">لم تبدأ</span></div><button class="btn" disabled>${I.play}بدء الحلقة · يُتاح 6:50 م</button></div>`;
+ if(s==='window'||s==='late')return `<div class="ses"><div class="row between"><div class="col"><span class="k">${s==='late'?'تأخر البدء':'يمكنك البدء الآن'}</span><b class="big">${s==='late'?'متأخرة 12 دقيقة':'تبدأ '+HQ.tm+' · بعد 8 د'}</b></div><span class="stt ${s==='late'?'s-late':'s-wait'}">${s==='late'?'متأخرة':'لم تبدأ'}</span></div>
+  ${s==='late'?`<div class="banner b-err" style="padding:8px 10px">${sm('alert')}<div>يظهر للمشرف أن الحلقة لم تبدأ، ويُسجَّل وقت بدئك الفعلي.</div></div>`:''}
+  <button class="btn" data-act="start" ${S.offline?'disabled':''}>${I.play}بدء الحلقة</button><div style="font-size:11.5px;color:var(--ink3);text-align:center;margin-top:-4px">يفتح ${HQ.hall} ويسجّل وقت البدء</div></div>`;
+ if(s==='run')return `<div class="ses run"><div class="row between"><div class="col"><span class="k">جارية منذ <span class="timer">7:02</span> م${S.lateStart?' · بدأت متأخرة 2 د':''}</span><b class="big timer">00:12:41</b></div><span class="stt" style="background:var(--lime);color:var(--olK)">جارية</span></div>
+  <div class="acts"><button class="btn" data-act="reopen">${I.video}العودة للقاعة</button><button class="btn2" data-act="endask">${I.stop}إنهاء الحلقة</button></div></div>`;
+ return `<div class="ses"><div class="row between"><div class="col"><span class="k">${s==='auto'?'أُغلقت تلقائيًا في موعد نهايتها':'انتهت الحلقة'}</span><b class="big">${s==='auto'?'7:02 م – 8:00 م · 58 د':'7:02 م – 7:58 م · 56 د'}</b></div><span class="stt s-end">${s==='auto'?'أُغلقت تلقائيًا':'انتهت'}</span></div>
+  ${s==='auto'?`<div class="note">${sm('info',14)}<span>لم تُضغط «إنهاء الحلقة»، فأُغلقت في موعدها. يمكنك إكمال الرصد كالمعتاد.</span></div>`:''}</div>`;
+}
+function attStrip(){
+ const c=cnt(),dis=!['run','window','late'].includes(S.ss)&&S.ss!=='ended'&&S.ss!=='auto';
+ return `<div class="att"><div class="n"><b style="color:var(--okT)">${c.p}</b>حاضر</div><span class="sep"></span><div class="n"><b>${c.n}</b>بدون تحضير</div><span class="sep"></span><div class="n"><b>${c.o}</b>أخرى</div>
+  <button class="refresh" data-act="refresh" ${S.offline?'disabled':''} aria-label="تحديث التحضير">${sm('ref')}تحديث</button></div>
+  <div class="upd">آخر تحديث ${S.upd} · «حاضر» يظهر لمن ضغط «دخول» من تطبيقه</div>
+  ${S.ss!=='before'?`<button class="btn2" data-act="all" style="height:40px;font-size:13px">تحضير الجميع</button>`:''}`;
+}
+function card(s,i){
+ const op=S.open===i,t=S.tab[i]||'tahdir',badge=`<span class="stt a-${s.a}">${AL[s.a]}${s.t&&s.a==='p'?' · '+s.t:''}</span>`;
+ const reqb=s.req==='open'?`<button class="req" data-act="reqopen" data-v="${i}">${sm('cal',13)}طلب غياب مفتوح</button>`:s.req==='ok'?`<span class="req" style="background:var(--info);color:var(--infoT)">${sm('ok',13)}عذر مقبول</span>`:'';
+ const body=!op?'':`<div class="exb"><div class="seg"><button data-act="rt" data-i="${i}" data-v="rasd" aria-pressed="${t==='rasd'}">الرصد</button><button data-act="rt" data-i="${i}" data-v="tahdir" aria-pressed="${t==='tahdir'}">التحضير</button></div>
+  ${t==='tahdir'?`<div class="row between" style="font-size:12.5px;font-weight:800">حالة التحضير ${s.t?`<span style="font-weight:600;color:var(--ink3)">دخل ${s.t}</span>`:''}</div>
+   <div class="chips">${[['p','حاضر'],['l','متأخر'],['a','غائب'],['x','غائب بعذر'],['act','نشاط']].map(([v,l])=>`<button class="ch ${v}" data-act="setA" data-i="${i}" data-v="${v}" aria-pressed="${s.a===v}">${l}</button>`).join('')}</div>
+   ${s.a==='a'?`<div class="note">${sm('info',14)}<span>تُرسل رسالة الغياب لولي الأمر الآن.</span></div>`:s.a==='n'?`<div class="note">${sm('info',14)}<span>لم يضغط «دخول» بعد. اضغط «تحديث» أو اختر الحالة. لا يتحول تلقائيًا إلى «غائب».</span></div>`:''}`
+  :`${[['درس اليوم','الملك 23 - القلم 7'],['المراجعة القريبة','الملك 1 - الملك 22'],['المراجعة البعيدة','النبأ 1 - النبأ 20']].map(([l,r])=>`<div class="exr"><div class="exl"><b>${l} :</b> ${r}</div><button class="mp">المصحف</button><span class="dd">لم يسمع ▾</span></div>`).join('')}<button class="save">حفظ</button>`}
+  <div class="b2"><button>سجل التسميع</button><button>المنح والخصم</button></div></div>`;
+ return `<div class="ex"><span class="tri"></span><div class="extop" data-act="tog" data-v="${i}" role="button" tabindex="0" style="cursor:pointer"><div class="col" style="flex:1;min-width:0"><b class="exn">${s.n}</b><div class="exm">${badge}<span class="tg2">${HQ.rw}</span>${reqb}</div></div><span class="chev ${op?'up':''}">${I.chev}</span></div>${body}</div>`;
+}
+function halaqa(){
+ return `<div class="screen">${sbar()}<div class="hd">${pat}<div class="row" style="gap:8px"><button class="ic" data-act="go" data-v="list" aria-label="رجوع">${I.back}</button><div class="col" style="flex:1;min-width:0"><b style="font-size:16px">${HQ.n}</b><span style="font-size:11.5px;color:var(--tag)">${HQ.mq} · ${HQ.tm} بتوقيتك</span></div><span class="ic">${I.list}</span><span class="ic">${I.bell}<i class="bd">3</i></span></div><div class="search">${sm('search')}البحث عن طالب</div></div>
+ ${S.offline?`<div class="offline">${sm('wifi')}لا يوجد اتصال · لا يمكن البدء أو التحديث أو الحفظ</div>`:''}
+ <div class="scr">${S.loading?'<div class="sk" style="height:120px"></div><div class="sk" style="height:60px"></div><div class="sk" style="height:76px"></div><div class="sk" style="height:76px"></div>':`${sesBar()}${attStrip()}${S.ST.map(card).join('')}`}</div>${overlay()}</div>`;
+}
+/* ---------- overlays ---------- */
+function overlay(){
+ const o=S.ov;let h='';
+ if(o==='push')h=`<button class="push" data-act="pushtap"><span class="lsi">${I.play}</span><span style="flex:1"><b style="font-size:13px">إتحاف · الآن</b><span style="display:block;font-size:13.5px">${HQ.n} بعد 10 دقائق</span><span style="display:block;font-size:12.5px;color:var(--ink2)">اضغط لبدء الحلقة وفتح القاعة</span></span></button>`;
+ if(o==='opening')h=`<div class="dim"><div class="sheet"><span class="grab"></span><span class="spin"></span><h4>جارٍ فتح ${HQ.hall.split(' · ')[0]} في Zoom…</h4><p>سُجّل بدء الحلقة 7:02 م</p></div></div>`;
+ if(o==='fail')h=`<div class="dim"><div class="sheet"><span class="grab"></span><h4>تعذّر فتح القاعة</h4><p>سُجّل بدء الحلقة 7:02 م، والطلاب يرون أنها بدأت. الرابط لا يفتح على جهازك.</p><button class="btn" data-act="reopen">حاول مجددًا</button><button class="btn2" data-act="say" data-v="نُسخ رابط القاعة">${sm('copy')}نسخ رابط القاعة</button><button class="btn2" data-act="say" data-v="أُبلغ المشرف بأن رابط القاعة لا يعمل">إبلاغ المشرف أن الرابط لا يعمل</button><p style="font-size:12px">لا يملك المعلم تعديل رابط القاعة.</p></div></div>`;
+ if(o==='end')h=`<div class="dim" data-act="close"><div class="sheet" data-stop="1"><span class="grab"></span><h4>إنهاء الحلقة</h4><div class="meta"><div><span>البدء</span><b>7:02 م</b></div><div><span>المدة حتى الآن</span><b>56 دقيقة</b></div><div><span>التحضير</span><b>${cnt().p} حاضر · ${cnt().n} بدون تحضير</b></div></div>
+  ${cnt().n?`<div class="banner b-warn" style="padding:8px 10px">${sm('info')}<div>${cnt().n} طلاب ما زالوا «بدون تحضير» وسيبقون كذلك ويظهرون للمشرف ليحسمهم. يمكنك حسمهم الآن من بطاقاتهم.</div></div>`:''}
+  <label style="font-size:13.5px;font-weight:700">ملخص الحلقة <span style="font-weight:400;color:var(--ink3)">(اختياري · يراه المشرف فقط)</span></label><textarea data-in="summary" placeholder="مثال: أكملنا تسميع الحفظ، وتأخر بعض الطلاب بسبب الاتصال">${S.summary}</textarea>
+  <button class="btn btnR" data-act="enddo">${I.stop}إنهاء الحلقة</button><button class="btn2" data-act="close">متابعة الحلقة</button></div></div>`;
+ if(o&&o.req!=null){const s=S.ST[o.req];h=`<div class="dim" data-act="close"><div class="sheet" data-stop="1"><span class="grab"></span><h4>طلب غياب · ${s.n}</h4><div class="meta"><div><span>الفترة</span><b>اليوم — الخميس 9 جمادى الآخرة</b></div><div><span>الحلقات</span><b>2 حلقتان</b></div><div><span>السبب</span><b>سفر عائلي</b></div><div><span>أُرسل</span><b>أمس 9:14 م</b></div></div>
+  <span class="attf">${sm('clip')}تذكرة_السفر.pdf<span style="margin-inline-start:auto;color:var(--exO);font-weight:700">عرض</span></span>
+  <button class="btn" data-act="reqok" data-v="${o.req}">قبول · غائب بعذر لكل أيامه</button><button class="btn2" data-act="reqno" data-v="${o.req}">رفض</button><p style="font-size:12px">يصل الطلب للمشرف أيضًا، ويُغلق عند قبول أحدكما.</p></div></div>`}
+ if(S.toast)h+=`<div class="toast" role="status">${S.toast}</div>`;
+ return h;
+}
+/* ---------- actions ---------- */
+const VIEWS={list,halaqa};
+function render(){const p=document.getElementById('ph'),sc=p.querySelector('.scr'),t=sc?sc.scrollTop:0;p.innerHTML=VIEWS[S.scr]();if(S.keep){const n=p.querySelector('.scr');if(n)n.scrollTop=t}S.keep=false;sync()}
+let tt;function say(m){S.toast=m;S.keep=true;render();clearTimeout(tt);tt=setTimeout(()=>{S.toast=null;S.keep=true;render()},2200)}
+const A={
+ go(d){S.scr=d.v;S.ov=null;render()},open(){S.scr='halaqa';render()},say(d){say(d.v)},
+ start(d,e){if(e)e.stopPropagation();if(S.offline)return;S.lateStart=S.ss==='late';S.scr='halaqa';S.ov='opening';render();setTimeout(()=>{if(S.ov!=='opening')return;S.ss='run';S.ov=S.failOpen?'fail':null;S.failOpen=false;S.keep=true;S.ov?render():say('بدأت الحلقة 7:02 م · فُتحت القاعة')},1300)},
+ pushtap(){A.start()},
+ reopen(){S.ov='opening';S.keep=true;render();setTimeout(()=>{S.ov=null;S.keep=true;say('فُتحت القاعة')},900)},
+ tog(d){S.open=S.open===+d.v?null:+d.v;S.keep=true;render()},
+ rt(d){S.tab[d.i]=d.v;S.keep=true;render()},
+ setA(d){const s=S.ST[+d.i];s.a=d.v;if(d.v!=='p')s.t=s.t&&d.v==='l'?s.t:s.t;S.keep=true;if(d.v==='a')say('سُجّل غائبًا · أُرسلت رسالة الغياب');else if(d.v==='x'&&s.req==='open'){s.req='ok';say('سُجّل «غائب بعذر» وأُغلق الطلب')}else render()},
+ refresh(){if(S.offline)return;let k=0;S.ST.forEach(s=>{if(s.a==='n'&&s.arrive){s.a='p';s.t=s.arrive;k++}});S.upd=S.ss==='run'?'7:14 م':'6:52 م';S.keep=true;say(k?`حُدّث التحضير · ${k} حضروا الآن`:'لا جديد في التحضير')},
+ all(){S.ST.forEach(s=>{if(s.a==='n'){s.a='p';s.t=s.t||null}});S.keep=true;say('حُضّر الجميع')},
+ endask(){S.ov='end';S.keep=true;render()},
+ enddo(){S.ss='ended';S.ov=null;S.keep=true;say(S.summary.trim()?'انتهت الحلقة وأُرسل الملخص للمشرف':'انتهت الحلقة · 56 دقيقة')},
+ close(d,e){if(e&&e.target.closest('[data-stop]')&&!e.target.closest('[data-act="close"]'))return;S.ov=null;S.keep=true;render()},
+ reqopen(d,e){e.stopPropagation();S.ov={req:+d.v};S.keep=true;render()},
+ reqok(d){const s=S.ST[+d.v];s.req='ok';s.a='x';S.ov=null;S.keep=true;say('سُجّل «غائب بعذر» لحلقتين')},
+ reqno(d){S.ST[+d.v].req=null;S.ov=null;S.keep=true;say('رُفض طلب الغياب وأُبلغ الطالب')},
+};
+document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el||!document.getElementById('ph').contains(el))return;if(S.ov==='push'&&el.dataset.act!=='pushtap')S.ov=null;e.stopPropagation();A[el.dataset.act]&&A[el.dataset.act]({...el.dataset},e)});
+document.addEventListener('input',e=>{if(e.target.dataset.in==='summary')S.summary=e.target.value});
+/* ---------- scenarios ---------- */
+const st=o=>()=>{S=Object.assign(fresh(),o)};
+const SC=[
+ ['g','التدفق الأساسي'],
+ ['تنبيه قبل الموعد بـ10 دقائق',st({scr:'list',ov:'push'}),'اضغط التنبيه: يعادل «بدء الحلقة» — يسجّل وقت البدء ويفتح القاعة.'],
+ ['حلقاتي — نافذة البدء',st({scr:'list'}),'زر «بدء الحلقة» على بطاقة الحلقة نفسها، فلا يحتاج المعلم فتح الحلقة أولًا.'],
+ ['الحلقة — نافذة البدء',st({scr:'halaqa'}),'شريط الجلسة أعلى شاشة الحلقة، ثم ملخص التحضير وزر «تحديث»، ثم بطاقات الطلاب الحالية.'],
+ ['الحلقة — جارية',st({scr:'halaqa',ss:'run'}),'اضغط «تحديث»: يظهر «حاضر» لمن ضغط «دخول» منذ آخر تحديث، مع وقت دخوله.'],
+ ['إنهاء الحلقة مع الملخص',st({scr:'halaqa',ss:'run',ov:'end',summary:'أكملنا تسميع الحفظ، وتأخر طالبان بسبب الاتصال.'}),'الملخص اختياري ويراه المشرف فقط. من بقي «بدون تحضير» يبقى كذلك.'],
+ ['إنهاء الحلقة بدون ملخص',st({scr:'halaqa',ss:'run',ov:'end'}),''],
+ ['g','حالات الحلقة'],
+ ['قبل نافذة البدء',st({scr:'halaqa',ss:'before'}),'الزر معطّل حتى 10 دقائق قبل الموعد.'],
+ ['متأخرة',st({scr:'halaqa',ss:'late'}),'بعد 10 دقائق دون بدء يُنبَّه المشرف داخل التطبيق والويب.'],
+ ['حلقاتي — حلقة متأخرة',st({scr:'list',ss:'late'}),''],
+ ['منتهية',st({scr:'halaqa',ss:'ended'}),''],
+ ['أُغلقت تلقائيًا',st({scr:'halaqa',ss:'auto'}),''],
+ ['g','التحضير'],
+ ['لم يدخل أحد',()=>{S=fresh();S.scr='halaqa';S.ss='window';S.ST.forEach(s=>{s.a='n';s.t=null;s.arrive=null})},''],
+ ['بعض الطلاب حاضرون',st({scr:'halaqa',ss:'run'}),''],
+ ['الجميع حاضرون',()=>{S=fresh();S.scr='halaqa';S.ss='run';S.ST.forEach((s,i)=>{s.a='p';s.t=s.t||s.arrive||'7:0'+(i%6)+' م';s.req=null})},''],
+ ['طالب بطلب غياب مفتوح',st({scr:'halaqa',ss:'run',open:2}),'اضغط «طلب غياب مفتوح» على بطاقة سلمان لعرض الطلب بمرفقه.'],
+ ['عرض طلب الغياب',st({scr:'halaqa',ss:'run',open:null,ov:{req:2}}),''],
+ ['طلب غياب مقبول',()=>{S=fresh();S.scr='halaqa';S.ss='run';S.ST[2].req='ok';S.ST[2].a='x'},'قبول الطلب = «غائب بعذر» لكل أيامه.'],
+ ['بطاقة الطالب — الرصد',st({scr:'halaqa',ss:'run',open:1,tab:{1:'rasd'}}),'شاشة الرصد بلا تغيير، مع وسم الرواية على البطاقة.'],
+ ['g','الأخطاء'],
+ ['تعذّر فتح القاعة',st({scr:'halaqa',ss:'window',failOpen:true}),'اضغط «بدء الحلقة».'],
+ ['لا يوجد إنترنت',st({scr:'halaqa',ss:'window',offline:true}),''],
+ ['تحميل',st({scr:'halaqa',loading:true}),''],
+];
+let cur=1;
+function run(i){if(SC[i][0]==='g')return;cur=i;SC[i][1]();document.getElementById('cap').textContent=SC[i][2]||'';render()}
+function sync(){document.querySelectorAll('.sc').forEach(b=>b.setAttribute('aria-current',+b.dataset.i===cur));document.getElementById('msel').value=cur}
+document.getElementById('list').innerHTML=SC.map((s,i)=>s[0]==='g'?`<h2>${s[1]}</h2>`:`<button class="sc" data-i="${i}">${s[0]}</button>`).join('');
+document.getElementById('msel').innerHTML=SC.map((s,i)=>s[0]==='g'?`<option disabled>— ${s[1]} —</option>`:`<option value="${i}">${s[0]}</option>`).join('');
+document.getElementById('list').onclick=e=>{const b=e.target.closest('.sc');if(b)run(+b.dataset.i)};
+document.getElementById('msel').onchange=e=>run(+e.target.value);
+run(1);
+</script>
+
+</body></html>
