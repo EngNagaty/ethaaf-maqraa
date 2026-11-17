@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>المقرأة — الطالب</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap">
+<style>
+:root{--g:#F2F2EE;--ol:#555942;--olD:#3F4230;--olC:#5A5D45;--olK:#313425;--ink:#1C1E14;--ink2:#5F6150;--ink3:#8A8B7E;--line:#E5E3DA;--beige:#F5F0E5;--tag:#EADFC4;--lime:#ECF6BC;--ok:#E7F5EC;--okT:#1E6B39;--err:#FDECEA;--errT:#B42318;--warn:#FFF4E0;--warnT:#8A520A;--info:#EEF1FF;--infoT:#3646B5;--mar:#8B2635;--gold:#B08D3C;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:#E7E5DD;color:var(--ink);font-family:Cairo,Tahoma,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer}
+svg.i{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.top{background:#2F3224;color:#fff;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top h1{margin:0;font-size:16px}.top p{margin:0;font-size:12px;color:#CBCDB8}
+.wrap{max-width:1150px;margin:0 auto;display:grid;grid-template-columns:280px 1fr;gap:28px;padding-block:22px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.panel{background:#FBFAF6;border:1px solid var(--line);border-radius:16px;padding:10px;align-self:start;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto}
+.panel h2{font-size:11.5px;color:var(--ink3);margin:12px 8px 4px}
+.sc{display:block;width:100%;text-align:start;padding:7px 9px;border-radius:9px;font-size:13px;color:var(--ink2);line-height:1.5}
+.sc:hover{background:#EFEDE4}.sc[aria-current=true]{background:var(--ol);color:#fff}
+.stage{display:flex;flex-direction:column;align-items:center;gap:12px;min-width:0}
+.cap{max-width:440px;text-align:center;font-size:13px;color:var(--ink2);line-height:1.7}
+.msel{display:none;width:100%}.msel select{width:100%;height:44px;border-radius:10px;border:1px solid var(--line);padding:0 10px;background:#fff}
+@media (max-width:780px){.wrap{grid-template-columns:1fr}.panel{display:none}.msel{display:block}}
+.phone{box-sizing:content-box;width:390px;max-width:calc(100vw - 52px);height:844px;border:10px solid #1B1C15;border-radius:48px;background:var(--g);position:relative;overflow:hidden;box-shadow:0 30px 60px -30px rgba(40,38,20,.5)}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column}
+.sb{height:44px;flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:0 26px;font-size:15px;font-weight:700;direction:ltr;position:relative;z-index:2}
+.sb.w{color:#fff}
+.pat{position:absolute;inset:0;width:100%;height:100%;opacity:.13;pointer-events:none}
+.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.col{display:flex;flex-direction:column}
+/* ---------- web ---------- */
+.url{margin:0 12px 8px;height:38px;border-radius:12px;background:#E9E8E2;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;color:#4A4B40;direction:ltr;flex-shrink:0}
+.web{flex:1;overflow-y:auto;background:#F7F7F5;scrollbar-width:none}
+.wh{background:#fff;border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;flex-direction:column;align-items:center;gap:2px;padding:18px 16px 6px;text-align:center}
+.logo .mk{width:56px;height:56px;border-radius:14px;background:#F7EDEE;color:var(--mar);display:grid;place-items:center;font-weight:800;font-size:24px}
+.logo b{color:var(--mar);font-size:17px}.logo small{color:var(--gold);font-size:12px}
+.wb{padding:12px 16px 28px;display:flex;flex-direction:column;gap:12px}
+.wb h2{margin:4px 0 0;font-size:20px;text-align:center}
+.wb .lead{margin:0;text-align:center;font-size:13.5px;color:var(--ink2);line-height:1.8}
+.choice{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:16px;display:flex;gap:12px;align-items:center;text-align:start;width:100%;min-height:76px}
+.choice:hover{border-color:#C9C5B4}
+.choice .ci{width:46px;height:46px;border-radius:12px;background:var(--beige);color:var(--ol);display:grid;place-items:center;flex-shrink:0}
+.choice b{font-size:15.5px;display:block}.choice small{font-size:12.5px;color:var(--ink2);line-height:1.6;display:block}
+.choice[disabled]{opacity:.55;cursor:not-allowed}
+.pcard{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.pimg{height:96px;background:var(--olC);position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:12px 14px;color:#fff}
+.pimg b{position:relative;font-size:17px}
+.pb{padding:12px 14px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--ink2);line-height:1.7}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:4px;background:var(--beige);border-radius:999px;padding:2px 10px;font-size:12px;color:#4A4C3C;white-space:nowrap}
+.slots{background:#F7F6F1;border-radius:10px;padding:8px 10px;font-size:12.5px;color:var(--ink)}
+.slots span{display:block}
+.btn{height:48px;border-radius:12px;background:var(--ol);color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;width:100%}
+.btn[disabled]{background:#E3E2DC;color:#8F8F85;cursor:not-allowed}
+.btn2{height:48px;border-radius:12px;border:1.5px solid var(--ol);color:var(--ol);background:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;width:100%}
+.fsec{background:#fff;border:1px solid var(--line);border-radius:14px}
+.fsec>h3{margin:0;padding:12px 14px;border-bottom:1px solid #F0EEE7;font-size:14.5px;display:flex;justify-content:space-between;align-items:center}
+.fgrid{display:flex;flex-direction:column;gap:12px;padding:14px}
+.f{display:flex;flex-direction:column;gap:5px}
+.f>label{font-size:13px;font-weight:600}.f>label em{color:var(--errT);font-style:normal}
+.f input,.f select,.f textarea{height:46px;border:1px solid #DDDACF;border-radius:10px;padding:0 12px;background:#fff;font-size:14px;width:100%}
+.f textarea{height:auto;min-height:84px;padding:10px 12px;resize:none}
+.f .hint{font-size:11.5px;color:var(--ink3);line-height:1.6}
+.f.bad input,.f.bad select,.f.bad textarea,.f.bad .seg button{border-color:#E5534B}
+.f .msg{font-size:12px;color:var(--errT);font-weight:600;line-height:1.6}
+.ph{display:flex;border:1px solid #DDDACF;border-radius:10px;overflow:hidden;height:46px;direction:ltr}
+.ph span{padding:0 10px;display:flex;align-items:center;background:#F7F6F1;font-size:13.5px;border-inline-end:1px solid #DDDACF}
+.ph input{border:0;border-radius:0;height:44px;text-align:right}
+.f.bad .ph{border-color:#E5534B}
+.seg{display:flex;gap:8px}
+.seg button{flex:1;height:44px;border:1px solid #DDDACF;border-radius:10px;font-size:14px;background:#fff}
+.seg button[aria-pressed=true]{border-color:var(--ol);background:#F5F6EE;font-weight:700;box-shadow:inset 0 0 0 1px var(--ol)}
+.togs{display:flex;gap:6px;flex-wrap:wrap}
+.togs button{height:36px;padding:0 12px;border:1px solid #DDDACF;border-radius:9px;font-size:13px;background:#fff}
+.togs button[aria-pressed=true]{background:var(--ol);border-color:var(--ol);color:#fff;font-weight:700}
+.slot{border:1.5px solid #DDDACF;border-radius:12px;padding:10px 12px;display:flex;gap:10px;align-items:center;text-align:start;width:100%;background:#fff}
+.slot[aria-pressed=true]{border-color:var(--ol);background:#FAFBF5}
+.slot .rd{width:18px;height:18px;border-radius:50%;border:1.5px solid #CFCBBB;flex-shrink:0}
+.slot[aria-pressed=true] .rd{border:5px solid var(--ol)}
+.slot b{font-size:14px;display:block}.slot small{font-size:12px;color:var(--ink3)}
+.banner{display:flex;gap:10px;align-items:flex-start;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.7}
+.banner b{display:block;font-size:13px}
+.b-err{background:var(--err);color:var(--errT)}.b-warn{background:var(--warn);color:var(--warnT)}.b-info{background:var(--info);color:var(--infoT)}.b-ok{background:var(--ok);color:var(--okT)}.b-gray{background:#EFEEE8;color:#45473A}
+.tz{display:flex;align-items:center;gap:8px;background:#F7F6F1;border-radius:10px;padding:8px 10px;font-size:12.5px}
+.tz select{height:30px;border:1px solid #DDDACF;border-radius:8px;font-size:12.5px;padding:0 6px;background:#fff;margin-inline-start:auto}
+.steps{display:flex;gap:4px;justify-content:center;font-size:11.5px;color:var(--ink3)}
+.steps span{display:flex;align-items:center;gap:4px}.steps i{font-style:normal;width:18px;height:18px;border-radius:50%;border:1.5px solid #CFCBBB;display:grid;place-items:center;font-size:10px}
+.steps .on{color:var(--ink);font-weight:700}.steps .on i{background:var(--ol);border-color:var(--ol);color:#fff}
+.done{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:10px 4px}
+.done .big{width:76px;height:76px;border-radius:50%;background:var(--ok);color:var(--okT);display:grid;place-items:center}
+.done .big svg{width:36px;height:36px}
+.nexts{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px;text-align:start;width:100%}
+.nexts div{display:flex;gap:10px;font-size:13px;line-height:1.7}
+.nexts i{font-style:normal;width:24px;height:24px;border-radius:50%;background:var(--beige);color:var(--ol);font-weight:800;display:grid;place-items:center;flex-shrink:0;font-size:12px}
+.stores{display:flex;gap:8px;width:100%}
+.stores span{flex:1;height:44px;border-radius:10px;background:#1C1E14;color:#fff;display:grid;place-items:center;font-size:12.5px;font-weight:700}
+/* ---------- app ---------- */
+.hdr{background:var(--ol);color:#fff;margin-top:-44px;padding:52px 18px 18px;border-radius:0 0 26px 26px;position:relative;overflow:hidden;flex-shrink:0}
+.hdr>*:not(.pat){position:relative}
+.ic{width:44px;height:44px;border-radius:50%;background:var(--olK);display:grid;place-items:center;color:#fff;position:relative}
+.bd{position:absolute;top:-3px;right:-3px;background:#DC2626;color:#fff;font-size:11px;font-weight:700;border-radius:9px;padding:0 6px;line-height:18px;font-style:normal}
+.coin{height:44px;border-radius:22px;background:var(--olK);display:flex;align-items:center;gap:6px;padding:0 14px;font-weight:700}
+.scr{flex:1;overflow-y:auto;padding:14px 16px 24px;display:flex;flex-direction:column;gap:12px;scrollbar-width:none}
+.scr>*{flex-shrink:0}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats div{background:var(--ol);color:#fff;border-radius:14px;height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:15px;font-weight:700;position:relative;overflow:hidden}
+.card{background:#fff;border-radius:16px}
+.lesson{padding:14px;display:flex;gap:12px;align-items:center}
+.lsi{width:44px;height:44px;border-radius:12px;background:var(--ol);display:grid;place-items:center;color:#fff;flex-shrink:0}
+.tab{flex-shrink:0;background:var(--ol);display:grid;grid-template-columns:repeat(4,1fr);padding:10px 8px 26px;gap:4px}
+.tab span{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--beige);padding:6px 4px;border-radius:12px}
+.tab span.on{background:var(--beige);color:var(--ol)}
+/* halaqa card */
+.hq{border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid var(--line)}
+.hq.live{background:var(--ol);border-color:var(--ol);color:#fff}
+.hq .k{font-size:13px;color:var(--ink3);font-weight:600}
+.hq.live .k{color:#fff;font-weight:700}
+.tg{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--tag);color:#3C382E;white-space:nowrap}
+.tg2{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:#F1F0EB;color:#3B3D33;white-space:nowrap}
+.hq.live .tg{background:var(--lime);color:var(--olK)}.hq.live .tg2{background:#464936;color:var(--beige)}
+.hq h3{margin:0;font-size:20px;font-weight:800}
+.hq .sub{font-size:14px;color:#374151}.hq .sub2{font-size:13px;color:var(--ink3)}
+.hq.live .sub{color:var(--beige)}.hq.live .sub2{color:var(--tag)}
+.cd{display:flex;align-items:center;gap:4px;background:var(--beige);color:#585345;font-size:13px;font-weight:700;padding:6px 10px;border-radius:10px;white-space:nowrap}
+.hq.live .cd{background:var(--olK);color:#fff}
+.go{height:56px;border-radius:14px;background:#fff;color:var(--ol);font-size:18px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:10px;width:100%}
+.go.off{height:48px;background:#ECEBE6;color:#7A7B70;font-size:16px;cursor:not-allowed}
+.go.re{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.7);height:50px;font-size:16px}
+.hq .ft{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--ink3)}
+.hq.live .ft{color:var(--tag);justify-content:center}
+.lnk{font-size:13px;font-weight:700;color:var(--ol);padding:10px 0;min-height:44px;display:inline-flex;align-items:center}
+.dotg{width:8px;height:8px;border-radius:50%;background:#86EFAC;display:inline-block}
+.car{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:0 16px;scrollbar-width:none}
+.car>.hq{flex:0 0 88%;scroll-snap-align:center}
+.pdots{display:flex;gap:6px;justify-content:center;margin-top:-4px}.pdots i{width:6px;height:6px;border-radius:50%;background:#CFCBBB}.pdots i.on{background:var(--ol);width:16px;border-radius:3px}
+.reqb{display:flex;align-items:center;gap:8px;background:var(--info);color:var(--infoT);border-radius:10px;padding:8px 10px;font-size:12.5px;font-weight:600}
+.hq.live .reqb{background:#464936;color:#fff}
+/* inner page */
+.ih{background:var(--ol);color:#fff;margin-top:-44px;padding:52px 16px 16px;border-radius:0 0 24px 24px;position:relative;overflow:hidden;flex-shrink:0}
+.ih>*:not(.pat){position:relative}
+.ih h2{margin:10px 2px 0;font-size:22px;font-weight:800}.ih p{margin:2px 2px 0;font-size:13px;color:var(--tag)}
+.back{width:44px;height:44px;border-radius:50%;background:var(--olK);display:grid;place-items:center;color:#fff}
+.pform{border:1px solid #D9D7CE;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;background:#fff}
+.fld{display:flex;flex-direction:column;gap:5px}.fld span{font-size:13.5px}
+.fld input{height:44px;border:1px solid #D9D7CE;border-radius:10px;padding:0 12px;font-size:14px;color:#8A8B80;background:#fff}
+.logout{height:52px;border-radius:12px;background:#B4271C;color:#fff;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px}
+.rq{display:flex;align-items:center;gap:10px;padding:12px 14px;width:100%;text-align:start}
+.rq+.rq{border-top:1px solid #EFEDE5}
+.rq b{font-size:14px;display:block}.rq small{font-size:12px;color:var(--ink2);display:block;line-height:1.6}
+.st{font-size:11.5px;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.s-open{background:var(--warn);color:var(--warnT)}.s-ok{background:var(--ok);color:var(--okT)}.s-no{background:#EFEEE8;color:#55574A}.s-err{background:var(--err);color:var(--errT)}
+.att{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:9px;padding:6px 10px;font-size:12.5px;background:#FAFAF7}
+.addf{border:1.5px dashed #D2CEBF;border-radius:12px;min-height:48px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13.5px;color:var(--ink2);width:100%}
+.tl{display:flex;flex-direction:column;gap:0;padding:4px 2px}
+.tl div{display:flex;gap:12px;align-items:flex-start;position:relative;padding-bottom:16px}
+.tl div:not(:last-child):after{content:"";position:absolute;right:11px;top:26px;bottom:2px;width:2px;background:#E2E0D6}
+.tl i{font-style:normal;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;flex-shrink:0;background:#ECEBE6;color:#9A9A8E;position:relative;z-index:1}
+.tl .dn i{background:var(--okT);color:#fff}.tl .cu i{background:var(--ol);color:#fff;box-shadow:0 0 0 4px #E5E7D6}
+.tl b{font-size:14px;display:block}.tl small{font-size:12px;color:var(--ink2)}
+.tl .fu b{color:var(--ink3)}
+.meta{padding:2px 14px}
+.meta div{display:flex;justify-content:space-between;gap:10px;padding:11px 0;font-size:13px;border-bottom:1px solid #EFEDE5}
+.meta div:last-child{border:0}.meta span{color:var(--ink2)}.meta b{text-align:end}
+.otp{display:flex;gap:10px;justify-content:center;direction:ltr}
+.otp span{width:56px;height:60px;border-radius:12px;border:1.5px solid #D9D7CE;background:#fff;display:grid;place-items:center;font-size:24px;font-weight:800}
+.otp span.on{border-color:var(--ol)}
+/* overlays */
+.push{position:absolute;top:50px;left:10px;right:10px;z-index:8;background:rgba(250,250,247,.97);border-radius:20px;padding:12px 14px;display:flex;gap:10px;align-items:center;text-align:start;box-shadow:0 12px 30px -10px rgba(0,0,0,.45);animation:dn .25s ease}
+@keyframes dn{from{transform:translateY(-12px);opacity:0}}
+.dim{position:absolute;inset:0;background:rgba(20,20,14,.45);z-index:9;display:flex;align-items:flex-end}
+.sheet{background:#fff;width:100%;border-radius:22px 22px 0 0;padding:10px 18px 30px;display:flex;flex-direction:column;gap:12px;animation:up .25s ease}
+@keyframes up{from{transform:translateY(30px);opacity:0}}
+.sheet .grab{width:40px;height:5px;border-radius:3px;background:#D9D7CE;align-self:center}
+.sheet h4{margin:0;font-size:17px;text-align:center}
+.sheet p{margin:0;font-size:13.5px;color:var(--ink2);text-align:center;line-height:1.8}
+.spin{width:44px;height:44px;border-radius:50%;border:4px solid #E5E7D6;border-top-color:var(--ol);animation:sp .9s linear infinite;align-self:center}
+@keyframes sp{to{transform:rotate(360deg)}}
+.toast{position:absolute;top:52px;left:50%;transform:translateX(-50%);background:#23251C;color:#fff;border-radius:999px;padding:9px 16px;font-size:13px;font-weight:600;z-index:10;white-space:nowrap}
+.offline{background:#3B3D33;color:#fff;font-size:12.5px;padding:8px 14px;display:flex;gap:8px;align-items:center;flex-shrink:0}
+.sk{background:linear-gradient(90deg,#ECEBE5 0,#F6F5F1 50%,#ECEBE5 100%);background-size:200% 100%;animation:sh 1.2s linear infinite;border-radius:10px}
+@keyframes sh{to{background-position:-200% 0}}
+.ltr{direction:ltr;unicode-bidi:isolate}
+</style>
+</head><body>
+
+<div dir="rtl" lang="ar">
+<header class="top"><h1>المقرأة الإلكترونية · الطالب (ويب عام + تطبيق)</h1><p>نموذج تفاعلي مبني على استمارة الانضمام وتطبيق الطالب الحاليين · بيانات افتراضية · الآن الثلاثاء 5:54 م بتوقيت الطالب (القاهرة)</p></header>
+<div class="wrap">
+ <aside class="panel" id="list"></aside>
+ <main class="stage">
+  <div class="msel"><select id="msel" aria-label="الشاشة"></select></div>
+  <div class="phone" id="ph"></div>
+  <div class="cap" id="cap"></div>
+ </main>
+</div>
+</div>
+
+<script>
+const sv=p=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`;
+const I={
+ bell:sv('<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>'),chat:sv('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'),
+ back:sv('<path d="M9 6l6 6-6 6"/>'),chev:sv('<path d="M15 6l-6 6 6 6"/>'),x:sv('<path d="M6 6l12 12M18 6L6 18"/>'),ok:sv('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
+ home:sv('<path d="M3 10.5 12 3l9 7.5V21H3z"/>'),rep:sv('<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>'),cart:sv('<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.5 11h11L21 7H6.2"/>'),user:sv('<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>'),
+ book:sv('<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/>'),video:sv('<rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/>'),clock:sv('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+ mosque:sv('<path d="M4 21V11a8 8 0 0 1 16 0v10M2 21h20M9 21v-4a3 3 0 0 1 6 0v4M12 3V1"/>'),screen:sv('<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>'),lock:sv('<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'),
+ alert:sv('<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/>'),info:sv('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'),clip:sv('<path d="M21 11l-8.5 8.5a5 5 0 0 1-7-7L14 4a3.5 3.5 0 0 1 5 5l-8.5 8.5a2 2 0 0 1-3-3L15 7"/>'),
+ cal:sv('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'),out:sv('<path d="M14 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-3M10 12h10M17 9l3 3-3 3"/>'),
+ wifi:sv('<path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0M12 19h.01M3 3l18 18"/>'),lockS:sv('<rect x="6" y="11" width="12" height="9" rx="2"/><path d="M9 11V8a3 3 0 0 1 6 0v3"/>'),copy:sv('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/>')};
+const pat='<svg class="pat" aria-hidden="true"><defs><pattern id="pp" width="46" height="46" patternUnits="userSpaceOnUse"><path d="M23 4l5 11 11 5-11 5-5 11-5-11-11-5 11-5z M0 23h8M38 23h8M23 0v4M23 42v4" fill="none" stroke="#ECF6BC" stroke-width="1.2"/></pattern></defs><rect width="100%" height="100%" fill="url(#pp)"/></svg>';
+const MQ=[{id:'m1',n:'مقرأة النور الإلكترونية',g:'ذكور',d:'حلقات قرآنية عن بُعد للطلاب من داخل المملكة وخارجها، بمعلمين مجازين.',reg:true,slug:'alnoor'},{id:'m2',n:'مقرأة النور — بنات',g:'إناث',d:'حلقات للطالبات بإشراف معلمات.',reg:true,slug:'alnoor-girls'}];
+const RW=['حفص','شعبة','ورش','قالون','الدوري','البزي'];
+const SLOTS={'حفص':[['الأحد · الثلاثاء · الخميس','6:00 م','7:00 م'],['يوميًا عدا الجمعة','4:30 ص','5:30 ص']],'شعبة':[['يوميًا عدا الجمعة','4:30 ص','5:30 ص']],'ورش':[['السبت · الإثنين','9:00 م','10:00 م']],'قالون':[['السبت · الإثنين','9:00 م','10:00 م']]};
+const TZS=['القاهرة (GMT+2)','الرياض (GMT+3)','لندن (GMT+0)','جاكرتا (GMT+7)'];
+const freshF=()=>({name:'',g:'',dob:'',id:'',nat:'',cty:'',stage:'',phone:'',langs:['العربية'],gname:'',gphone:'',gnat:'',gid:'',kids:1,prog:'حفظ القرآن الكريم كاملًا',rw:'',hz:'',slot:null,tz:TZS[0]});
+const filled=()=>({name:'عبدالله يوسف الحسن',g:'ذكر',dob:'2014/03/12',id:'2•••••••71',nat:'مصر',cty:'مصر',stage:'متوسط',phone:'',langs:['العربية','الإنجليزية'],gname:'يوسف عبدالله الحسن',gphone:'10 1•• ••• 45',gnat:'مصر',gid:'2•••••••19',kids:1,prog:'حفظ القرآن الكريم كاملًا',rw:'حفص',hz:'جزء عمّ',slot:0,tz:TZS[0]});
+const fresh=()=>({scr:'choose',oneMq:false,mqClosed:false,noProg:false,F:freshF(),E:{},hs:'before',started:false,absOpen:false,absF:{from:'الثلاثاء 7 جمادى الآخرة',to:'الخميس 9 جمادى الآخرة',why:'',files:[]},absE:{},wd:'none',wdF:{why:'',files:[]},wdE:false,ov:null,offline:false,loading:false,toast:null,from:'home'});
+let S=fresh();
+const sbar=w=>`<div class="sb ${w?'w':''}"><span>${S.scr==='home'&&S.hs==='live'?'5:54':'5:54'}</span><span>●●● 62%</span></div>`;
+const url=u=>`<div class="url">${I.lockS.replace('class="i"','class="i" style="width:14px;height:14px"')}${u}</div>`;
+const logo=()=>`<div class="logo"><span class="mk">ن</span><b>مجمع النور</b><small>لتحفيظ القرآن الكريم</small></div>`;
+/* ================= WEB ================= */
+function choose(){
+ const open=MQ.filter(m=>m.reg);
+ return `<div class="screen" style="background:#F7F7F5">${sbar()}${url('ethaaf.com/join/alnoor-complex')}<div class="web">${logo()}<div class="wb">
+  <h2>الانضمام إلى مجمع النور</h2><p class="lead">اختر طريقة الدراسة المناسبة لك</p>
+  <button class="choice" data-act="say" data-v="تفتح استمارة المجمع الحالية كما هي"><span class="ci">${I.mosque}</span><span style="flex:1"><b>الانضمام للمجمع</b><small>حلقات حضورية في مساجد المجمع</small></span>${I.chev}</button>
+  <div style="font-size:13px;font-weight:700;margin:6px 2px -4px">الانضمام للمقرأة <span class="chip" style="background:var(--lime)">عن بُعد</span></div>
+  ${open.map(m=>`<button class="choice" data-act="pickmq" data-v="${m.id}"><span class="ci">${I.screen}</span><span style="flex:1"><b>${m.n}</b><small>${m.g==='ذكور'?'للطلاب':'للطالبات'} · حلقات عن بُعد من أي مكان وبتوقيتك المحلي</small></span>${I.chev}</button>`).join('')}
+  <p class="lead" style="font-size:12px;color:var(--ink3)">تظهر هذه الخطوة فقط عند وجود مقرأة تسجيلها مفتوح. رابط المقرأة المباشر ينقلك لبرامجها مباشرة.</p>
+ </div></div></div>`;
+}
+function progs(){
+ const m=MQ[0],P=S.noProg?[]:[{n:'حفظ القرآن الكريم كاملًا',d:'برنامج متكامل لحفظ القرآن الكريم مع معلمين مجازين، بحلقات يومية عن بُعد.',c:['ذكور وإناث','7 — 60 سنة','العربية'],reg:true,sl:['الأحد · الثلاثاء · الخميس — 6:00 م','يوميًا عدا الجمعة — 4:30 ص','السبت · الإثنين — 9:00 م']},{n:'تصحيح التلاوة',d:'تصحيح النطق وأحكام التجويد للكبار.',c:['ذكور','15 سنة فأكثر'],reg:false,sl:['الإثنين · الأربعاء — 8:00 م']}];
+ let body;
+ if(S.mqClosed)body=`<div class="done" style="padding-top:20px"><span class="big" style="background:#EFEEE8;color:var(--ink2)">${I.lock}</span><b style="font-size:18px">التسجيل في ${m.n} مغلق حاليًا</b><p class="lead">لا تستقبل المقرأة طلبات جديدة الآن. تابع حسابات المجمع لمعرفة موعد فتح التسجيل.</p><button class="btn2" data-act="go" data-v="choose" style="margin-top:6px">العودة لخيارات الانضمام</button></div>`;
+ else if(!P.length)body=`<div class="done" style="padding-top:20px"><span class="big" style="background:#EFEEE8;color:var(--ink2)">${I.book}</span><b style="font-size:18px">لا توجد برامج متاحة حاليًا</b><p class="lead">تظهر البرامج هنا عند فتح حلقات بها.</p></div>`;
+ else body=`<div class="tz">${I.clock.replace('class="i"','class="i" style="width:16px;height:16px"')}<span>الأوقات بتوقيتك: <b>القاهرة (GMT+2)</b></span></div>
+  ${P.map(p=>`<div class="pcard"><div class="pimg">${pat}<b>${p.n}</b></div><div class="pb"><span>${p.d}</span><div class="chips">${p.c.map(c=>`<span class="chip">${c}</span>`).join('')}</div>
+   <div class="slots"><b style="font-size:12px;color:var(--ink2)">الأوقات المتاحة</b>${p.sl.map(s=>`<span>${s}</span>`).join('')}</div>
+   ${p.reg?`<button class="btn" data-act="go" data-v="ins">سجّل في البرنامج</button>`:`<button class="btn" disabled>التسجيل مغلق</button>`}</div></div>`).join('')}`;
+ return `<div class="screen" style="background:#F7F7F5">${sbar()}${url('ethaaf.com/join/'+m.slug)}<div class="web">${logo()}<div class="wb">
+  ${S.mqClosed||!P.length?'':`<h2>${m.n}</h2><p class="lead">${m.d}</p>`}${body}</div></div></div>`;
+}
+function ins(){
+ return `<div class="screen" style="background:#F7F7F5">${sbar()}${url('ethaaf.com/join/alnoor')}<div class="web">${logo()}<div class="wb">
+  <div class="fsec"><h3>تعليمات التسجيل في المقرأة</h3><div style="padding:14px;font-size:13.5px;line-height:2">
+  • الالتزام بالحضور في الموعد، والدخول من زر «دخول الحلقة» في تطبيق إتحاف.<br>• تحتاج اتصالًا جيدًا بالإنترنت وسماعة ومكانًا هادئًا.<br>• تُفتح الكاميرا حسب تعليمات المعلم، ولا تُسجَّل الجلسات.<br>• الغياب بعذر يُطلب من التطبيق قبل الحلقة.</div>
+  <div style="padding:0 14px 14px"><button class="btn" data-act="go" data-v="form">متابعة التسجيل</button></div></div>
+ </div></div></div>`;
+}
+function form(){
+ const F=S.F,E=S.E,uni=F.stage==='جامعي وموظف',minor=F.stage&&!uni,sl=F.rw?(SLOTS[F.rw]||[]):[];
+ const fld=(k,l,req,inp,hint)=>`<div class="f ${E[k]?'bad':''}"><label>${l}${req?' <em>*</em>':''}</label>${inp}${E[k]?`<span class="msg">${E[k]}</span>`:hint?`<span class="hint">${hint}</span>`:''}</div>`;
+ const inp=(k,ph,extra)=>`<input data-in="${k}" value="${F[k]}" placeholder="${ph}" ${extra||''}>`;
+ const sel=(k,opts,ph)=>`<select data-sel="${k}"><option value="">${ph}</option>${opts.map(o=>`<option ${F[k]===o?'selected':''}>${o}</option>`).join('')}</select>`;
+ const phone=(k,code)=>`<div class="ph"><span>${code}</span><input data-in="${k}" value="${F[k]}" placeholder="10 1234 5678"></div>`;
+ const nE=Object.keys(E).length;
+ return `<div class="screen" style="background:#F7F7F5">${sbar()}${url('ethaaf.com/join/alnoor')}<div class="web" id="wf">${logo()}<div class="wb">
+  <h2 style="font-size:18px">استمارة الانضمام — ${MQ[0].n}</h2>
+  ${nE?`<div class="banner b-err">${I.alert}<div><b>${E.id&&E.id.includes('مسجل')?'لا يمكن إرسال الطلب':'راجع الحقول المظللة'}</b>${E.id&&E.id.includes('مسجل')?'رقم الهوية مرتبط بطلب أو تسجيل في هذا المجمع.':nE+' حقول تحتاج تصحيحًا.'}</div></div>`:''}
+  <div class="fsec"><h3>بيانات الطالب</h3><div class="fgrid">
+   ${fld('name','الاسم الكامل',1,inp('name','أدخل الاسم الكامل'))}
+   ${fld('g','الجنس',1,`<div class="seg">${['ذكر','أنثى'].map(g=>`<button data-act="fset" data-k="g" data-v="${g}" aria-pressed="${F.g===g}">${g}</button>`).join('')}</div>`)}
+   ${F.g==='أنثى'?`<div class="banner b-warn">${I.info}<div><b>هذه المقرأة للطلاب الذكور</b>للطالبات: <button class="lnk" style="padding:0;min-height:0;text-decoration:underline" data-act="say" data-v="تفتح برامج مقرأة النور — بنات">مقرأة النور — بنات</button></div></div>`:''}
+   ${fld('dob','تاريخ الميلاد',1,inp('dob','يوم / شهر / سنة','dir="ltr" style="text-align:right"'))}
+   ${fld('id','رقم الهوية',1,inp('id','رقم الهوية أو جواز السفر','dir="ltr" style="text-align:right"'),'تدخل به إلى تطبيق إتحاف لمتابعة طلبك')}
+   ${fld('nat','الجنسية',1,sel('nat',['السعودية','مصر','الجزائر','المغرب','الكويت','فرنسا','المملكة المتحدة','أخرى'],'الجنسية'))}
+   ${fld('cty','دولة الإقامة',1,sel('cty',['السعودية','مصر','الجزائر','المغرب','الكويت','فرنسا','المملكة المتحدة','أخرى'],'دولة الإقامة'))}
+   ${fld('stage','المرحلة',1,sel('stage',['الابتدائية الأولية','الابتدائية العليا','متوسط','ثانوي','جامعي وموظف'],'المرحلة'))}
+   ${F.stage&&F.stage!=='جامعي وموظف'?fld('grade','الصف',1,'<select><option>الصف الأول</option></select>'):''}
+   ${fld('phone','رقم جوال الطالب',uni,phone('phone','+20'),uni?'يصلك رمز الدخول (OTP) على هذا الرقم':'اختياري · رمز الدخول يصل لجوال ولي الأمر')}
+   ${fld('langs','اللغات المتقنة',0,`<div class="togs">${['العربية','الإنجليزية','الفرنسية','الأردية','الإندونيسية','أخرى'].map(l=>`<button data-act="ftog" data-k="langs" data-v="${l}" aria-pressed="${F.langs.includes(l)}">${l}</button>`).join('')}</div>`)}
+  </div></div>
+  ${minor?`<div class="fsec"><h3>بيانات ولي الأمر <span class="row" style="gap:6px;font-size:12px;font-weight:400;color:var(--ink2)">عدد الأبناء <span class="chip" style="background:#fff;border:1px solid var(--line)">− ${F.kids} +</span></span></h3><div class="fgrid">
+   <div class="banner b-gray" style="padding:8px 10px">${I.info}<div>لا يُنتظر موافقة ولي الأمر. يصله رمز الدخول ورسائل المقرأة على الواتساب.</div></div>
+   ${fld('gname','اسم ولي الأمر',1,inp('gname','أدخل اسم ولي الأمر'))}
+   ${fld('gphone','رقم جوال ولي الأمر',1,phone('gphone','+20'),'بأي رمز دولة · يصله رمز الدخول')}
+   ${fld('gnat','الجنسية',1,sel('gnat',['السعودية','مصر','الجزائر','المغرب','الكويت','أخرى'],'الجنسية'))}
+   ${fld('gid','رقم الهوية',1,inp('gid','رقم الهوية','dir="ltr" style="text-align:right"'))}
+  </div></div>`:!F.stage?`<div class="banner b-gray">${I.info}<div>تظهر بيانات ولي الأمر بعد اختيار المرحلة (لكل المراحل عدا «جامعي وموظف»).</div></div>`:''}
+  <div class="fsec"><h3>البرنامج</h3><div class="fgrid">
+   ${fld('prog','البرنامج',1,`<select data-sel="prog"><option>حفظ القرآن الكريم كاملًا</option><option>تصحيح التلاوة (للذكور 15+)</option></select>`,'البرامج المتاحة في المقرأة لجنسك')}
+   ${fld('rw','الرواية',1,`<div class="togs">${RW.map(r=>`<button data-act="fset" data-k="rw" data-v="${r}" aria-pressed="${F.rw===r}">${r}</button>`).join('')}</div>`)}
+   ${fld('hz','مقدار الحفظ الحالي',1,sel('hz',['لا أحفظ','جزء عمّ','جزء تبارك','جزءان إلى 5 أجزاء','5 إلى 10 أجزاء','أكثر من 10 أجزاء','القرآن كاملًا'],'اختر'))}
+  </div></div>
+  <div class="fsec"><h3>الموعد المفضل <em style="color:var(--errT);font-style:normal">*</em></h3><div class="fgrid">
+   <div class="tz">${I.clock.replace('class="i"','class="i" style="width:16px;height:16px"')}<span>منطقتك الزمنية</span><select data-sel="tz">${TZS.map(t=>`<option ${F.tz===t?'selected':''}>${t}</option>`).join('')}</select></div>
+   ${!F.rw?`<span class="hint" style="font-size:12.5px;color:var(--ink3)">اختر الرواية لتظهر المواعيد المتاحة لها.</span>`
+   :!sl.length?`<div class="banner b-warn">${I.info}<div><b>لا توجد مواعيد متاحة لرواية ${F.rw} حاليًا</b>اختر رواية أخرى، أو عد لاحقًا عند فتح حلقات جديدة.</div></div>`
+   :`<div class="col" style="gap:8px">${sl.map((s,i)=>`<button class="slot" data-act="slot" data-v="${i}" aria-pressed="${F.slot===i}"><span class="rd"></span><span style="flex:1"><b>${s[0]}</b><small>${F.tz.startsWith('الرياض')?s[2]:s[1]} بتوقيتك${F.tz.startsWith('الرياض')?'':' · '+s[2]+' بتوقيت المقرأة'}</small></span></button>`).join('')}</div>`}
+   ${E.slot?`<span style="font-size:12px;color:var(--errT);font-weight:600">${E.slot}</span>`:''}
+  </div></div>
+  <button class="btn" data-act="submit">إرسال الطلب</button>
+  <p class="lead" style="font-size:12px;color:var(--ink3)">بإرسال الطلب يدخل قائمة الانتظار، وتصلك رسالة تأكيد على الواتساب.</p>
+ </div></div>${toast()}</div>`;
+}
+function done(){
+ const F=S.F,to=F.stage==='جامعي وموظف'?'جوالك':'جوال ولي الأمر';
+ return `<div class="screen" style="background:#F7F7F5">${sbar()}${url('ethaaf.com/join/alnoor')}<div class="web">${logo()}<div class="wb"><div class="done">
+  <span class="big">${I.ok}</span><b style="font-size:20px">تم استلام طلبك</b><p class="lead">طلب ${F.name||'عبدالله يوسف الحسن'} الآن في قائمة الانتظار لـ «${MQ[0].n}».</p>
+  <div class="nexts"><div><i>1</i><span>أرسلنا رسالة تأكيد على واتساب ${to} <b class="ltr">+20 10 1•• ••• 45</b> فيها روابط تحميل التطبيق.</span></div>
+   <div><i>2</i><span>ادخل تطبيق إتحاف برقم الهوية ورمز التحقق، وتابع حالة طلبك.</span></div>
+   <div><i>3</i><span>عند قبولك تصلك رسالة بالحلقة وموعدها بتوقيتك المحلي.</span></div></div>
+  <div class="stores"><span>App Store</span><span>Google Play</span></div>
+ </div></div></div></div>`;
+}
+/* ================= APP ================= */
+const tab=a=>`<nav class="tab">${[['الرئيسية',I.home,'home'],['تقرير الطالب',I.rep,''],['المتجر',I.cart,''],['حسابي',I.user,'account']].map(([l,ic,k])=>`<span class="${k===a?'on':''}" ${k?`data-act="go" data-v="${k}" role="button" style="cursor:pointer"`:''}>${ic}${l}</span>`).join('')}</nav>`;
+const coin=`<span class="coin"><svg class="i" viewBox="0 0 24 24" style="color:#CA8A04" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.5 10h5"/></svg>430</span>`;
+const hdr=t=>`<div class="hdr">${pat}<div class="row between"><b style="font-size:22px">${t}</b><div class="row">${coin}<button class="ic" aria-label="المحادثات">${I.chat}</button><button class="ic" aria-label="الإشعارات">${I.bell}<i class="bd">4</i></button></div></div></div>`;
+function login(){
+ const otp=S.scr==='otp';
+ return `<div class="screen" style="background:#fff">${sbar()}<div class="scr" style="padding:24px 22px;gap:16px">
+  <div class="logo" style="padding-top:30px"><span class="mk" style="background:var(--beige);color:var(--ol)">إ</span><b style="color:var(--ink);font-size:20px">${otp?'رمز التحقق':'تسجيل الدخول'}</b><small style="color:var(--ink2);font-size:13px">${otp?'أُرسل الرمز إلى جوال ولي الأمر':'ادخل برقم هويتك'}</small></div>
+  ${otp?`<div class="ltr" style="text-align:center;font-weight:700">+20 10 1•• ••• 45</div><div class="otp"><span class="on">4</span><span class="on">8</span><span>2</span><span></span></div><p style="text-align:center;font-size:12.5px;color:var(--ink3);margin:0">إعادة الإرسال بعد 0:42</p><button class="btn" data-act="go" data-v="applicant">تحقق</button>`
+  :`<div class="f"><label>رقم الهوية</label><input value="2•••••••71" dir="ltr" style="text-align:right"></div><button class="btn" data-act="go" data-v="otp">متابعة</button><p style="text-align:center;font-size:12.5px;color:var(--ink3);margin:0;line-height:1.8">الدخول كما هو لكل مستخدمي إتحاف. للمرحلة «جامعي وموظف» يصل الرمز لجوال الطالب، ولغيرها لجوال ولي الأمر.</p>`}
+ </div></div>`;
+}
+function applicant(){
+ return `<div class="screen">${sbar(1)}<div class="hdr">${pat}<div class="row between"><b style="font-size:22px">طلب الانضمام</b><button class="ic" aria-label="الإشعارات">${I.bell}</button></div><p style="margin:6px 0 0;font-size:13px;color:var(--tag)">عبدالله يوسف الحسن</p></div>
+ <div class="scr">
+  <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px"><div class="row between"><b style="font-size:16px">حالة طلبك</b><span class="st s-open">في الانتظار</span></div>
+   <div class="tl"><div class="dn"><i>✓</i><span><b>استلام الطلب</b><small>الأحد 1448/05/02</small></span></div><div class="cu"><i>2</i><span><b>في الانتظار</b><small>يراجع المشرف الطلبات بحسب الأسبقية والمقاعد المتاحة</small></span></div><div class="fu"><i>3</i><span><b>القبول والتسكين</b><small>تصلك رسالة بالحلقة وموعدها بتوقيتك</small></span></div></div></div>
+  <div class="card meta"><div><span>المقرأة</span><b>${MQ[0].n}</b></div><div><span>البرنامج</span><b>حفظ القرآن الكريم كاملًا</b></div><div><span>الرواية</span><b>حفص</b></div><div><span>الموعد المختار</span><b>الأحد · الثلاثاء · الخميس 6:00 م<br><small style="color:var(--ink3);font-weight:400">بتوقيت القاهرة</small></b></div><div><span>تاريخ التقديم</span><b>1448/05/02</b></div></div>
+  <div class="banner b-gray">${I.info}<div>لا يلزمك أي إجراء الآن. نرسل لك رسالة واتساب وإشعارًا عند أي تغيير في حالة طلبك.</div></div>
+  <button class="lnk" style="align-self:center;color:#B4271C">تسجيل خروج</button>
+ </div></div>`;
+}
+/* halaqa card */
+function hq(o){
+ const H=o||{n:'حلقة الأعشار المسائية',t:'أ. سعد الشهري',tm:'6:00 م',rw:'حفص'},st=o?o.st:S.hs;
+ const tags=`<div class="row" style="gap:6px"><span class="tg">مقرأة</span><span class="tg2">رواية ${H.rw}</span></div>`;
+ const req=S.absOpen&&!o?`<div class="reqb">${I.cal.replace('class="i"','class="i" style="width:16px;height:16px"')}طلب غياب مفتوح: الثلاثاء — الخميس</div>`:'';
+ if(st==='live'||st==='joined'){const j=st==='joined';
+  return `<section class="hq live" aria-label="حلقتي"><div class="row between"><span class="k row" style="gap:6px">${S.started||j?'<span class="dotg"></span>بدأ المعلم الحلقة':'وقت الدخول'}</span>${tags}</div>
+  <div class="row between" style="align-items:flex-end"><div class="col" style="gap:2px"><h3>${H.n}</h3><span class="sub">اليوم · ${H.tm} (بتوقيتك)</span><span class="sub2">المعلم: ${H.t}</span></div>${j?`<span class="cd">${I.ok.replace('class="i"','class="i" style="width:16px;height:16px"')}حاضر 5:56 م</span>`:`<span class="cd">${I.clock.replace('class="i"','class="i" style="width:16px;height:16px"')}${S.started?'بدأت منذ 2 د':'تبدأ خلال 6 د'}</span>`}</div>
+  ${j?`<button class="go re" data-act="rejoin">${I.video}العودة إلى القاعة</button><div class="ft">تم تسجيل حضورك 5:56 م · العودة لا تعيد التسجيل</div>`
+  :`<button class="go" data-act="join" ${S.offline?'disabled style="opacity:.5;cursor:not-allowed"':''}>${I.video}دخول الحلقة</button><div class="ft">${S.offline?'يحتاج الدخول إلى اتصال بالإنترنت':'يُسجَّل حضورك تلقائيًا عند الدخول'}</div>`}${req}</section>`}
+ if(st==='excused')return `<section class="hq" aria-label="حلقتي"><div class="row between"><span class="k">حلقة اليوم</span>${tags}</div>
+  <div class="row between" style="align-items:flex-end"><div class="col" style="gap:2px"><h3>${H.n}</h3><span class="sub">اليوم · ${H.tm} (بتوقيتك)</span><span class="sub2">المعلم: ${H.t}</span></div><span class="cd" style="background:var(--ok);color:var(--okT)">غائب بعذر</span></div>
+  <button class="go off" disabled>${I.video}لديك عذر غياب اليوم</button><div class="ft"><span>حلقتك القادمة: الخميس 6:00 م</span></div></section>`;
+ if(st==='next')return `<section class="hq" aria-label="حلقتي"><div class="row between"><span class="k">${o&&o.k||'الحلقة القادمة'}</span>${tags}</div>
+  <div class="row between" style="align-items:flex-end"><div class="col" style="gap:2px"><h3>${H.n}</h3><span class="sub">${o&&o.day||'الخميس'} · ${H.tm} (بتوقيتك)</span><span class="sub2">المعلم: ${H.t}</span></div><span class="cd">${I.clock.replace('class="i"','class="i" style="width:16px;height:16px"')}${o&&o.cd||'بعد يومين'}</span></div>
+  <button class="go off" disabled>${I.video}دخول الحلقة</button><div class="ft"><span>${o?'يُتاح الدخول قبل الموعد بـ10 دقائق':'انتهت حلقة اليوم · حضرت 5:56 م'}</span><button class="lnk" data-act="absopen">طلب غياب</button></div></section>`;
+ return `<section class="hq" aria-label="حلقتي"><div class="row between"><span class="k">حلقتك القادمة</span>${tags}</div>
+  <div class="row between" style="align-items:flex-end"><div class="col" style="gap:2px"><h3>${H.n}</h3><span class="sub">اليوم · ${H.tm} (بتوقيتك)</span><span class="sub2">المعلم: ${H.t}</span></div><span class="cd">${I.clock.replace('class="i"','class="i" style="width:16px;height:16px"')}بعد 2 س 15 د</span></div>
+  <button class="go off" disabled>${I.video}دخول الحلقة</button><div class="ft"><span>يُتاح الدخول قبل الموعد بـ10 دقائق</span>${S.absOpen?'':'<button class="lnk" data-act="absopen">طلب غياب</button>'}</div>${req}</section>`;
+}
+function home(){
+ let card;
+ if(S.loading)card=`<div class="sk" style="height:214px;border-radius:18px"></div>`;
+ else if(S.hs==='multi')card=`<div class="car">${hq({n:'حلقة الأعشار المسائية',t:'أ. سعد الشهري',tm:'6:00 م',rw:'حفص',st:'live'})}${hq({n:'تصحيح التلاوة',t:'أ. ماجد القحطاني',tm:'8:00 م',rw:'حفص',st:'next',k:'الحلقة التالية اليوم',day:'اليوم',cd:'بعد 2 س 6 د'})}</div><div class="pdots"><i class="on"></i><i></i></div>`;
+ else card=hq();
+ return `<div class="screen">${sbar(1)}${hdr('الرئيسية')}${S.offline?`<div class="offline">${I.wifi.replace('class="i"','class="i" style="width:16px;height:16px"')}لا يوجد اتصال بالإنترنت</div>`:''}
+ <div class="scr">${card}
+  <div class="stats">${[['غائب',1],['غائب بعذر',S.hs==='excused'?3:2],['متأخر',0],['لم يسمّع',3],['المنجزات','18 من 40'],['نسبة الإنجاز','45 %']].map(([l,v])=>`<div>${pat}<span style="position:relative">${l}</span><span style="position:relative;font-size:17px">${v}</span></div>`).join('')}</div>
+  <div class="card lesson"><span class="lsi">${I.book}</span><div style="flex:1"><b style="font-size:16px">درس اليوم</b><div style="font-size:13px;color:var(--ink3)">بحسب خطتك · الآن في التقويم أدناه</div></div></div>
+  <div class="card" style="padding:14px;color:var(--ink3);font-size:13px">تقويم الدورة · كما هو</div>
+ </div>${tab('home')}${overlay()}</div>`;
+}
+function account(){
+ const f=(l,v)=>`<label class="fld"><span>${l}</span><input value="${v}" readonly ${/[0-9+]/.test(v)?'dir="ltr" style="text-align:right"':''}></label>`;
+ const wdRow={none:'',pending:'<span class="st s-open">معلّق</span>',ok:'<span class="st s-ok">مؤكد</span>',no:'<span class="st s-no">مرفوض</span>'}[S.wd];
+ return `<div class="screen">${sbar(1)}${hdr('حسابي')}<div class="scr" style="background:#FAFAF8">
+  <div class="card" style="border:1px solid #E4E2D8"><div style="padding:12px 14px 2px;font-weight:800;font-size:15px">طلباتي <span class="chip" style="background:var(--lime);font-size:11px">مقرأة</span></div>
+   <button class="rq" data-act="absopen"><span class="lsi" style="width:40px;height:40px;background:var(--beige);color:var(--ol)">${I.cal}</span><span style="flex:1"><b>طلب غياب</b><small>${S.absOpen?'مفتوح · الثلاثاء — الخميس':'لحلقة أو أكثر من اليوم فصاعدًا'}</small></span>${S.absOpen?'<span class="st s-open">مفتوح</span>':''}${I.chev}</button>
+   <button class="rq" data-act="go" data-v="withdraw"><span class="lsi" style="width:40px;height:40px;background:#F6EDEC;color:#9A3B30">${I.out}</span><span style="flex:1"><b>طلب انسحاب من المقرأة</b><small>${S.wd==='pending'?'بانتظار تأكيد المشرف · حضورك مستمر':S.wd==='ok'?'أكّد المشرف انسحابك':S.wd==='no'?'رفض المشرف الطلب · تواصل مع المشرف':'يؤكده المشرف'}</small></span>${wdRow}${I.chev}</button></div>
+  <div class="pform"><b style="font-size:17px">المعلومات الشخصية</b>${f('الاسم الكامل','عبدالله يوسف الحسن')}${f('رقم الهوية','2•••••••71')}${f('رقم جوال ولي الأمر','+20 10 1•• ••• 45')}${f('اسم المجمع','مجمع النور · مقرأة النور الإلكترونية')}${f('اسم الحلقة','حلقة الأعشار المسائية')}${f('المرحلة','متوسط')}</div>
+  <button class="logout">تسجيل خروج ${I.out}</button>
+ </div>${tab('account')}${overlay()}</div>`;
+}
+function absence(){
+ const A_=S.absF,E=S.absE;
+ if(S.absOpen&&S.scr==='absence')return `<div class="screen">${sbar(1)}<div class="ih">${pat}<button class="back" data-act="go" data-v="${S.from}" aria-label="رجوع">${I.back}</button><h2>طلب غياب</h2><p>حلقة الأعشار المسائية</p></div><div class="scr">
+  <div class="card meta"><div><span>الحالة</span><span class="st s-open">مفتوح</span></div><div><span>الفترة</span><b>الثلاثاء 7 — الخميس 9 جمادى الآخرة</b></div><div><span>الحلقات</span><b>2 حلقتان</b></div><div><span>السبب</span><b>${A_.why||'سفر عائلي'}</b></div><div><span>المرفقات</span><b>${(A_.files.length?A_.files:['تذكرة_السفر.pdf']).join('، ')}</b></div></div>
+  <div class="banner b-gray">${I.info}<div>وصل الطلب لمعلمك ومشرف المقرأة. عند قبوله تُسجَّل «غائب بعذر» لكل أيامه.</div></div>
+  <button class="btn2" style="border-color:#E3B5AF;color:#B4271C" data-act="abscancel">إلغاء الطلب</button></div>${overlay()}${toast()}</div>`;
+ const fld=(k,l,req,inp,hint)=>`<div class="f ${E[k]?'bad':''}"><label>${l}${req?' <em>*</em>':''}</label>${inp}${E[k]?`<span class="msg">${E[k]}</span>`:hint?`<span class="hint">${hint}</span>`:''}</div>`;
+ const D=['الثلاثاء 7 جمادى الآخرة','الخميس 9 جمادى الآخرة','الأحد 12 جمادى الآخرة','الثلاثاء 14 جمادى الآخرة'];
+ return `<div class="screen">${sbar(1)}<div class="ih">${pat}<button class="back" data-act="go" data-v="${S.from}" aria-label="رجوع">${I.back}</button><h2>طلب غياب</h2><p>حلقة الأعشار المسائية · من اليوم فصاعدًا</p></div><div class="scr">
+  <div class="card" style="padding:14px;display:flex;flex-direction:column;gap:12px">
+  ${fld('from','من',1,`<select data-ab="from">${D.map(d=>`<option ${A_.from===d?'selected':''}>${d}</option>`).join('')}</select>`)}
+  ${fld('to','إلى',1,`<select data-ab="to">${D.map(d=>`<option ${A_.to===d?'selected':''}>${d}</option>`).join('')}</select>`,'تشمل الفترة حلقتين: الثلاثاء والخميس')}
+  ${fld('why','السبب',1,`<textarea data-ab="why" placeholder="مثال: سفر، مرض، ظرف عائلي">${A_.why}</textarea>`)}
+  <div class="f"><label>مرفقات <span style="font-weight:400;color:var(--ink3)">(اختياري)</span></label>${A_.files.map((n,i)=>`<div class="row between att" style="width:100%"><span class="row" style="gap:6px">${I.clip.replace('class="i"','class="i" style="width:16px;height:16px"')}${n}</span><button data-act="absrm" data-v="${i}" aria-label="إزالة" style="width:32px;height:32px;display:grid;place-items:center">${I.x.replace('class="i"','class="i" style="width:16px;height:16px"')}</button></div>`).join('')}<button class="addf" data-act="absadd">${I.clip}إضافة مرفق (صورة أو PDF)</button></div>
+  </div>
+  <button class="btn" data-act="abssend">إرسال الطلب</button>
+ </div>${toast()}</div>`;
+}
+function withdraw(){
+ if(S.wd!=='none'){const m={pending:['معلّق','s-open','وصل طلبك لمشرف المقرأة. حضورك مستمر حتى يؤكده، ومقعدك محفوظ.'],ok:['مؤكد','s-ok','أكّد المشرف انسحابك من المقرأة. شكرًا لك، ويمكنك التقديم مجددًا متى شئت.'],no:['مرفوض','s-no','رفض المشرف الطلب، وتستمر في حلقتك. تواصل معه من مجموعة الحلقة لمعرفة السبب.']}[S.wd];
+  return `<div class="screen">${sbar(1)}<div class="ih">${pat}<button class="back" data-act="go" data-v="account" aria-label="رجوع">${I.back}</button><h2>طلب انسحاب</h2><p>${MQ[0].n}</p></div><div class="scr">
+  <div class="card meta"><div><span>الحالة</span><span class="st ${m[1]}">${m[0]}</span></div><div><span>تاريخ الطلب</span><b>الثلاثاء 7 جمادى الآخرة</b></div><div><span>السبب</span><b>${S.wdF.why||'ظروف عمل'}</b></div></div>
+  <div class="banner ${S.wd==='ok'?'b-ok':'b-gray'}">${I.info}<div>${m[2]}</div></div></div>${toast()}</div>`}
+ return `<div class="screen">${sbar(1)}<div class="ih">${pat}<button class="back" data-act="go" data-v="account" aria-label="رجوع">${I.back}</button><h2>طلب انسحاب</h2><p>${MQ[0].n}</p></div><div class="scr">
+  <div class="banner b-warn">${I.alert}<div><b>يؤكد المشرف الانسحاب</b>يستمر حضورك ومقعدك حتى التأكيد. بعده تخرج من الحلقة ويتحرر مقعدك.</div></div>
+  <div class="card" style="padding:14px;display:flex;flex-direction:column;gap:12px"><div class="f ${S.wdE?'bad':''}"><label>السبب <em>*</em></label><textarea data-wd="why" placeholder="اكتب سبب الانسحاب">${S.wdF.why}</textarea>${S.wdE?'<span class="msg">اكتب سبب الانسحاب</span>':''}</div>
+  <div class="f"><label>مرفقات <span style="font-weight:400;color:var(--ink3)">(اختياري)</span></label><button class="addf" data-act="say" data-v="يُفتح منتقي الملفات">${I.clip}إضافة مرفق</button></div></div>
+  <button class="btn" style="background:#9A3B30" data-act="wdsend">إرسال طلب الانسحاب</button></div>${toast()}</div>`;
+}
+/* ---------- overlays ---------- */
+function overlay(){
+ const o=S.ov;let h='';
+ if(o==='push')h=`<button class="push" data-act="pushtap"><span class="lsi" style="width:40px;height:40px;border-radius:10px">${I.video}</span><span style="flex:1"><b style="font-size:13px">إتحاف · الآن</b><span style="display:block;font-size:13.5px">حلقة الأعشار المسائية تبدأ بعد 10 دقائق</span><span style="display:block;font-size:12.5px;color:var(--ink2)">اضغط للدخول ويُسجَّل حضورك</span></span></button>`;
+ if(o==='opening')h=`<div class="dim"><div class="sheet"><span class="grab"></span><span class="spin"></span><h4>جارٍ فتح القاعة في Zoom…</h4><p>سُجّل حضورك 5:56 م</p></div></div>`;
+ if(o==='fail')h=`<div class="dim"><div class="sheet"><span class="grab"></span><h4>تعذّر فتح القاعة</h4><p>سُجّل حضورك 5:56 م. لم نتمكن من فتح تطبيق Zoom على جهازك.</p><button class="btn" data-act="join">حاول مجددًا</button><button class="btn2" data-act="say" data-v="نُسخ رابط القاعة">${I.copy}نسخ رابط القاعة</button><button class="lnk" style="align-self:center" data-act="close">إغلاق</button></div></div>`;
+ if(o==='cancel')h=`<div class="dim"><div class="sheet"><span class="grab"></span><h4>إلغاء طلب الغياب؟</h4><p>يُلغى الطلب ولا يصل للمعلم والمشرف.</p><button class="btn" style="background:#B4271C" data-act="abscancelok">إلغاء الطلب</button><button class="btn2" data-act="close">رجوع</button></div></div>`;
+ return h+toast();
+}
+const toast=()=>S.toast?`<div class="toast" role="status">${S.toast}</div>`:'';
+/* ---------- render & actions ---------- */
+const VIEWS={choose,progs,ins,form,done,login,otp:login,applicant,home,account,absence,withdraw};
+function render(){const p=document.getElementById('ph'),sc=p.querySelector('#wf,.scr'),t=sc?sc.scrollTop:0;p.innerHTML=VIEWS[S.scr]();if(S.keep){const n=p.querySelector('#wf,.scr');if(n)n.scrollTop=t}S.keep=false;sync()}
+let tt;function say(m){S.toast=m;S.keep=true;render();clearTimeout(tt);tt=setTimeout(()=>{S.toast=null;S.keep=true;render()},2200)}
+function validate(){const F=S.F,E={},uni=F.stage==='جامعي وموظف';
+ if(!F.name.trim())E.name='الاسم الكامل مطلوب';if(!F.g)E.g='اختر الجنس';else if(F.g==='أنثى')E.g='هذه المقرأة للطلاب الذكور';
+ if(!F.dob.trim())E.dob='تاريخ الميلاد مطلوب';
+ if(!F.id.trim())E.id='رقم الهوية مطلوب';else if(F.id.replace(/\s/g,'')==='1012345678')E.id='رقم الهوية مسجل مسبقًا في مجمع النور (طلب قائم أو طالب مسجل). تابع طلبك من تطبيق إتحاف.';
+ if(!F.nat)E.nat='اختر الجنسية';if(!F.cty)E.cty='اختر دولة الإقامة';if(!F.stage)E.stage='اختر المرحلة';
+ if(uni&&!F.phone.trim())E.phone='جوال الطالب إلزامي لمرحلة «جامعي وموظف»';
+ if(F.stage&&!uni){if(!F.gname.trim())E.gname='اسم ولي الأمر مطلوب';if(!F.gphone.trim())E.gphone='جوال ولي الأمر مطلوب';if(!F.gnat)E.gnat='اختر الجنسية';if(!F.gid.trim())E.gid='رقم الهوية مطلوب'}
+ if(!F.rw)E.rw='اختر الرواية';if(!F.hz)E.hz='اختر مقدار الحفظ';
+ if(F.rw&&!(SLOTS[F.rw]||[]).length)E.slot='لا توجد مواعيد لهذه الرواية';else if(F.slot===null)E.slot='اختر الموعد المفضل';
+ return E}
+const A={
+ go(d){S.scr=d.v;S.ov=null;render()},
+ pickmq(){S.scr='progs';render()},
+ say(d){say(d.v)},
+ fset(d){S.F[d.k]=d.v;delete S.E[d.k];if(d.k==='rw'){S.F.slot=null;delete S.E.slot}S.keep=true;render()},
+ ftog(d){const a=S.F[d.k],i=a.indexOf(d.v);i<0?a.push(d.v):a.splice(i,1);S.keep=true;render()},
+ slot(d){S.F.slot=+d.v;delete S.E.slot;S.keep=true;render()},
+ submit(){S.E=validate();if(Object.keys(S.E).length){render();return}S.scr='done';render()},
+ join(){if(S.offline)return;S.ov='opening';S.keep=true;render();setTimeout(()=>{if(S.ov!=='opening')return;if(S.failOpen){S.ov='fail';S.failOpen=false;S.hs='joined';S.keep=true;render();return}S.ov=null;S.hs='joined';S.keep=true;say('سُجّل حضورك 5:56 م · فُتحت القاعة')},1300)},
+ rejoin(){S.ov='opening';S.keep=true;render();setTimeout(()=>{S.ov=null;S.keep=true;say('فُتحت القاعة · لم يتغير وقت حضورك')},1000)},
+ pushtap(){S.hs='live';S.ov=null;A.join()},
+ close(){S.ov=null;S.keep=true;render()},
+ absopen(){S.from=S.scr;S.scr='absence';S.absE={};render()},
+ absadd(){S.absF.files.push(S.absF.files.length?'صورة_العذر.jpg':'تذكرة_السفر.pdf');S.keep=true;render()},
+ absrm(d){S.absF.files.splice(+d.v,1);S.keep=true;render()},
+ abssend(){if(!S.absF.why.trim()){S.absE={why:'اكتب سبب الغياب'};S.keep=true;render();return}S.absOpen=true;S.scr=S.from;say('أُرسل طلب الغياب للمعلم والمشرف')},
+ abscancel(){S.ov='cancel';S.keep=true;render()},
+ abscancelok(){S.absOpen=false;S.ov=null;S.absF={from:'الثلاثاء 7 جمادى الآخرة',to:'الخميس 9 جمادى الآخرة',why:'',files:[]};S.scr=S.from==='absence'?'home':S.from;say('أُلغي طلب الغياب')},
+ wdsend(){if(!S.wdF.why.trim()){S.wdE=true;S.keep=true;render();return}S.wd='pending';S.keep=true;say('أُرسل طلب الانسحاب للمشرف')},
+};
+document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el||!document.getElementById('ph').contains(el))return;if(S.ov==='push'&&el.dataset.act!=='pushtap')S.ov=null;A[el.dataset.act]&&A[el.dataset.act]({...el.dataset},e)});
+document.addEventListener('input',e=>{const t=e.target;if(t.dataset.in){S.F[t.dataset.in]=t.value}if(t.dataset.ab){S.absF[t.dataset.ab]=t.value}if(t.dataset.wd){S.wdF[t.dataset.wd]=t.value}});
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset.sel){S.F[t.dataset.sel]=t.value;delete S.E[t.dataset.sel];S.keep=true;render()}if(t.dataset.ab&&t.tagName==='SELECT'){S.absF[t.dataset.ab]=t.value}});
+/* ---------- scenarios ---------- */
+const st=(o)=>()=>{S=Object.assign(fresh(),o)};
+const SC=[
+ ['g','الويب العام — الانضمام'],
+ ['رابط المجمع — اختيار نوع الانضمام',st({}),'خطوة جديدة على رابط المجمع الحالي، تظهر فقط عند وجود مقرأة تسجيلها مفتوح. اختر «مقرأة النور الإلكترونية».'],
+ ['صفحة البرامج',st({scr:'progs'}),'لكل برنامج: الوصف، الصورة، الفئة، حالة التسجيل، والأوقات المتاحة بتوقيت الزائر. البرنامج بلا حلقات لا يظهر.'],
+ ['تعليمات المقرأة',st({scr:'ins'}),'نص المقرأة قبل «متابعة التسجيل»، كما في الاستمارة الحالية.'],
+ ['استمارة المقرأة — فارغة',st({scr:'form'}),'ابدأ بالجنس والمرحلة: «جامعي وموظف» يُلزم جوال الطالب ويخفي ولي الأمر، وغيرها يُظهر ولي الأمر. اختر الرواية لتظهر المواعيد.'],
+ ['استمارة المقرأة — مكتملة',st({scr:'form',F:filled()}),'اضغط «إرسال الطلب». جرّب تغيير المنطقة الزمنية لترى المواعيد بتوقيت آخر.'],
+ ['تم استلام الطلب',st({scr:'done',F:filled()}),'ما سيحدث بعد الإرسال، دون عرض ترتيب الانتظار.'],
+ ['g','حالات الويب'],
+ ['التسجيل موقوف',st({scr:'progs',mqClosed:true}),''],
+ ['لا برامج متاحة',st({scr:'progs',noProg:true}),''],
+ ['أخطاء التحقق',st({scr:'form',F:Object.assign(freshF(),{stage:'جامعي وموظف'})}),'اضغط «إرسال الطلب» لترى أخطاء الحقول الإلزامية.'],
+ ['رقم هوية مسجل مسبقًا',()=>{S=Object.assign(fresh(),{scr:'form',F:Object.assign(filled(),{id:'1012345678'})});S.E=validate()},'رقم الهوية فريد على مستوى المجمع: طلب أو تسجيل في مقرأة واحدة.'],
+ ['لا مواعيد مطابقة للرواية',st({scr:'form',jump:'[data-sel=tz]',F:Object.assign(filled(),{rw:'الدوري',slot:null})}),''],
+ ['طالبة في مقرأة للذكور',st({scr:'form',F:Object.assign(filled(),{g:'أنثى'})}),'توجيه مباشر لمقرأة البنات بدل رسالة خطأ عند الإرسال.'],
+ ['g','التطبيق — قبل القبول'],
+ ['الدخول برقم الهوية',st({scr:'login'}),'شاشة الدخول الحالية كما هي.'],
+ ['رمز التحقق',st({scr:'otp'}),''],
+ ['المتقدم — في الانتظار',st({scr:'applicant'}),'شاشة جديدة: الحالة والتفاصيل فقط، بلا إجراءات. تتحول لحساب الطالب بعد القبول.'],
+ ['g','التطبيق — بطاقة «حلقتي»'],
+ ['1 · قبل الموعد',st({scr:'home',hs:'before'}),'بطاقة «حلقتي» أعلى الرئيسية فوق الإحصائيات. الدخول معطّل حتى 10 دقائق قبل الموعد.'],
+ ['تنبيه قبل الموعد بـ10 دقائق',st({scr:'home',hs:'before',ov:'push'}),'اضغط التنبيه: يعادل «دخول الحلقة» — يُسجَّل الحضور وتُفتح القاعة.'],
+ ['2 · وقت الدخول',st({scr:'home',hs:'live'}),'اضغط «دخول الحلقة».'],
+ ['2 · وقت الدخول — بدأ المعلم',st({scr:'home',hs:'live',started:true}),''],
+ ['3 · بعد الدخول',st({scr:'home',hs:'joined'}),'«العودة إلى القاعة» لا يعيد تسجيل الحضور.'],
+ ['4 · غائب بعذر اليوم',st({scr:'home',hs:'excused'}),''],
+ ['5 · بعد الانتهاء / يوم بلا حلقة',st({scr:'home',hs:'next'}),''],
+ ['6 · أكثر من حلقة',st({scr:'home',hs:'multi'}),'تمرير أفقي بين الحلقات.'],
+ ['g','التطبيق — الطلبات والحالات'],
+ ['طلب غياب — فارغ',st({scr:'absence',from:'home'}),'اضغط «إرسال الطلب» دون سبب لترى الخطأ، ثم أضف مرفقًا.'],
+ ['طلب غياب — بمرفقات',st({scr:'absence',from:'home',absF:{from:'الثلاثاء 7 جمادى الآخرة',to:'الخميس 9 جمادى الآخرة',why:'سفر عائلي',files:['تذكرة_السفر.pdf']}}),''],
+ ['طلب غياب — مفتوح (إلغاء)',st({scr:'absence',from:'home',absOpen:true}),'يُلغى الطلب وهو مفتوح فقط.'],
+ ['البطاقة مع طلب غياب مفتوح',st({scr:'home',hs:'before',absOpen:true}),''],
+ ['حسابي — طلباتي',st({scr:'account'}),'قسم جديد أعلى «حسابي»: طلب الغياب، وطلب الانسحاب (من هنا فقط).'],
+ ['طلب انسحاب',st({scr:'withdraw'}),''],
+ ['طلب انسحاب — معلّق',st({scr:'withdraw',wd:'pending'}),''],
+ ['طلب انسحاب — مؤكد',st({scr:'withdraw',wd:'ok'}),''],
+ ['طلب انسحاب — مرفوض',st({scr:'withdraw',wd:'no'}),''],
+ ['تعذّر فتح القاعة',st({scr:'home',hs:'live',failOpen:true}),'اضغط «دخول الحلقة»: الحضور مسجل، مع «حاول مجددًا» و«نسخ رابط القاعة».'],
+ ['لا يوجد إنترنت',st({scr:'home',hs:'live',offline:true}),''],
+ ['تحميل',st({scr:'home',loading:true}),''],
+];
+let cur=1;
+function run(i){if(SC[i][0]==='g')return;cur=i;SC[i][1]();document.getElementById('cap').textContent=SC[i][2]||'';render();if(S.jump){const el=document.querySelector('#ph '+S.jump),w=document.querySelector('#wf');if(el&&w)w.scrollTop=el.getBoundingClientRect().top-w.getBoundingClientRect().top+w.scrollTop-160;S.jump=null}}
+function sync(){document.querySelectorAll('.sc').forEach(b=>b.setAttribute('aria-current',+b.dataset.i===cur));document.getElementById('msel').value=cur}
+document.getElementById('list').innerHTML=SC.map((s,i)=>s[0]==='g'?`<h2>${s[1]}</h2>`:`<button class="sc" data-i="${i}">${s[0]}</button>`).join('');
+document.getElementById('msel').innerHTML=SC.map((s,i)=>s[0]==='g'?`<option disabled>— ${s[1]} —</option>`:`<option value="${i}">${s[0]}</option>`).join('');
+document.getElementById('list').onclick=e=>{const b=e.target.closest('.sc');if(b)run(+b.dataset.i)};
+document.getElementById('msel').onchange=e=>run(+e.target.value);
+run(1);
+</script>
+
+</body></html>
