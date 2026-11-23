@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>المقرأة — حساب المشرف</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--ol:#555942;--olD:#3F4230;--ink:#22241A;--ink2:#5F6150;--ink3:#8A8B7E;--line:#E8E6DE;--bg:#F7F7F5;--beige:#F3EFE3;--chip:#F1EBDA;--ok:#E7F6EC;--okT:#1F7A43;--err:#FDECEA;--errT:#B42318;--warn:#FFF4E0;--warnT:#9A5B0B;--info:#EEF1FF;--infoT:#3646B5;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:#E6E4DC;color:var(--ink);font-family:Cairo,Tahoma,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer}
+svg.i{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.ptop{background:#2F3224;color:#fff;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.ptop h1{margin:0;font-size:16px}.ptop p{margin:0;font-size:12px;color:#CBCDB8}
+.pwrap{display:grid;grid-template-columns:250px 1fr;gap:20px;padding-block:18px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1500px;margin:0 auto}
+.panel{background:#FBFAF6;border:1px solid var(--line);border-radius:14px;padding:10px;align-self:start;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto}
+.panel h2{font-size:11.5px;color:var(--ink3);margin:12px 8px 4px}
+.sc{display:block;width:100%;text-align:start;padding:7px 9px;border-radius:9px;font-size:13px;color:var(--ink2);line-height:1.5}
+.sc:hover{background:#EFEDE4}.sc[aria-current=true]{background:var(--ol);color:#fff}
+.stage{min-width:0;display:flex;flex-direction:column;gap:10px;align-items:center}
+.cap{font-size:13px;color:var(--ink2);text-align:center;max-width:760px;line-height:1.7}
+.msel{display:none;width:100%}.msel select{width:100%;height:42px;border-radius:10px;border:1px solid var(--line);padding:0 10px;background:#fff}
+@media (max-width:900px){.pwrap{grid-template-columns:1fr}.panel{display:none}.msel{display:block}}
+.fit{position:relative;overflow:hidden;border-radius:12px;box-shadow:0 20px 50px -28px rgba(40,38,20,.55);width:100%}
+.desk{width:1366px;height:820px;position:absolute;top:0;right:0;transform-origin:top right;background:var(--bg);display:flex;overflow:hidden}
+/* app shell */
+.side{width:250px;flex-shrink:0;background:#fff;border-inline-start:1px solid var(--line);display:flex;flex-direction:column}
+.logo{height:92px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid #F0EEE7}
+.logo span{width:46px;height:46px;border-radius:10px;background:var(--beige);display:grid;place-items:center;color:#8B2635;font-weight:800}
+.logo b{display:block;font-size:14px}.logo small{font-size:11px;color:var(--ink3)}
+.nav{flex:1;overflow:auto;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;font-size:14px;color:#3A3C2E;text-decoration:none;cursor:pointer}
+.nav a:hover{background:#F7F5EE}
+.nav a.on{background:var(--beige);font-weight:700;border-inline-end:3px solid var(--ol)}
+.nav a i{font-style:normal;font-size:10px;font-weight:700;background:#ECF6BC;color:var(--olD);border-radius:6px;padding:1px 6px;margin-inline-start:auto}
+.nav .out{color:#B42318;margin-top:8px;border-top:1px solid #F0EEE7;padding-top:12px}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.bar{height:72px;flex-shrink:0;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+.search{width:460px;height:42px;border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;gap:8px;padding:0 14px;color:#9A988C;font-size:13px}
+.me{display:flex;align-items:center;gap:12px}.me b{display:block;font-size:14px}.me small{font-size:12px;color:var(--ink3)}
+.av{width:42px;height:42px;border-radius:10px;background:var(--beige);display:grid;place-items:center;font-weight:800;color:var(--ol)}
+.body{flex:1;overflow:auto;padding:18px 26px 40px;display:flex;flex-direction:column;gap:16px;position:relative}
+.crumb{font-size:12px;color:var(--ink3)}.crumb b{color:var(--ink2);font-weight:600}
+.ttl{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.ttl h2{margin:2px 0 0;font-size:22px;font-weight:800}
+.ttl p{margin:2px 0 0;color:var(--ink2);font-size:13px}
+.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.wrap{flex-wrap:wrap}
+.btn{height:40px;padding:0 16px;border-radius:9px;background:var(--ol);color:#fff;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn2{height:40px;padding:0 14px;border-radius:9px;border:1px solid var(--ol);color:var(--ol);background:#fff;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.btn3{height:34px;padding:0 10px;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:13px;display:inline-flex;align-items:center;gap:6px;color:var(--ink2)}
+.danger{color:var(--errT);border-color:#F3C7C2}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px}
+.pad{padding:18px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.stat span{font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:6px}.stat b{font-size:26px;display:block;margin-top:4px}.stat small{font-size:12px;color:var(--ink3)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line)}
+.tabs button{padding:10px 16px;font-weight:700;font-size:14px;color:var(--ink2);border-bottom:2.5px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:6px}
+.tabs button[aria-pressed=true]{color:var(--ink);border-color:var(--ol)}
+.tabs button .n{background:var(--chip);border-radius:9px;font-size:11px;padding:0 7px;color:var(--ink2)}
+table.t{width:100%;border-collapse:collapse;font-size:13.5px}
+.t th{background:#F7F7F4;color:var(--ink2);font-weight:600;font-size:12.5px;text-align:start;padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+.t td{padding:12px 14px;border-bottom:1px solid #F1EFE9;vertical-align:middle}
+.t tr:last-child td{border-bottom:0}
+.t tbody tr.lnk{cursor:pointer}.t tbody tr.lnk:hover{background:#FBFAF6}
+.chip{display:inline-flex;align-items:center;gap:5px;background:var(--chip);border-radius:999px;padding:3px 10px;font-size:12px;color:#4A4C3C;white-space:nowrap}
+.st{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;white-space:nowrap}
+.st:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.s-ok{color:var(--okT)}.s-off{color:#8A8B7E}.s-warn{color:var(--warnT)}
+.dots{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--ink2)}
+.dots:hover{background:#F2F0E9}
+.menu{position:absolute;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px -12px rgba(0,0,0,.25);padding:6px;z-index:20;min-width:200px}
+.menu button{display:flex;width:100%;gap:8px;align-items:center;padding:9px 10px;border-radius:8px;font-size:13.5px;text-align:start}
+.menu button:hover{background:#F6F4EE}
+.banner{display:flex;gap:12px;align-items:flex-start;border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.7}
+.banner b{display:block}
+.b-warn{background:var(--warn);color:var(--warnT)}.b-err{background:var(--err);color:var(--errT)}.b-info{background:var(--info);color:var(--infoT)}.b-ok{background:var(--ok);color:var(--okT)}.b-gray{background:#F1F0EB;color:#4A4B40}
+.capbar{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.meter{flex:1;min-width:260px;height:12px;border-radius:6px;background:#EFEDE6;overflow:hidden;display:flex;gap:2px}
+.meter i{display:block;height:100%}
+.lg{display:flex;gap:14px;font-size:12.5px;color:var(--ink2);flex-wrap:wrap}
+.lg span{display:inline-flex;align-items:center;gap:6px}.lg span:before{content:"";width:10px;height:10px;border-radius:3px;background:var(--c)}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:56px 20px;color:var(--ink2);font-size:14px;line-height:1.8}
+.empty .ill{width:72px;height:72px;border-radius:18px;background:var(--beige);display:grid;place-items:center;color:var(--ol);margin-bottom:6px}
+.empty .ill svg{width:32px;height:32px}
+.empty b{font-size:17px;color:var(--ink)}
+/* forms */
+.fsec{background:#fff;border:1px solid var(--line);border-radius:14px}
+.fsec>h3{margin:0;padding:14px 18px;border-bottom:1px solid #F0EEE7;font-size:15px;font-weight:700}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px;padding:18px}
+.full{grid-column:1/-1}
+.f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.f>label{font-size:13.5px;font-weight:600}.f>label em{color:var(--errT);font-style:normal}
+.f input,.f select,.f textarea{height:44px;border:1px solid #DDDACF;border-radius:10px;padding:0 12px;background:#fff;font-size:14px;width:100%}
+.f textarea{height:auto;min-height:84px;padding:10px 12px;resize:vertical}
+.f .hint{font-size:12px;color:var(--ink3)}
+.f.bad input,.f.bad select{border-color:#E5534B;background:#FFFBFA}
+.f .msg{font-size:12px;color:var(--errT);font-weight:600}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.seg button{height:42px;padding:0 16px;border:1px solid #DDDACF;border-radius:10px;font-size:14px;background:#fff}
+.seg button[aria-pressed=true]{border-color:var(--ol);background:#F5F6EE;font-weight:700;box-shadow:inset 0 0 0 1px var(--ol)}
+.rte{border:1px solid #DDDACF;border-radius:10px;overflow:hidden}
+.rte .tb{display:flex;gap:10px;padding:8px 12px;border-bottom:1px solid #EEECE5;color:var(--ink3);font-size:13px}
+.rte .tx{padding:12px;min-height:80px;font-size:13.5px;line-height:1.9}
+.upl{border:1.5px dashed #D7D3C5;border-radius:12px;padding:16px;display:flex;align-items:center;gap:12px;color:var(--ink2);font-size:13px}
+.copy{display:flex;align-items:center;gap:8px;border:1px solid #DDDACF;border-radius:10px;padding:0 6px 0 12px;height:44px;background:#FAFAF7}
+.copy code{flex:1;direction:ltr;text-align:left;font-size:13px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sw{width:44px;height:26px;border-radius:13px;background:#D6D3C7;position:relative;flex-shrink:0}
+.sw:after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.sw[aria-checked=true]{background:var(--okT)}.sw[aria-checked=true]:after{right:21px}
+.foot{display:flex;gap:10px;justify-content:flex-start}
+.ms{display:flex;gap:6px;flex-wrap:wrap;border:1px solid #DDDACF;border-radius:10px;padding:7px;min-height:44px;align-items:center;background:#fff}
+.ms .chip button{display:grid;place-items:center;color:var(--ink3)}
+.branch{border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;grid-template-columns:1.1fr 1fr 1fr 1fr;gap:12px;align-items:end;background:#FCFCFA}
+.lock{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink3)}
+/* overlays */
+.dim{position:absolute;inset:0;background:rgba(25,26,18,.42);display:grid;place-items:center;z-index:30}
+.modal{background:#fff;border-radius:16px;width:560px;max-width:92%;box-shadow:0 24px 60px -20px rgba(0,0,0,.45);display:flex;flex-direction:column;max-height:90%}
+.modal .mh{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #F0EEE7}
+.modal .mh b{font-size:16px}
+.modal .mb{padding:18px;display:flex;flex-direction:column;gap:14px;overflow:auto}
+.modal .mf{display:flex;gap:10px;padding:14px 18px;border-top:1px solid #F0EEE7}
+.modal .mf .btn,.modal .mf .btn2{flex:1;justify-content:center}
+.x{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;border:1px solid var(--line)}
+.toast{position:absolute;top:86px;left:50%;transform:translateX(-50%);background:#22241A;color:#fff;border-radius:999px;padding:10px 18px;font-size:13.5px;font-weight:600;z-index:40;display:flex;gap:8px;align-items:center}
+.sk{background:linear-gradient(90deg,#EFEDE6 0,#F7F6F1 50%,#EFEDE6 100%);background-size:200% 100%;animation:sh 1.2s linear infinite;border-radius:8px}
+@keyframes sh{to{background-position:-200% 0}}
+.msgs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.mcard{border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line);display:flex;flex-direction:column}
+.mcard h4{margin:0;background:#C9BC9B;color:#2C2E22;padding:12px;font-size:14px;text-align:center}
+.mcard p{margin:0;padding:12px 14px;font-size:12.5px;color:var(--ink2);line-height:1.8;flex:1;white-space:pre-line;max-height:120px;overflow:hidden}
+.mcard .ma{display:flex;gap:8px;padding:10px 12px}
+.mcard .ma button{flex:1;height:36px;border-radius:8px;font-size:13px;font-weight:600}
+.on1{background:#22A04B;color:#fff}.off1{background:#D64541;color:#fff}.ed{border:1px solid var(--line);background:#fff}
+.tag{position:absolute;margin:8px;font-size:10.5px;font-weight:700;background:var(--ol);color:#fff;border-radius:6px;padding:1px 7px}
+.ucard{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.ucard .k{font-size:11.5px;color:var(--ink3)}
+.pill{font-size:11px;font-weight:700;border-radius:999px;padding:2px 9px}
+.p-ok{background:var(--ok);color:var(--okT)}.p-err{background:var(--err);color:var(--errT)}
+.dkcol{display:grid;grid-template-columns:2fr 1fr;gap:16px;align-items:start}
+.kv{display:grid;grid-template-columns:140px 1fr;gap:10px 14px;font-size:13.5px;padding:16px 18px}
+.kv span{color:var(--ink3)}
+/* supervisor additions */
+.rolebar{width:100%;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#FBFAF6;border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:13px;color:var(--ink2)}
+.rolebar b{color:var(--ink)}
+.rolebar .seg button{height:34px;font-size:12.5px;padding:0 12px}
+.nav .sub{display:flex;flex-direction:column;gap:2px;padding-inline-start:28px}
+.nav .sub a{font-size:13px;padding:7px 12px}
+.nav a .chev{margin-inline-start:auto;font-size:11px;color:var(--ink3)}
+.sect{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.sect h3{margin:0;font-size:16px;display:flex;align-items:center;gap:8px}
+.sect .sub2{font-size:12.5px;color:var(--ink3)}
+.kcards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.kc{border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:start;display:flex;flex-direction:column;gap:4px;background:#fff;min-height:104px}
+.kc:hover{border-color:#CFCBBB;background:#FCFBF7}
+.kc span{font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:6px}
+.kc b{font-size:24px}
+.kc small{font-size:12px;color:var(--ink3)}
+.kc.act{border-color:#F0D9A8;background:#FFFBF2}.kc.act b{color:var(--warnT)}
+.kc.zero b{color:var(--ink3)}
+.today{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tcard{border-radius:12px;background:#F7F5EE;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.tcard b{font-size:20px;display:block}.tcard span{font-size:13px;color:var(--ink2)}.tcard small{font-size:12px;color:var(--ink3)}
+.lk{color:var(--ol);font-weight:700;font-size:12.5px;text-decoration:underline;cursor:pointer}
+.filters{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:14px 16px;border-bottom:1px solid #F1EFE9}
+.filters .f select{height:38px;font-size:13px}
+.filters .f label{font-size:12px;font-weight:600;color:var(--ink2)}
+.nw{display:inline-block;width:6px;height:6px;border-radius:50%;background:#9BB52C;margin-inline-start:4px;vertical-align:middle}
+.rank{width:26px;height:26px;border-radius:8px;background:var(--beige);display:grid;place-items:center;font-weight:800;font-size:12.5px;color:var(--olD)}
+.t .s2{display:block;font-size:12px;color:var(--ink3);font-weight:400}
+.sel2{height:34px;border:1px solid #DDDACF;border-radius:8px;padding:0 8px;background:#fff;font-size:13px;min-width:110px}
+.menu button[disabled]{opacity:.5;cursor:not-allowed}
+.menu .why{font-size:11.5px;color:var(--errT);padding:0 10px 6px 10px;max-width:220px;line-height:1.5}
+.steps{display:flex;gap:6px;padding:12px 18px;border-bottom:1px solid #F0EEE7;background:#FCFBF8}
+.steps div{flex:1;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink3);font-weight:600}
+.steps i{font-style:normal;width:24px;height:24px;border-radius:50%;border:1.5px solid #D6D3C7;display:grid;place-items:center;font-size:12px}
+.steps .on{color:var(--ink)}.steps .on i{background:var(--ol);border-color:var(--ol);color:#fff}
+.steps .dn i{background:var(--ok);border-color:#BFE3CB;color:var(--okT)}
+.who{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 16px;background:#F7F6F1;border-radius:12px;padding:12px 14px;font-size:13px}
+.who span{display:block;font-size:11.5px;color:var(--ink3)}
+.hc{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;grid-template-columns:22px 1fr auto;gap:12px;align-items:center;text-align:start;width:100%;background:#fff}
+.hc:hover:not([disabled]){border-color:#C9C5B4}
+.hc[aria-pressed=true]{border-color:var(--ol);box-shadow:inset 0 0 0 1px var(--ol);background:#FAFBF5}
+.hc[disabled]{background:#FAFAF8;cursor:not-allowed}.hc[disabled] .hn{color:var(--ink3)}
+.hc .rd{width:18px;height:18px;border-radius:50%;border:1.5px solid #CFCBBB}
+.hc[aria-pressed=true] .rd{border:5px solid var(--ol)}
+.hc .hn{font-weight:700;font-size:14px}
+.hc .hm{font-size:12.5px;color:var(--ink2);display:flex;gap:12px;flex-wrap:wrap;margin-top:3px}
+.seats{font-size:12.5px;font-weight:700;text-align:center}.seats small{display:block;font-weight:400;color:var(--ink3);font-size:11px}
+.match{font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 8px}
+.m-yes{background:var(--ok);color:var(--okT)}.m-no{background:#F1F0EB;color:var(--ink2)}.m-bad{background:var(--err);color:var(--errT)}
+.wa{background:#E7F3E5;border-radius:12px 12px 12px 4px;padding:10px 12px;font-size:13px;line-height:1.8;white-space:pre-line;color:#1F2A1C;max-width:360px}
+.rlist{display:flex;flex-direction:column;gap:8px}
+.rlist label{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px;cursor:pointer}
+.rlist label.on{border-color:var(--ol);background:#FAFBF5}
+.rlist input{accent-color:var(--ol);width:16px;height:16px}
+.togs{display:flex;gap:6px;flex-wrap:wrap}
+.togs button{height:36px;padding:0 12px;border:1px solid #DDDACF;border-radius:9px;font-size:13px;background:#fff}
+.togs button[aria-pressed=true]{background:var(--ol);border-color:var(--ol);color:#fff;font-weight:700}
+.togs button[disabled]{opacity:.4;cursor:not-allowed}
+.req{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.att{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:8px;padding:4px 10px;font-size:12.5px;background:#FAFAF7}
+.dcols{display:grid;grid-template-columns:1fr 1.4fr;gap:16px;align-items:start}
+.hcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dcard{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.dcard h5{margin:0;background:#C9BC9B;color:#2C2E22;padding:9px;text-align:center;font-size:14px}
+.dcard .dm{display:flex;justify-content:space-between;padding:8px 12px;font-size:12px;color:var(--ink2)}
+.dcard .dz{margin:0 12px 10px;border:1.5px dashed #D7D3C5;border-radius:10px;padding:14px;text-align:center;font-size:12.5px;color:var(--ink3)}
+.slist{display:flex;flex-direction:column;gap:8px}
+.srow{border:1px solid var(--line);border-radius:10px;padding:9px 12px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.srow small{display:block;color:var(--ink3);font-size:12px}
+.mq{display:inline-flex;align-items:center;gap:4px;background:#ECF0DA;color:var(--olD);border-radius:6px;padding:1px 7px;font-size:11px;font-weight:700}
+</style>
+</head><body>
+<div dir="rtl" lang="ar">
+<header class="ptop"><div><h1>حساب المقرأة · مشرف المقرأة (ويب) — الإعداد والتشغيل والتخرج</h1><p>نموذج تفاعلي · موجز التعديل 1 (23 نوفمبر 2026) · القرارات D82–D131 · بيانات افتراضية</p></div></header>
+<div class="pwrap">
+ <aside class="panel" id="list"></aside>
+ <main class="stage">
+  <div class="msel"><select id="msel" aria-label="الشاشة"></select></div>
+  <div class="fit" id="fit"><div class="desk" id="desk"></div></div>
+  <div class="cap" id="cap"></div>
+ </main>
+</div>
+</div>
+<script>
+const I={
+ home:'<path d="M5 10l7-6 7 6v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',rep:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 15v-3M12 15V9M16 15v-5"/>',
+ users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20c-.5-2.6-2-4.4-4-5.1"/>',
+ timer:'<path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9"/>',teacher:'<path d="M12 4l9 4-9 4-9-4z"/><path d="M7 10v5c0 1.5 2.2 3 5 3s5-1.5 5-3v-5"/>',
+ brief:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3 13h18"/>',
+ mosque:'<path d="M4 21V11a8 8 0 0 1 16 0v10M2 21h20M9 21v-4a3 3 0 0 1 6 0v4M12 3V1"/>',
+ maqraa:'<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M9 9.5c1-.8 2-.8 3 0s2 .8 3 0M9 12.5c1-.8 2-.8 3 0s2 .8 3 0"/>',
+ cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',wa:'<path d="M21 12a9 9 0 0 1-13.4 7.8L3 21l1.3-4.4A9 9 0 1 1 21 12z"/>',
+ gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>',copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/>',dots:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
+ x:'<path d="M6 6l12 12M18 6L6 18"/>',ok:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',alert:'<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+ lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/>',trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+ pause:'<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>',play:'<path d="M7 5l12 7-12 7z"/>',back:'<path d="M9 6l6 6-6 6"/>',link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+ img:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/>',book:'<path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5c-.8 0-1.5-.7-1.5-1.5zM20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5z"/>',
+ door:'<path d="M14 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4M10 16l4-4-4-4M14 12H3"/>'};
+
+Object.assign(I,{cup:'<path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 14v4M8 21h8"/>',cap:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5M22 9v6"/>',task:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/>',dl:'<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',flag:'<path d="M5 21V4h11l-2 4 2 4H5"/>',globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'});
+const ic=(k,s)=>`<svg class="i" viewBox="0 0 24 24"${s?` style="${s}"`:''} aria-hidden="true">${I[k]}</svg>`;
+const MQN='مقرأة النور الإلكترونية',CX='مجمع النور';
+const DAYS=['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
+const hr=h=>{const p=h<12?'ص':'م',x=h%12||12;return x+':00 '+p};
+const mk=h=>hr(h)+' مكة';
+const PLATFORM=u=>/zoom\.us/.test(u)?'Zoom':/meet\.google/.test(u)?'Google Meet':/teams\.(microsoft|live)/.test(u)?'Microsoft Teams':'رابط خارجي';
+const fresh=()=>({scr:'login',menu:null,modal:null,toast:null,sel:[],emptyW:false,fullCap:false,emptyF:false,emptyG:false,emptyHalls:false,race:false,ftab:'all',ptab:'plan',
+ cap:{max:150,used:112},
+ W:[{id:1,n:'عبدالله يوسف الحسن',g:'ذكر',age:12,cty:'مصر',tz:'القاهرة',off:-1,prog:'حفظ القرآن الكريم كاملًا',plan:'إتحاف الأخيار · الفئة الثانية · المسار الثالث',rw:'حفص',days:['الأحد','الثلاثاء','الخميس'],s:19,d:'1448/05/02'},
+  {id:2,n:'إبراهيم كوليبالي',g:'ذكر',age:31,cty:'فرنسا',tz:'باريس',off:-2,prog:'تصحيح التلاوة',plan:'خطة مرنة · المستوى 1',rw:'حفص',days:['الإثنين','الأربعاء'],s:21,d:'1448/05/04'},
+  {id:3,n:'يوسف ماجد الأحمد',g:'ذكر',age:9,cty:'السعودية',tz:'',off:0,prog:'حفظ القرآن الكريم كاملًا',plan:'نور البيان · المرحلة الأولى',rw:'حفص',days:['الأحد','الثلاثاء'],s:16,d:'1448/05/05'},
+  {id:4,n:'عمر حسن عثمان',g:'ذكر',age:16,cty:'المملكة المتحدة',tz:'لندن',off:-3,prog:'حفظ القرآن الكريم كاملًا',plan:'إتحاف الأخيار · الفئة الثالثة · المسار الرابع',rw:'حفص',days:['الأحد','الثلاثاء','الخميس'],s:19,d:'1448/05/06'},
+  {id:5,n:'محمد أمين بلعيد',g:'ذكر',age:24,cty:'الجزائر',tz:'الجزائر',off:-2,prog:'حفظ القرآن الكريم كاملًا',plan:'إتحاف الأخيار · الفئة الأولى · المسار الثاني',rw:'ورش',days:['السبت','الإثنين'],s:22,d:'1448/05/07'},
+  {id:6,n:'مريم عبدالرحمن الصالح',g:'أنثى',age:14,cty:'الكويت',tz:'',off:0,prog:'حفظ القرآن الكريم كاملًا',plan:'إتحاف الأخيار · الفئة الثانية · المسار الثالث',rw:'حفص',days:['الأحد','الأربعاء'],s:17,d:'1448/05/08'},
+  {id:7,n:'سعد خالد المري',g:'ذكر',age:19,cty:'قطر',tz:'',off:0,prog:'حفظ القرآن الكريم كاملًا',plan:'تمام البنيان · فئة الإتقان الثانية · المسار الثاني',rw:'حفص',days:['الأحد','الثلاثاء','الخميس'],s:19,d:'1448/05/09'}],
+ H:[{id:'h1',n:'حلقة الإتقان',t:'أ. ماجد القحطاني',g:'ذكور',hall:'قاعة الفجر',rw:['حفص'],days:['الأحد','الثلاثاء','الخميس'],s:19,e:20,cap:15,c:13,prog:'حفظ القرآن الكريم كاملًا',st:'بدأت 7:06 م'},
+  {id:'h2',n:'حلقة الأعشار المسائية',t:'أ. سعد الشهري',g:'ذكور',hall:'قاعة الضحى',rw:['حفص'],days:['الأحد','الثلاثاء','الخميس'],s:19,e:20,cap:12,c:9,prog:'حفظ القرآن الكريم كاملًا',late:14},
+  {id:'h3',n:'حلقة ورش',t:'أ. عبدالإله السبيعي',g:'ذكور',hall:'قاعة الضحى',rw:['ورش','قالون'],days:['السبت','الإثنين'],s:22,e:23,cap:10,c:6,prog:'حفظ القرآن الكريم كاملًا'},
+  {id:'h4',n:'حلقة الصغار',t:'أ. هند العتيبي',tf:1,g:'ذكور',hall:'قاعة الفجر',rw:['حفص'],days:['الأحد','الثلاثاء'],s:16,e:17,cap:8,c:7,prog:'حفظ القرآن الكريم كاملًا',age:10},
+  {id:'h5',n:'تصحيح التلاوة',t:'أ. ماجد القحطاني',g:'ذكور',hall:'قاعة الضحى',rw:['حفص'],days:['الإثنين','الأربعاء'],s:21,e:22,cap:10,c:5,prog:'تصحيح التلاوة'},
+  {id:'h6',n:'حلقة الحافظات',t:'أ. نورة السالم',g:'إناث',hall:'قاعة النور',rw:['حفص'],days:['الأحد','الأربعاء'],s:17,e:18,cap:12,c:10,prog:'حفظ القرآن الكريم كاملًا'}],
+ halls:[{n:'قاعة الفجر',u:'https://meet.google.com/abc-defg-hij',on:true},{n:'قاعة الضحى',u:'https://us02web.zoom.us/j/8123456789',on:true,rep:1},{n:'قاعة النور',u:'https://meet.google.com/xyz-abcd-efg',on:true},{n:'قاعة الاحتياط',u:'',on:false}],
+ F:[{id:1,n:'سلمان ناصر العمري',prog:'حفظ القرآن الكريم كاملًا',plan:'إتحاف الأخيار · الفئة الثانية',h:'حلقة الأعشار المسائية',t:'أ. سعد الشهري',d:'1448/06/18',st:'nom'},
+  {id:2,n:'أنس محمود الخطيب',prog:'حفظ القرآن الكريم كاملًا',plan:'إتحاف الأخيار · الفئة الأولى',h:'حلقة الإتقان',t:'أ. ماجد القحطاني',d:'1448/06/15',st:'sch',when:'الأحد 1448/06/22 · 5:00 م مكة'},
+  {id:3,n:'عبدالرحمن ديالو',prog:'حفظ القرآن الكريم كاملًا',plan:'تمام البنيان · فئة الإتقان الأولى',h:'حلقة الإتقان',t:'أ. ماجد القحطاني',d:'1448/06/02',st:'failT',re:'1448/07/05'},
+  {id:4,n:'لينا سامي العوضي',prog:'حفظ القرآن الكريم كاملًا',plan:'إتحاف الأخيار · الفئة الثانية',h:'حلقة الحافظات',t:'أ. نورة السالم',d:'1448/05/28',st:'failR',rv:'2 من 3 مقررات'},
+  {id:5,n:'زياد فهد السالم',prog:'تصحيح التلاوة',plan:'خطة مرنة · المستوى 3',h:'تصحيح التلاوة',t:'أ. ماجد القحطاني',d:'1448/05/20',st:'pass'}],
+ G:[{n:'زياد فهد السالم',prog:'تصحيح التلاوة',br:'خطة مرنة',rw:'حفص',t:'أ. ماجد القحطاني',d:'1448/06/10',cty:'السعودية',no:'MQR-2026-000014'},
+  {n:'بلال أحمد الفرا',prog:'حفظ القرآن الكريم كاملًا',br:'الحفظ بالأعشار',rw:'حفص',t:'أ. سعد الشهري',d:'1448/04/28',cty:'الأردن',no:'MQR-2026-000011'},
+  {n:'آمنة يحيى الزهراني',prog:'حفظ القرآن الكريم كاملًا',br:'الحفظ بالأعشار',rw:'حفص',t:'أ. نورة السالم',d:'1448/03/14',cty:'السعودية',no:'MQR-2026-000006'}],
+ ST:{abs:[{id:1,from:'1448/06/12',to:'1448/06/13',why:'مرض',past:1,f:'تقرير_طبي.pdf',st:'open'},{id:2,from:'1448/06/24',to:'1448/06/26',why:'سفر عائلي',f:'تذكرة_السفر.pdf',st:'open'}]},
+ form:{q:5,pass:70,appr:'فوري',ded:[['خطأ في الحفظ',1],['تردد',0.5],['خطأ في التجويد',0.25],['تنبيه',0.25]],edited:false},SU:[{n:'خالد المالكي',g:'ذكر',ph:'+966 5•• ••• 214',src:'من مشرفي المجمع',d:'1448/05/01',first:1},{n:'نورة عبدالله السالم',g:'أنثى',ph:'+966 5•• ••• 377',src:'مشرف جديد',d:'1448/05/10'}],su:null,hf:null,hl:null,pf:{reg:false,phrase:'غير متاح الآن لكثرة الطلبات'},ex:null,fail:null,bulk:null,acc:null,absF:null,
+});
+let S=fresh();
+const left=()=>S.fullCap?0:S.cap.max-S.cap.used;
+const ME=['خالد المالكي','مشرف المقرأة','خ'];
+const NAV=[['الرئيسية','home','home'],['قائمة الطلاب','users','stu'],['الخريجون','cap','grad',1],['قائمة الانتظار','timer','wait'],['قائمة المعلمين','teacher','say:قائمة المعلمين — كما هي، بمعلمي المقرأة فقط'],['المشرفين','brief','sups',1],
+ ['اختبارات الطلاب','task',null,0,[['الاختبارات المرحلية','say:الاختبارات المرحلية — كما هي'],['الاختبارات الختامية','final',1]]],
+ ['إدارة الحلقات','book',null,0,[['قائمة الحلقات','sec'],['القاعات','halls',1],['زيارة حلقة قرآنية','visit']]],['الشهادات','cup','cert'],['تقارير','rep','say:التقارير الحالية بنطاق المقرأة'],['الواتساب','wa','say:الواتساب — كما هو'],
+ ['الإعدادات','gear',null,0,[['برامج المقرأة','progs'],['تعليمات التسجيل','ins'],['إعدادات المقرأة','mset'],['تجديد الاشتراك','sub']]]];
+const NAVMAP={sprof:'stu',pform:'progs',exam:'final'};
+const navA=(to,cls,inner)=>to.startsWith('say:')?`<a class="${cls}" data-act="say" data-v="${to.slice(4)}">${inner}</a>`:`<a class="${cls}" data-act="go" data-v="${to}">${inner}</a>`;
+function shell(active,crumb,title,sub,actions,body){
+ const on=NAVMAP[active]||active;
+ const items=NAV.map(([l,i,to,nw,ch])=>{
+  if(ch){const op=ch.some(c=>c[1]===on);return `<a>${ic(i)}${l}<span class="chev">${op?'▴':'▾'}</span></a><div class="sub">${ch.map(([cl,ct,cn])=>navA(ct,ct===on?'on':'',cl+(cn?'<i>جديد</i>':''))).join('')}</div>`}
+  return navA(to,to===on?'on':'',ic(i)+l+(nw?'<i>جديد</i>':''))}).join('');
+ return `<aside class="side"><div class="logo"><span style="color:var(--ol)">${ic('maqraa','width:24px;height:24px')}</span><div><b>${MQN}</b><small>تابعة لـ ${CX}</small></div></div>
+ <nav class="nav">${items}<a class="out" data-act="go" data-v="login">${ic('door')}تبديل الحساب / خروج</a></nav></aside>
+ <div class="main"><div class="bar"><div class="search">${ic('chart','width:16px')}ابحث عن طالب أو حلقة أو معلم…</div><div class="me"><div><b>${ME[0]}</b><small>${ME[1]}</small></div><span class="av">${ME[2]}</span></div></div>
+ <div class="body" id="bd"><div class="crumb">${crumb}</div><div class="ttl"><div><h2>${title}</h2>${sub?`<p>${sub}</p>`:''}</div><div class="row">${actions||''}</div></div>${body}</div></div>${overlay()}`;
+}
+const empty=(i,t,b,btn)=>`<div class="card"><div class="empty"><span class="ill">${ic(i)}</span><b>${t}</b>${b}${btn||''}</div></div>`;
+const capBanner=()=>`<div class="banner b-warn">${ic('alert')}<div style="flex:1"><b>سعة المقرأة ممتلئة (${S.cap.max}/${S.cap.max})</b>القبول معطّل حتى تُزاد السعة. المنتظرون لا يتأثرون؛ يُحتسب الطالب بعد التسكين فقط.</div><button class="btn" data-act="go" data-v="sub">طلب زيادة السعة</button></div>`;
+const loc=w=>w.off?`<span class="s2">${hr(w.s+w.off)} بتوقيت ${w.tz}</span>`:'';
+/* ---------- login ---------- */
+function login(){
+ return `<div style="flex:1;display:grid;place-items:center;background:var(--bg)"><div class="card" style="width:460px;padding:28px;display:flex;flex-direction:column;gap:14px">
+  <div style="text-align:center"><b style="font-size:20px">أي حساب تريد؟</b><div style="font-size:13px;color:var(--ink2);margin-top:4px">حسابك مرتبط بجهتين في إتحاف</div></div>
+  <button class="hc" data-act="go" data-v="home" style="grid-template-columns:44px 1fr auto"><span class="ill" style="width:44px;height:44px;border-radius:12px;background:var(--beige);display:grid;place-items:center;color:var(--ol)">${ic('maqraa')}</span><div><div class="hn">${MQN}</div><div class="hm">مشرف المقرأة</div></div>${ic('back','transform:scaleX(-1)')}</button>
+  <button class="hc" data-act="say" data-v="يفتح حساب المجمع كما هو" style="grid-template-columns:44px 1fr auto"><span style="width:44px;height:44px;border-radius:12px;background:var(--beige);display:grid;place-items:center;color:var(--ol)">${ic('mosque')}</span><div><div class="hn">${CX} لتحفيظ القرآن الكريم</div><div class="hm">مشرف حلقات</div></div>${ic('back','transform:scaleX(-1)')}</button>
+  <p style="margin:0;font-size:12px;color:var(--ink3);text-align:center;line-height:1.8">تظهر هذه الخطوة فقط لمن له أكثر من حساب، ويمكن التبديل لاحقًا من القائمة الجانبية.</p></div>${overlay()}</div>`;
+}
+/* ---------- home ---------- */
+function home(){
+ const lt=S.H.filter(h=>h.late),nom=S.F.filter(f=>f.st==='nom').length,ab=3,rep=S.halls.filter(h=>h.rep).length;
+ const K=[['طلبات الغياب المفتوحة',ab,'منها 1 بأثر رجعي','go','stu','cal'],['حلقات لم تبدأ',lt.length,lt.length?`متأخرة ${lt[0].late} د · ${lt[0].n}`:'كل الحلقات بدأت','late','','timer'],['بلاغات روابط القاعات',rep,rep?'من المعلمين: الرابط لا يعمل':'لا بلاغات','go','halls','flag'],
+  ['مرشحو الاختبار الختامي',nom,'رشّحهم المعلمون','go','final','task'],['المنتظرون',S.W.length,'بترتيب الأسبقية','go','wait','users'],['المقاعد المتاحة',left(),`من سعة المقرأة (${S.cap.max})`,'go','sub',left()?'chart':'alert']];
+ return shell('home','الرئيسية','حياك الله خالد',`${MQN} · الثلاثاء 1448/06/21 · الآن 7:14 م مكة`,'',`
+  <div class="stats">${[['الطلاب المسكّنون',S.cap.used],['المعلمون',7],['الحلقات',S.H.length],['الخريجون',S.G.length]].map(([l,v])=>`<div class="stat"><span>${l}</span><b>${v}</b></div>`).join('')}</div>
+  <div class="sect"><div><h3>تحتاج إجراء</h3><div class="sub2">البطاقات التي تحتاج إجراء أولًا</div></div>
+   <div class="kcards" style="grid-template-columns:repeat(6,1fr)">${K.map(([l,v,sm,a,to,i],j)=>`<button class="kc ${v&&j<4?'act':''} ${!v?'zero':''}" data-act="${a}" data-v="${to}"><span>${ic(i,'width:16px')}${l}</span><b>${v}</b><small>${sm}</small></button>`).join('')}</div></div>
+  <div class="sect"><div><h3>متابعة اليوم</h3><div class="sub2">البطاقات الحالية كما هي، بنطاق المقرأة</div></div>
+   <div class="today">${[['الغائبون','4 طلاب'],['لم يسمّعوا','21 طالبًا'],['الطلاب النشطون','2 طالب'],['بدون تحضير','9 طلاب'],['بدون رصد','17 طالبًا'],['الصفحات المنجزة','38 صفحة']].map(([l,v])=>`<div class="tcard"><div><span>${l}</span><b>${v}</b><small>عرض القائمة</small></div></div>`).join('')}</div></div>`);
+}
+/* ---------- waiting list ---------- */
+const olderOf=w=>S.W.filter(x=>x.prog===w.prog&&x.d<w.d&&!S.sel.includes(x.id));
+function wait(){
+ const R=S.emptyW?[]:S.W,n=S.sel.length;
+ const tbl=!R.length?empty('timer','لا توجد طلبات في الانتظار','تصل الطلبات من رابط انضمام المقرأة، مرتبة بالأسبقية.',`<button class="btn2" data-act="say" data-v="نُسخ رابط الانضمام" style="margin-top:8px">${ic('copy')}نسخ رابط الانضمام</button>`)
+ :`<div class="card">${n?`<div class="row between" style="padding:10px 14px;background:#F5F6EE;border-bottom:1px solid var(--line)"><b style="font-size:13.5px">تم تحديد ${n} ${n>2?'طلاب':'طالب'}</b><div class="row"><button class="btn3" data-act="clrsel">إلغاء التحديد</button><button class="btn" data-act="bulk" ${S.fullCap?'disabled':''}>قبول وتسكين جماعي</button></div></div>`:''}
+  <table class="t"><thead><tr><th style="width:36px"><input type="checkbox" data-act="selall" ${n===R.length?'checked':''} aria-label="تحديد الكل"></th><th>الأسبقية</th><th>الطالب</th><th>البرنامج والخطة</th><th>الرواية</th><th>الموعد المفضل</th><th>تاريخ التقديم</th><th>الإجراء</th></tr></thead><tbody>
+  ${R.map((w,i)=>`<tr ${S.sel.includes(w.id)?'style="background:#FAFBF5"':''}><td><input type="checkbox" data-act="sel" data-v="${w.id}" ${S.sel.includes(w.id)?'checked':''} aria-label="تحديد ${w.n}"></td><td><span class="rank">${i+1}</span></td><td><b>${w.n}</b><span class="s2">${w.g} · ${w.age} سنة · ${w.cty}</span></td><td>${w.prog}<span class="s2">${w.plan}</span></td><td>${w.rw}</td><td>${w.days.join(' · ')}<span class="s2">${mk(w.s)}</span>${loc(w)}</td><td>${w.d}</td>
+   <td style="position:relative"><button class="dots" data-act="wmenu" data-v="${w.id}" aria-label="إجراءات">${ic('dots')}</button>${S.menu==='w'+w.id?`<div class="menu" style="left:10px;top:44px" data-stop="1"><button data-act="accask" data-v="${w.id}" ${S.fullCap?'disabled':''}>${ic('ok')}قبول وتسكين</button>${S.fullCap?'<div class="why">سعة المقرأة ممتلئة</div>':''}<button data-act="rejask" data-v="${w.id}" style="color:var(--errT)">${ic('x')}رفض الطلب</button><button data-act="say" data-v="تفاصيل الطلب">${ic('info')}كافة البيانات</button></div>`:''}</td></tr>`).join('')}
+  </tbody></table></div>`;
+ return shell('wait','<b>قائمة الانتظار</b>','قائمة الانتظار','الخطة التي اختارها الطالب في طلبه هي الافتراضية عند التسكين','',`${S.fullCap?capBanner():''}
+  <div class="card"><div class="filters"><div class="f"><label>البرنامج</label><select><option>كل البرامج</option></select></div><div class="f"><label>الجنس</label><select><option>الكل</option></select></div><div class="f"><label>الرواية</label><select><option>كل الروايات</option></select></div><div class="f"><label>الدولة</label><select><option>كل الدول</option></select></div><div class="f"><label>تاريخ التقديم</label><select><option>الكل</option></select></div></div></div>${tbl}`);
+}
+/* ---------- students ---------- */
+function stu(){
+ const R=[['سلمان ناصر العمري','حلقة الأعشار المسائية','إتحاف الأخيار · الفئة الثانية','حفص',['abs','nom']],['أنس محمود الخطيب','حلقة الإتقان','إتحاف الأخيار · الفئة الأولى','حفص',['sch']],['عبدالرحمن ديالو','حلقة الإتقان','تمام البنيان · فئة الإتقان الأولى','حفص',['failT']],['لينا سامي العوضي','حلقة الحافظات','إتحاف الأخيار · الفئة الثانية','حفص',['failR','abs']],['حمزة رياض الكبيسي','حلقة الصغار','نور البيان · المرحلة الثانية','حفص',['cut']],['إلياس كريم بوعزة','حلقة ورش','إتحاف الأخيار · الفئة الثالثة','ورش',[]]];
+ const TG={abs:'<span class="pill" style="background:var(--info);color:var(--infoT)">طلب غياب</span>',nom:'<span class="pill" style="background:#ECF0DA;color:var(--olD)">مرشح للختامي</span>',sch:'<span class="pill" style="background:#ECF0DA;color:var(--olD)">ختامي مجدول</span>',failT:'<span class="pill" style="background:var(--warn);color:var(--warnT)">راسب · إعادة 1448/07/05</span>',failR:'<span class="pill" style="background:var(--warn);color:var(--warnT)">راسب · مراجعة 2/3</span>',cut:'<span class="pill p-err">منقطع · 10 أيام</span>'};
+ return shell('stu','<b>قائمة الطلاب</b>','قائمة الطلاب','',`<button class="btn2">تصدير Excel</button>`,`
+ <div class="card"><table class="t"><thead><tr><th>الاسم</th><th>الحلقة</th><th>الخطة</th><th>الرواية</th><th>طلبات وتنبيهات</th><th>الإجراء</th></tr></thead><tbody>
+ ${R.map((r,i)=>`<tr class="lnk" data-act="go" data-v="sprof"><td><b>${r[0]}</b></td><td><span class="chip">${r[1]}</span></td><td>${r[2]}</td><td>${r[3]}</td><td><div class="row wrap" style="gap:6px">${r[4].map(k=>TG[k]).join('')||'<span style="color:var(--ink3)">—</span>'}</div></td><td><button class="dots">${ic('dots')}</button></td></tr>`).join('')}
+ </tbody></table></div>`);
+}
+function sprof(){
+ const T=S.ST,t=S.ptab;
+ const absRows=T.abs.map(a=>`<div class="req"><div style="flex:1;min-width:220px"><b>من ${a.from} إلى ${a.to}</b>${a.past?' <span class="pill" style="background:var(--warn);color:var(--warnT)">بأثر رجعي</span>':''}<div style="font-size:13px;color:var(--ink2)">السبب: ${a.why}</div></div><span class="att">${ic('img','width:14px')}${a.f}</span>${a.st==='open'?`<span class="st s-warn">مفتوح</span><button class="btn" data-act="absok" data-v="${a.id}">قبول</button><button class="btn2" data-act="absno" data-v="${a.id}">رفض</button>`:a.st==='ok'?'<span class="st s-ok">مقبول · غائب بعذر</span>':'<span class="st s-off">مرفوض</span>'}</div>`).join('');
+ const tabs=`<div class="tabs">${[['plan','خطة الطالب'],['acad','السجل الأكاديمي'],['chg','تتبع تغييرات خطط الطالب'],['log','سجل النشاطات']].map(([k,l])=>`<button data-act="ptab" data-v="${k}" aria-pressed="${t===k}">${l}${k==='acad'?'<span class="n" style="background:#ECF6BC;color:var(--olD)">جديد</span>':''}</button>`).join('')}</div>`;
+ let b;
+ if(t==='acad')b=`<div class="card"><table class="t"><thead><tr><th>البرنامج</th><th>الخطة</th><th>الرواية</th><th>تاريخ التسكين</th><th>تاريخ التخرج</th><th>المعلم</th><th>الشهادة</th></tr></thead><tbody>
+  <tr><td><b>حفظ القرآن الكريم كاملًا</b></td><td>إتحاف الأخيار · الفئة الثانية</td><td>حفص</td><td>1447/09/03</td><td><span class="pill" style="background:#ECF0DA;color:var(--olD)">مرشح للاختبار الختامي</span></td><td>أ. سعد الشهري</td><td style="color:var(--ink3)">—</td></tr>
+  <tr><td><b>تصحيح التلاوة</b></td><td>خطة مرنة · المستوى 3</td><td>حفص</td><td>1447/02/11</td><td>1447/08/20</td><td>أ. ماجد القحطاني</td><td><button class="lk" data-act="say" data-v="تُفتح الشهادة MQR-2026-000003">MQR-2026-000003</button></td></tr></tbody></table></div>
+  <p style="margin:0;font-size:12.5px;color:var(--ink3)">سطر لكل برنامج. الطالب يتبع برنامجًا واحدًا في الوقت نفسه، ويقدّم على غيره بعد التخرج.</p>`;
+ else if(t==='plan')b=`<div class="card"><div class="kv" style="grid-template-columns:repeat(3,1fr)"><div><span>اسم البرنامج</span><br><b>حفظ القرآن الكريم كاملًا</b></div><div><span>الخطة</span><br><b>إتحاف الأخيار · الفئة الثانية · المسار الثالث</b></div><div><span>الحلقة</span><br><b>حلقة الأعشار المسائية</b></div></div></div>
+  <div class="stats" style="grid-template-columns:repeat(6,1fr)">${[['غائب',1],['غائب بعذر',2],['متأخر',0],['لم يسمّع',3],['المقررات المنجزة','40/40'],['نسبة الإنجاز','100%']].map(([l,v])=>`<div class="stat"><span>${l}</span><b style="font-size:22px">${v}</b></div>`).join('')}</div>`;
+ else b=`<div class="card pad" style="color:var(--ink3);font-size:13.5px">كما هو في ملف الطالب الحالي.</div>`;
+ return shell('sprof','قائمة الطلاب / <b>بيانات الطالب</b>','الطالب | سلمان ناصر العمري','حلقة الأعشار المسائية · حفص · مصر',`<button class="btn2">تعديل البيانات</button><button class="btn2">تصدير PDF</button><button class="btn">${ic('back')}الصفحة السابقة</button>`,`
+ <div class="banner b-ok">${ic('task')}<div style="flex:1"><b>مرشح للاختبار الختامي</b>رشّحه أ. سعد الشهري من الرصد في 1448/06/18.</div><button class="btn" data-act="go" data-v="final">الاختبارات الختامية</button></div>
+ <div class="card pad" style="display:flex;flex-direction:column;gap:10px"><div class="row between"><b>طلبات الغياب</b><div class="row"><span style="font-size:12.5px;color:var(--ink3)">قبول الطلب يسجّل «غائب بعذر» لكل أيامه</span><button class="btn3" data-act="absnew">${ic('plus','width:15px')}تسجيل عذر غياب</button></div></div>${absRows}</div>
+ ${tabs}${b}`);
+}
+/* ---------- graduates ---------- */
+function grad(){
+ const R=S.emptyG?[]:S.G;
+ return shell('grad','<b>الخريجون</b>','الخريجون','من اجتاز الاختبار الختامي لبرنامجه',`<button class="btn2" ${R.length?'':'disabled'}>${ic('dl')}تصدير Excel</button>`,`
+ <div class="card"><div class="filters"><div class="f"><label>البرنامج</label><select><option>كل البرامج</option></select></div><div class="f"><label>الرواية</label><select><option>كل الروايات</option></select></div><div class="f"><label>الفترة</label><select><option>كل الفترات</option></select></div><div class="f"><label>الجنس</label><select><option>الكل</option></select></div><div class="f"><label>الدولة</label><select><option>كل الدول</option></select></div></div>
+ ${R.length?`<table class="t"><thead><tr><th>الاسم</th><th>البرنامج</th><th>الفرع</th><th>الرواية</th><th>المعلم</th><th>تاريخ التخرج</th><th>الدولة</th><th>رقم الشهادة</th></tr></thead><tbody>${R.map(g=>`<tr><td><b>${g.n}</b></td><td>${g.prog}</td><td>${g.br}</td><td>${g.rw}</td><td>${g.t}</td><td>${g.d}</td><td>${g.cty}</td><td><button class="lk" data-act="say" data-v="تُفتح الشهادة ${g.no}" style="direction:ltr">${g.no}</button></td></tr>`).join('')}</tbody></table>`
+ :`<div class="empty"><span class="ill">${ic('cap')}</span><b>لا يوجد خريجون بعد</b>يظهر هنا كل طالب اجتاز الاختبار الختامي لبرنامجه، مع رقم شهادته.</div>`}</div>`);
+}
+/* ---------- final exams ---------- */
+const FST={nom:['مرشح','s-warn'],sch:['مجدول','s-ok'],failT:['راسب · مدة مقترحة','s-off'],failR:['راسب · مراجعة مقررات','s-off'],pass:['ناجح · خريج','s-ok']};
+function final(){
+ const R=(S.emptyF?[]:S.F).filter(f=>S.ftab==='all'||f.st===S.ftab||(S.ftab==='fail'&&f.st.startsWith('fail')));
+ const cn=k=>S.F.filter(f=>k==='all'||f.st===k||(k==='fail'&&f.st.startsWith('fail'))).length;
+ const act=f=>f.st==='nom'?`<div class="row" style="gap:6px"><button class="btn3" data-act="schask" data-v="${f.id}">${ic('cal','width:15px')}تحديد موعد</button><button class="btn" style="height:34px;font-size:13px" data-act="exam" data-v="${f.id}">إجراء الاختبار</button></div>`
+  :f.st==='sch'?`<button class="btn" style="height:34px;font-size:13px" data-act="exam" data-v="${f.id}">إجراء الاختبار</button>`
+  :f.st==='failT'?`<span style="font-size:12.5px;color:var(--ink2)">بانتظار إعادة ترشيح المعلم<span class="s2">المدة المقترحة حتى ${f.re}</span></span>`:f.st==='failR'?`<span style="font-size:12.5px;color:var(--ink2)">بانتظار إعادة ترشيح المعلم<span class="s2">المراجعة: ${f.rv}</span></span>`:`<button class="lk" data-act="go" data-v="grad">عرض في الخريجين</button>`;
+ return shell('final','اختبارات الطلاب / <b>الاختبارات الختامية</b>','الاختبارات الختامية','يرشّح المعلم الطالب من الرصد، ويُجري مشرف المقرأة الاختبار',`<button class="btn2" data-act="formask">${ic('edit')}استمارة الاختبار الختامي</button>`,`
+ <div class="tabs">${[['all','الكل'],['nom','مرشح'],['sch','مجدول'],['fail','راسب'],['pass','ناجح']].map(([k,l])=>`<button data-act="ftab" data-v="${k}" aria-pressed="${S.ftab===k}">${l}<span class="n">${S.emptyF?0:cn(k)}</span></button>`).join('')}</div>
+ ${R.length?`<div class="card"><table class="t"><thead><tr><th>الاسم</th><th>البرنامج</th><th>الخطة</th><th>الحلقة</th><th>المعلم (المرشِّح)</th><th>تاريخ الترشيح</th><th>الحالة</th><th>الإجراء</th></tr></thead><tbody>
+ ${R.map(f=>`<tr><td><b>${f.n}</b></td><td>${f.prog}</td><td>${f.plan}</td><td>${f.h}</td><td>${f.t}</td><td>${f.d}</td><td><span class="st ${FST[f.st][1]}">${FST[f.st][0]}</span>${f.when?`<span class="s2">${f.when}</span>`:''}</td><td>${act(f)}</td></tr>`).join('')}</tbody></table></div>`
+ :empty('task','لا يوجد مرشحون للاختبار الختامي','يظهر الطالب هنا عندما يرشّحه معلمه للاختبار الختامي من شاشة الرصد.')}
+ <p style="margin:0;font-size:12.5px;color:var(--ink3)">بالنجاح يصبح الطالب خريجًا فورًا، ويخرج من حلقته ويتحرر مقعده، وتصدر شهادة «إتمام البرنامج» معتمدة تلقائيًا.</p>`);
+}
+function exam(){
+ const f=S.F.find(x=>x.id===S.ex.id),q=S.ex.q,tot=q.reduce((a,b)=>a+(+b||0),0),pct=Math.round(tot/q.length*10),ok=pct>=S.form.pass;
+ return shell('exam','اختبارات الطلاب / الاختبارات الختامية / <b>إجراء الاختبار</b>',`الاختبار الختامي · ${f.n}`,`${f.prog} · ${f.plan} · ${f.h}`,`<button class="btn2" data-act="go" data-v="final">${ic('back')}رجوع</button>`,`
+ <div class="banner b-gray">${ic('info')}<div style="flex:1"><b>الاستمارة: ${S.form.edited?'استمارة المقرأة (معدّلة)':'الاستمارة الأساسية للاختبار المرحلي (افتراضية)'}</b>${S.form.q} أسئلة · النجاح من ${S.form.pass}% · النطاق: البرنامج كاملًا بحسب الخطة.</div><button class="btn3" data-act="formask">${ic('edit','width:15px')}تعديل الاستمارة</button></div>
+ <div class="dkcol"><div class="card"><table class="t"><thead><tr><th>السؤال</th><th>الموضع</th><th>الدرجة من 10</th></tr></thead><tbody>${q.map((v,i)=>`<tr><td><b>س${i+1}</b></td><td>${['البقرة 255','الكهف 1','يس 1','الملك 1','النبأ 1','آل عمران 1','مريم 1','الفرقان 1','الرحمن 1','الحديد 1'][i]}</td><td><input class="sel2" style="width:90px" type="number" min="0" max="10" step="0.25" data-q="${i}" value="${v}"></td></tr>`).join('')}</tbody></table></div>
+ <div class="card pad" style="display:flex;flex-direction:column;gap:10px"><b>النتيجة</b><div class="row" style="gap:6px"><b style="font-size:30px" id="xpct">${pct}%</b><span id="xres" class="pill ${ok?'p-ok':'p-err'}">${ok?'ناجح':'راسب'}</span></div><span style="font-size:12.5px;color:var(--ink3)">درجة النجاح ${S.form.pass}% بحسب الاستمارة</span>
+  <button class="btn" data-act="examsave" style="justify-content:center">اعتماد النتيجة</button></div></div>`);
+}
+/* ---------- halaqat & halls ---------- */
+function sec(){
+ return shell('sec','إدارة الحلقات / <b>قائمة الحلقات</b>','قائمة الحلقات','',`<button class="btn" data-act="hform">${ic('plus')}إضافة حلقة</button>`,`
+ <div class="card"><table class="t"><thead><tr><th>الحلقة</th><th>الجنس</th><th>المعلم</th><th>الموعد</th><th>القاعة</th><th>الرواية</th><th>الطلاب</th><th></th></tr></thead><tbody>
+ ${S.H.map(h=>`<tr><td><b>${h.n}</b>${h.age?`<span class="s2">حتى ${h.age} سنوات</span>`:''}</td><td>${h.g}</td><td>${h.t}</td><td>${h.days.join(' · ')}<span class="s2">${mk(h.s)} – ${hr(h.e)}</span></td><td>${h.hall}</td><td>${h.rw.join('، ')}</td><td><b>${h.c}</b><span style="color:var(--ink3)">/${h.cap}</span>${h.c>=h.cap?' <span class="pill p-err">ممتلئة</span>':''}</td><td><button class="dots">${ic('dots')}</button></td></tr>`).join('')}
+ </tbody></table></div>`);
+}
+function halls(){
+ const H=S.emptyHalls?[]:S.halls,rp=H.filter(h=>h.rep);
+ const linked=n=>S.H.filter(h=>h.hall===n);
+ return shell('halls','إدارة الحلقات / <b>القاعات</b>','القاعات','رابط القاعة يُدخله المشرف يدويًا، وزر «دخول» عند المعلم والطالب يحمله دائمًا',H.length?`<button class="btn" data-act="hladd">${ic('plus')}إضافة قاعة</button>`:'',`
+ ${rp.map(h=>`<div class="banner b-warn">${ic('flag')}<div style="flex:1"><b>بلاغ: رابط «${h.n}» لا يعمل</b>أ. سعد الشهري · حلقة الأعشار المسائية · اليوم 7:03 م مكة</div><button class="btn" data-act="hledit" data-v="${S.halls.indexOf(h)}">تعديل الرابط</button><button class="btn2" data-act="repdone" data-v="${S.halls.indexOf(h)}">تم الحل</button></div>`).join('')}
+ ${H.length?`<div class="card"><table class="t"><thead><tr><th>القاعة</th><th>الرابط</th><th>الحلقات المرتبطة</th><th>الحالة</th><th>الإجراء</th></tr></thead><tbody>${H.map((h,i)=>`<tr><td><b>${h.n}</b>${h.u?`<span class="s2">${PLATFORM(h.u)}</span>`:''}</td><td>${h.u?`<code style="direction:ltr;display:inline-block;max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px;color:var(--ink2)">${h.u}</code>`:'<span class="pill p-err">لا يوجد رابط</span>'}</td><td>${linked(h.n).map(x=>`<span class="chip">${x.n} · ${mk(x.s)}</span>`).join(' ')||'<span style="color:var(--ink3)">—</span>'}</td><td>${h.on?'<span class="st s-ok">نشطة</span>':'<span class="st s-off">معطلة</span>'}</td><td><div class="row" style="gap:6px"><button class="btn3" data-act="hledit" data-v="${i}">${ic('edit','width:15px')}تعديل</button><button class="btn3 danger" data-act="hldel" data-v="${i}" aria-label="حذف">${ic('trash','width:15px')}</button></div></td></tr>`).join('')}</tbody></table></div>`
+ :empty('maqraa','لا توجد قاعات بعد','القاعة اسم ورابط اجتماع (Zoom أو Meet أو غيرهما). كل حلقة تُربط بقاعة واحدة، ويمنع النظام تداخل المواعيد.',`<button class="btn" data-act="hladd" style="margin-top:8px">${ic('plus')}إضافة قاعة</button>`)}`);
+}
+/* ---------- certificates ---------- */
+function cert(){
+ return shell('cert','<b>الشهادات</b>','الشهادات','',``,`
+ <div class="tabs"><button>الرئيسية</button><button>الترشيحات</button><button aria-pressed="true">السجل</button><button>القوالب</button><button>الإعدادات</button></div>
+ <div class="banner b-info">${ic('cup')}<div><b>نوع جديد: «إتمام البرنامج»</b>يصدر معتمدًا تلقائيًا لحظة نجاح الطالب في الاختبار الختامي، فلا يظهر في «الترشيحات». تصل رسالة «إشعار صدور شهادة».</div></div>
+ <div class="card"><table class="t"><thead><tr><th>الطالب</th><th>النوع</th><th>رقم الشهادة</th><th>تاريخ الإصدار</th><th>الاعتماد</th><th>الإرسال</th></tr></thead><tbody>
+ ${S.G.map(g=>`<tr><td><b>${g.n}</b></td><td><span class="chip">إتمام البرنامج · ${g.prog}</span></td><td style="direction:ltr;text-align:right">${g.no}</td><td>${g.d}</td><td><span class="st s-ok">تلقائي عند النجاح</span></td><td><span class="st s-ok">فُتح الرابط</span></td></tr>`).join('')}
+ <tr><td><b>أنس محمود الخطيب</b></td><td><span class="chip">اجتياز اختبار مرحلي</span></td><td style="direction:ltr;text-align:right">MQR-2026-000009</td><td>1448/04/02</td><td><span class="st s-ok">اعتمده المشرف</span></td><td><span class="st s-ok">أُرسل</span></td></tr></tbody></table></div>`);
+}
+/* ---------- settings ---------- */
+function progs(){
+ const P=[['حفظ القرآن الكريم كاملًا','حفظ',3,true,5],['تصحيح التلاوة','تلاوة',1,true,1],['مراجعة الحفاظ','مراجعة',1,false,0]];
+ return shell('progs','الإعدادات / <b>برامج المقرأة</b>','برامج المقرأة','',`<button class="btn">${ic('plus')}إضافة برنامج</button>`,`
+ <div class="card"><table class="t"><thead><tr><th>البرنامج</th><th>النوع</th><th>الفروع</th><th>الحلقات</th><th>التسجيل</th><th>الإجراء</th></tr></thead><tbody>${P.map((p,i)=>`<tr class="lnk" data-act="go" data-v="pform"><td><b>${p[0]}</b></td><td>${p[1]}</td><td>${p[2]}</td><td>${p[4]||'—'}</td><td>${p[3]?'<span class="st s-ok">مفتوح</span>':`<span class="st s-off">مغلق</span><span class="s2">«${S.pf.phrase}»</span>`}</td><td><button class="btn3">${ic('edit','width:15px')}تعديل</button></td></tr>`).join('')}</tbody></table></div>`);
+}
+function pform(){
+ const f=S.pf;
+ return shell('pform','الإعدادات / برامج المقرأة / <b>مراجعة الحفاظ</b>','مراجعة الحفاظ','',`<button class="btn2" data-act="go" data-v="progs">${ic('back')}الصفحة السابقة</button>`,`
+ <div class="dcols" style="grid-template-columns:1.3fr 1fr"><div class="fsec"><h3>الظهور والتسجيل</h3><div class="fgrid" style="grid-template-columns:1fr">
+  <div class="f"><label>التسجيل في البرنامج</label><div class="row"><button class="sw" role="switch" aria-checked="${f.reg}" data-act="preg" aria-label="التسجيل"></button><span>${f.reg?'مفتوح':'مغلق'}</span></div></div>
+  ${f.reg?'':`<div class="f"><label>العبارة الظاهرة على كارت البرنامج <span class="chip" style="background:#ECF6BC;color:var(--olD)">جديد</span></label><input data-pf="phrase" value="${f.phrase}" maxlength="40"><span class="hint">تظهر للزائر بدل «التسجيل مغلق». حتى 40 حرفًا.</span></div>`}
+  <div class="f"><label>بقية الحقول</label><span class="hint">البيانات والفروع (هيكل الخطة) كما في التصميم السابق.</span></div></div></div>
+ <div class="card" style="overflow:hidden"><div style="height:90px;background:var(--ol);color:#fff;display:flex;align-items:flex-end;padding:12px 14px"><b>مراجعة الحفاظ</b></div><div style="padding:12px 14px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--ink2)">معاينة الكارت في صفحة البرامج العامة<div><span class="chip">ذكور وإناث</span> <span class="chip">18 سنة فأكثر</span></div><button class="btn" ${f.reg?'':'disabled'} style="justify-content:center;${f.reg?'':'background:#E3E2DC;color:#7E7E74'}">${f.reg?'سجّل في البرنامج':f.phrase||'التسجيل مغلق'}</button></div></div></div>`);
+}
+function ins(){return shell('ins','الإعدادات / <b>تعليمات التسجيل</b>','تعليمات تسجيل طالب جديد','تظهر قبل «متابعة التسجيل» في استمارة المقرأة','',`<div class="fsec"><div class="fgrid" style="grid-template-columns:1fr"><div class="rte"><div class="tb"><b>B</b><i>I</i><u>U</u><span>•</span><span>1.</span></div><div class="tx" contenteditable="true">• الالتزام بالحضور في الموعد، والدخول من زر «دخول الحلقة».<br>• تحتاج اتصالًا جيدًا بالإنترنت ومكانًا هادئًا.</div></div><div class="foot"><button class="btn" data-act="say" data-v="حُفظت التعليمات">حفظ</button></div></div></div>`)}
+function mset(){
+ return shell('mset','الإعدادات / <b>إعدادات المقرأة</b>','إعدادات المقرأة','','',`
+ <div class="fsec"><h3>بيانات المقرأة</h3><div class="fgrid">
+  <div class="f"><label>اسم المقرأة <em>*</em></label><input value="${MQN}"></div><div class="f"><label>الشعار</label><div class="upl" style="padding:9px 12px">${ic('img')}<span style="flex:1">PNG أو JPG</span><button class="btn3">اختيار</button></div></div>
+  <div class="f full"><label>الوصف</label><textarea>حلقات قرآنية عن بُعد للطلاب والطالبات من داخل المملكة وخارجها.</textarea></div>
+  <div class="f"><label>مدينة المقرأة <em>*</em></label><select><option>مكة المكرمة (GMT+3)</option><option>الرياض (GMT+3)</option><option>القاهرة (GMT+2)</option></select><span class="hint">تُعرض المواعيد بتوقيت مكة، ويرى كل مستخدم توقيته المحلي إن اختلف</span></div>
+  <div class="f"><label>سن استثناء الصغار <em>*</em></label><input type="number" value="10" style="max-width:140px"><span class="hint">يجوز إسناد معلمة لحلقة ذكور دون هذا السن</span></div>
+  <div class="f"><label>التسجيل بالمقرأة</label><div class="row"><button class="sw" role="switch" aria-checked="true"></button><span>مفتوح</span></div></div>
+  <div class="f"><label>رابط الانضمام</label><div class="copy"><code>ethaaf.com/join/alnoor</code><button class="btn3" data-act="say" data-v="نُسخ الرابط">${ic('copy','width:15px')}نسخ</button></div></div>
+ </div></div>
+ <div class="banner b-gray">${ic('info')}<div>المقرأة للجنسين، وجنس كل حلقة يُحدَّد في نموذج الحلقة. لا توجد حالة «إيقاف المقرأة».</div></div>
+ <div class="foot"><button class="btn" data-act="say" data-v="حُفظت الإعدادات">حفظ</button></div>`);
+}
+function sub(){
+ const u=S.fullCap?S.cap.max:S.cap.used,full=u>=S.cap.max;
+ return shell('sub','الإعدادات / <b>تجديد الاشتراك</b>','الاشتراك الحالي','',`<button class="btn2">فاتورة الاشتراك</button><button class="btn">الطلبات المعلقة والسابقة</button><button class="btn">طلب تجديد الاشتراك</button><button class="btn" style="${full?'box-shadow:0 0 0 3px #F6D9A2':''}" data-act="say" data-v="أُرسل طلب زيادة السعة لإدارة المنصة">طلب زيادة السعة</button>`,`
+ <div class="fsec"><h3>بيانات الباقة</h3><div class="kv" style="grid-template-columns:repeat(4,auto)"><span>نوع الاشتراك</span><b>مقرأة</b><span>سعة المقرأة</span><b>${S.cap.max} طالب</b><span>المدة</span><b>12 شهرًا</b><span>المبلغ</span><b>[يُحدَّد]</b></div></div>
+ <div class="fsec"><h3>تفاصيل استخدام الباقة</h3><div class="fgrid" style="grid-template-columns:1fr 1fr">
+  <div class="ucard"><div class="row between"><b>سعة المقرأة</b><span class="pill ${full?'p-err':'p-ok'}">${full?'ممتلئة':'ضمن الحد'}</span></div><div class="row" style="gap:24px"><div><div class="k">الطلاب المسكّنون</div><b>${u}</b></div><div><div class="k">الحد الأقصى</div><b>${S.cap.max}</b></div><div><div class="k">المنتظرون</div><b>${S.W.length}</b></div></div>
+   <div class="meter"><i style="width:${u/S.cap.max*100}%;background:var(--ol)"></i></div><div style="font-size:12.5px;color:var(--ink2)">مستقلة عن باقة المجمع. يُحتسب الطالب بعد التسكين، ويتحرر مقعده بالتخرج أو الاستبعاد.</div></div>
+ </div></div>`);
+}
+/* ---------- overlays ---------- */
+function hcands(w){const all=S.H.filter(h=>h.prog===w.prog&&h.g===(w.g==='ذكر'?'ذكور':'إناث')),ok=all.filter(h=>h.rw.includes(w.rw));return{list:ok.map(h=>({h,full:h.c>=h.cap,age:h.age&&w.age>h.age,match:h.s===w.s&&w.days.every(d=>h.days.includes(d))})),hid:all.length-ok.length}}
+function why(w,h){if(h.g!==(w.g==='ذكر'?'ذكور':'إناث'))return 'الجنس';if(h.prog!==w.prog)return 'البرنامج';if(!h.rw.includes(w.rw))return 'الرواية';if(h.age&&w.age>h.age)return 'العمر';return ''}
+function accModal(){
+ const a=S.acc,w=S.W.find(x=>x.id===a.id),C=hcands(w),h=S.H.find(x=>x.id===a.h);
+ const stp=['اختيار الحلقة','الخطة','المراجعة والحفظ'].map((l,i)=>`<div class="${a.step===i+1?'on':a.step>i+1?'dn':''}"><i>${a.step>i+1?'✓':i+1}</i>${l}</div>`).join('');
+ const who=`<div class="who"><div><span>الطالب</span><b>${w.n}</b></div><div><span>الجنس · العمر · الدولة</span>${w.g} · ${w.age} · ${w.cty}</div><div><span>البرنامج · الرواية</span>${w.prog} · ${w.rw}</div><div><span>الموعد المفضل</span>${w.days.join(' · ')}<br>${mk(w.s)}${w.off?' · '+hr(w.s+w.off)+' '+w.tz:''}</div></div>`;
+ let b;
+ if(a.step===1)b=`${who}${a.err==='race'?`<div class="banner b-err">${ic('alert')}<div><b>امتلأت «حلقة الإتقان» قبل لحظات</b>اختر حلقة أخرى.</div></div>`:''}
+  <div style="display:flex;flex-direction:column;gap:8px">${C.list.map(({h,full,age,match})=>`<button class="hc" data-act="pickh" data-v="${h.id}" aria-pressed="${a.h===h.id}" ${full||age?'disabled':''}><span class="rd"></span><div><div class="hn">${h.n} ${full?'<span class="match m-bad">ممتلئة</span>':age?`<span class="match m-bad">العمر ${w.age} يتجاوز الحد (${h.age})</span>`:match?'<span class="match m-yes">يوافق موعده المفضل</span>':'<span class="match m-no">موعد مختلف</span>'}</div><div class="hm"><span>${h.t}</span><span>${h.days.join(' · ')}</span><span>${mk(h.s)}</span><span>${h.hall}</span></div></div><div class="seats">${h.c}/${h.cap}<small>${full?'لا مقاعد':(h.cap-h.c)+' متاح'}</small></div></button>`).join('')}</div>${C.hid?`<div style="font-size:12.5px;color:var(--ink3)">لا تظهر ${C.hid} حلقة لا تدعم رواية ${w.rw}.</div>`:''}`;
+ else if(a.step===2)b=`<div class="banner b-ok" style="font-size:12.5px">${ic('ok')}<div>خطة الطالب من طلبه مختارة مسبقًا ويمكن تغييرها. الحقول تتبع هيكل الخطة.</div></div>
+  <div class="fgrid" style="padding:0"><div class="f"><label>الخطة <em>*</em></label><select><option>${w.plan.split(' · ')[0]}</option><option>تمام البنيان</option><option>تعاهد القرآن</option></select><span class="hint">من طلب الطالب</span></div>
+  ${w.plan.split(' · ').slice(1).map((p,i)=>`<div class="f"><label>${p.startsWith('الفئة')||p.startsWith('فئة')?'الفئة':p.startsWith('المسار')?'المسار':p.startsWith('المرحلة')?'المرحلة':'المستوى'} <em>*</em></label><select><option>${p}</option></select></div>`).join('')}
+  <div class="f"><label>اتجاه التسميع</label><div class="seg"><button aria-pressed="false">من الفاتحة</button><button aria-pressed="true">من الناس</button></div></div></div>`;
+ else b=`${a.err==='cap'?`<div class="banner b-err">${ic('alert')}<div style="flex:1"><b>لا توجد مقاعد متاحة في المقرأة</b>امتلأت سعة المقرأة قبل لحظات. لم يُقبل الطالب وبقي طلبه في مكانه.</div><button class="btn" data-act="go" data-v="sub">طلب زيادة السعة</button></div>`:''}
+  <div class="card"><div class="kv"><span>الطالب</span><b>${w.n}</b><span>الحلقة</span><b>${h.n} · ${h.t}</b><span>الموعد</span><span>${h.days.join(' · ')} ${mk(h.s)}${w.off?' · '+hr(h.s+w.off)+' بتوقيت '+w.tz:''}</span><span>الخطة</span><span>${w.plan}</span><span>عند الحفظ</span><span>يُحتسب مقعد من سعة المقرأة (${S.cap.used} ← ${S.cap.used+1} / ${S.cap.max})، وتُرسل رسالة القبول بالتوقيتين.</span></div></div>`;
+ const ft=a.step===1?`<button class="btn" data-act="accnext" ${a.h?'':'disabled'}>التالي: الخطة</button><button class="btn2" data-act="close">إلغاء</button>`:a.step===2?`<button class="btn" data-act="accnext">التالي: المراجعة</button><button class="btn2" data-act="accback">رجوع</button>`:`<button class="btn" data-act="accsave">قبول وتسكين</button><button class="btn2" data-act="accback">رجوع</button>`;
+ return `<div class="modal" style="width:860px"><div class="mh"><b>قبول وتسكين</b><button class="x" data-act="close">${ic('x')}</button></div><div class="steps">${stp}</div><div class="mb">${b}</div><div class="mf">${ft}</div></div>`;
+}
+function bulkModal(){
+ const B=S.bulk,ws=S.W.filter(w=>S.sel.includes(w.id)),h=S.H.find(x=>x.id===B.h);
+ const stp=['اختيار الحلقة','المراجعة والحفظ'].map((l,i)=>`<div class="${B.step===i+1?'on':B.step>i+1?'dn':''}"><i>${B.step>i+1?'✓':i+1}</i>${l}</div>`).join('');
+ let b;
+ if(B.step===1)b=`<p style="margin:0;font-size:13.5px;color:var(--ink2)">حلقة واحدة لكل المحددين (${ws.length}). تعرض المراجعة من يناسبها ومن لا يناسبها.</p><div style="display:flex;flex-direction:column;gap:8px">${S.H.map(x=>{const fit=ws.filter(w=>!why(w,x)).length;return `<button class="hc" data-act="bpick" data-v="${x.id}" aria-pressed="${B.h===x.id}" ${x.c>=x.cap?'disabled':''}><span class="rd"></span><div><div class="hn">${x.n} <span class="match ${fit?'m-yes':'m-no'}">يناسب ${fit} من ${ws.length}</span></div><div class="hm"><span>${x.t}</span><span>${x.g}</span><span>${x.rw.join('، ')}</span><span>${x.days.join(' · ')} ${mk(x.s)}</span></div></div><div class="seats">${x.cap-x.c}<small>${x.c>=x.cap?'ممتلئة':'متاح'}</small></div></button>`}).join('')}</div>`;
+ else{const fit=ws.filter(w=>!why(w,h)),seats=Math.min(h.cap-h.c,left()),can=Math.min(fit.length,seats);
+  if(!B.pick)B.pick=fit.slice(0,can).map(w=>w.id);
+  b=`<div class="who" style="grid-template-columns:repeat(3,1fr)"><div><span>الحلقة</span><b>${h.n}</b></div><div><span>مقاعد الحلقة المتاحة</span><b>${h.cap-h.c}</b></div><div><span>مقاعد المقرأة المتاحة</span><b>${left()}</b></div></div>
+  ${fit.length>seats?`<div class="banner b-warn">${ic('alert')}<div><b>يمكن تسكين ${seats} من ${fit.length} مناسبين</b>المقاعد المتاحة ${seats}. حُدد الأقدم في الانتظار؛ يمكنك تغيير الاختيار.</div></div>`:''}
+  <table class="t"><thead><tr><th></th><th>الطالب</th><th>الخطة (من طلبه)</th><th>النتيجة</th></tr></thead><tbody>${ws.map(w=>{const r=why(w,h),on=B.pick.includes(w.id);return `<tr><td>${r?'':`<input type="checkbox" data-act="bpk" data-v="${w.id}" ${on?'checked':''} ${!on&&B.pick.length>=seats?'disabled':''}>`}</td><td><b>${w.n}</b><span class="s2">${w.g} · ${w.age} سنة · ${w.rw}</span></td><td style="font-size:12.5px">${w.plan}</td><td>${r?`<span class="pill p-err">لا يناسب: ${r}</span>`:on?'<span class="pill p-ok">يُسكَّن</span>':'<span class="pill" style="background:#F1F0EB;color:var(--ink2)">لا مقعد</span>'}</td></tr>`}).join('')}</tbody></table>
+  <p style="margin:0;font-size:12.5px;color:var(--ink3)">كل طالب يُسكَّن بخطته من طلبه. من لا يناسب يبقى محددًا في الانتظار.</p>`}
+ const ft=B.step===1?`<button class="btn" data-act="bnext" ${B.h?'':'disabled'}>التالي: المراجعة</button><button class="btn2" data-act="close">إلغاء</button>`:`<button class="btn" data-act="bsave" ${B.pick&&B.pick.length?'':'disabled'}>تسكين ${B.pick?B.pick.length:0} طلاب</button><button class="btn2" data-act="bback">رجوع</button>`;
+ return `<div class="modal" style="width:820px"><div class="mh"><b>قبول وتسكين جماعي</b><button class="x" data-act="close">${ic('x')}</button></div><div class="steps">${stp}</div><div class="mb">${b}</div><div class="mf">${ft}</div></div>`;
+}
+function overlay(){
+ const M=S.modal;let h='';
+ if(M){
+  if(M.t==='acc')h=accModal();
+  if(M.t==='bulk')h=bulkModal();
+  if(M.t==='skip'){const w=S.W.find(x=>x.id===M.id),o=olderOf(w);h=`<div class="modal" style="width:540px"><div class="mh"><b>تخطي ترتيب الأسبقية</b><button class="x" data-act="close">${ic('x')}</button></div><div class="mb"><div class="banner b-warn">${ic('alert')}<div>يوجد ${o.length} طلب أقدم في نفس البرنامج: ${o.map(x=>x.n).join('، ')}. السبب إلزامي ويُسجَّل.</div></div><div class="rlist">${['الموعد المفضل يوافق حلقة بها مقعد، والأقدم لا يوافقها','عمر الطالب يناسب حلقة الصغار المتاحة','الرواية لا تتوفر لها حلقة للطلب الأقدم','أخرى'].map(r=>`<label class="${S.skipR===r?'on':''}"><input type="radio" name="sk" data-act="skr" data-v="${r}" ${S.skipR===r?'checked':''}>${r}</label>`).join('')}</div>${S.skipE?'<span style="color:var(--errT);font-size:12.5px;font-weight:600">اختر سبب التخطي</span>':''}</div><div class="mf"><button class="btn" data-act="skipgo">متابعة</button><button class="btn2" data-act="close">إلغاء</button></div></div>`}
+  if(M.t==='rej'){const w=S.W.find(x=>x.id===M.id);h=`<div class="modal" style="width:540px"><div class="mh"><b>رفض طلب ${w.n}</b><button class="x" data-act="close">${ic('x')}</button></div><div class="mb"><div class="rlist">${['لا توجد حلقة مناسبة لموعده المفضل','البرنامج المطلوب غير متاح حاليًا','البيانات غير مكتملة أو غير صحيحة','أخرى'].map(r=>`<label class="${S.rejR===r?'on':''}"><input type="radio" name="rj" data-act="rjr" data-v="${r}" ${S.rejR===r?'checked':''}>${r}</label>`).join('')}</div>${S.rejE?'<span style="color:var(--errT);font-size:12.5px;font-weight:600">اختر سبب الرفض</span>':''}<div class="banner b-err" style="font-size:13px">${ic('trash')}<div><b>سيُحذف الطلب بعد إرسال رسالة الرفض</b>لا يُحفظ رقم الهوية، فيستطيع التقديم مجددًا.</div></div></div><div class="mf"><button class="btn" style="background:var(--errT)" data-act="rejdo">إرسال الرفض وحذف الطلب</button><button class="btn2" data-act="close">إلغاء</button></div></div>`}
+  if(M.t==='late'){const L=S.H.filter(x=>x.late);h=`<div class="modal" style="width:600px"><div class="mh"><b>حلقات لم تبدأ</b><button class="x" data-act="close">${ic('x')}</button></div><div class="mb">${L.map(x=>`<div class="req"><div style="flex:1"><b>${x.n}</b><div style="font-size:12.5px;color:var(--ink2)">${x.t} · ${mk(x.s)} · ${x.hall}</div></div><span class="pill p-err">متأخرة ${x.late} دقيقة</span><button class="btn2" data-act="say" data-v="فُتحت القاعة">${ic('door')}دخول القاعة</button></div>`).join('')}<div class="banner b-gray" style="font-size:12.5px">${ic('info')}<div>تنبيه داخل التطبيق والويب بعد 10 دقائق دون بدء. لا يُرسل واتساب.</div></div></div><div class="mf"><button class="btn2" data-act="close">إغلاق</button></div></div>`}
+  if(M.t==='hl'){const e=S.hl.err||{},p=S.hl.u&&/^https?:\/\//.test(S.hl.u)?PLATFORM(S.hl.u):null,lk=M.i!=null?S.H.filter(x=>x.hall===S.halls[M.i].n):[];h=`<div class="modal"><div class="mh"><b>${M.i!=null?'تعديل قاعة':'إضافة قاعة'}</b><button class="x" data-act="close">${ic('x')}</button></div><div class="mb">
+   <div class="f ${e.n?'bad':''}"><label>اسم القاعة <em>*</em></label><input data-hl="n" value="${S.hl.n}" placeholder="مثال: قاعة الفجر">${e.n?`<span class="msg">${e.n}</span>`:''}</div>
+   <div class="f ${e.u?'bad':''}"><label>رابط القاعة <em>*</em></label><input data-hl="u" value="${S.hl.u}" dir="ltr" placeholder="https://">${e.u?`<span class="msg">${e.u}</span>`:p?`<span class="hint">${p}</span>`:'<span class="hint">انسخ رابط الاجتماع الثابت من Zoom أو Meet أو غيرهما</span>'}</div>
+   ${M.i!=null?`<div class="banner b-gray" style="font-size:12.5px">${ic('info')}<div>تغيير الرابط لا يُرسل إشعارًا؛ زر «دخول» يحمل الرابط الجديد مباشرة.${lk.length?' مرتبطة بـ: '+lk.map(x=>x.n).join('، ')+'.':''}</div></div>`:''}
+   <div class="row between"><b style="font-size:13.5px">الحالة</b><div class="row"><button class="sw" role="switch" aria-checked="${S.hl.on}" data-act="hlon" ${lk.length?'disabled title="مرتبطة بحلقات نشطة"':''}></button><span style="font-size:13px">${S.hl.on?'نشطة':'معطلة'}${lk.length?' · لا تُعطَّل وهي مرتبطة بحلقات':''}</span></div></div></div>
+   <div class="mf"><button class="btn" data-act="hlsave">حفظ</button><button class="btn2" data-act="close">إلغاء</button></div></div>`}
+  if(M.t==='hldel'){const x=S.halls[M.i],lk=S.H.filter(y=>y.hall===x.n);h=lk.length?`<div class="modal" style="width:480px"><div class="mh"><b>لا يمكن حذف القاعة</b><button class="x" data-act="close">${ic('x')}</button></div><div class="mb"><div class="banner b-err">${ic('alert')}<div>«${x.n}» مرتبطة بـ ${lk.length} حلقات نشطة: ${lk.map(y=>y.n).join('، ')}. انقلها لقاعة أخرى من نموذج الحلقة أولًا.</div></div></div><div class="mf"><button class="btn" data-act="close">حسنًا</button></div></div>`:`<div class="modal" style="width:440px"><div class="mh"><b>حذف القاعة</b><button class="x" data-act="close">${ic('x')}</button></div><div class="mb">سيتم حذف «${x.n}» نهائيًا.</div><div class="mf"><button class="btn" style="background:var(--errT)" data-act="hldeldo" data-v="${M.i}">حذف</button><button class="btn2" data-act="close">إلغاء</button></div></div>`}
+  if(M.t==='hform')h=hformModal();
+  if(M.t==='form'){const F=S.form;h=`<div class="modal" style="width:640px"><div class="mh"><b>استمارة الاختبار الختامي</b><button class="x" data-act="close">${ic('x')}</button></div><div class="mb">
+   <div class="banner ${F.edited?'b-info':'b-gray'}" style="font-size:12.5px">${ic('info')}<div>${F.edited?'معدّلة لهذه المقرأة. «استعادة الافتراضية» يرجعها للاستمارة الأساسية.':'الافتراضية: نسخة من «الاستمارة الأساسية» للاختبار المرحلي. التعديل هنا يخص الاختبار الختامي في هذه المقرأة فقط.'}</div></div>
+   <div class="fgrid" style="padding:0"><div class="f"><label>عدد الأسئلة <em>*</em></label><select data-fm="q">${[3,4,5,6,8,10].map(n=>`<option ${F.q===n?'selected':''}>${n}</option>`).join('')}</select></div>
+   <div class="f"><label>درجة النجاح % <em>*</em></label><input data-fm="pass" type="number" min="50" max="100" value="${F.pass}"></div>
+   <div class="f full"><label>بنود الخصم</label><div style="display:flex;flex-direction:column;gap:6px">${F.ded.map(([n,v],i)=>`<div class="row" style="gap:8px"><input class="sel2" style="flex:1;width:auto;height:38px" value="${n}" data-fd="${i}"><select class="sel2" data-fv="${i}" style="flex:none;width:110px;height:38px">${[0.25,0.5,0.75,1,1.5,2].map(x=>`<option ${x===v?'selected':''}>${x}</option>`).join('')}</select></div>`).join('')}<button class="btn3" style="align-self:flex-start" data-act="fdadd">${ic('plus','width:15px')}إضافة بند</button></div></div>
+   <div class="f full"><label>جدول التقدير</label><span class="hint">ممتاز 90–100 · جيد جدًا 80–89 · جيد 70–79 · راسب أقل من ${F.pass} — كما في الاستمارة الأساسية</span></div></div></div>
+   <div class="mf"><button class="btn" data-act="formsave">حفظ الاستمارة</button>${F.edited?'<button class="btn2" data-act="formreset">استعادة الافتراضية</button>':'<button class="btn2" data-act="close">إلغاء</button>'}</div></div>`}
+  if(M.t==='su'){const u=S.su,e=u.err||{};h=`<div class="modal" style="width:560px"><div class="mh"><b>إضافة مشرف للمقرأة</b><button class="x" data-act="close">${ic('x')}</button></div><div class="mb">
+   <div class="seg">${[['ex','من مشرفي المجمع الحاليين'],['new','مشرف جديد']].map(([k,l])=>`<button data-act="suk" data-v="${k}" aria-pressed="${u.k===k}">${l}</button>`).join('')}</div>
+   ${u.k==='ex'?`<div class="f ${e.p?'bad':''}"><label>المشرف <em>*</em></label><select data-su="p"><option value="">اختر من مشرفي ${CX}</option><option ${u.p==='عبدالرحمن فؤاد الخولي'?'selected':''}>عبدالرحمن فؤاد الخولي</option><option ${u.p==='ياسر طراف محمد'?'selected':''}>ياسر طراف محمد</option></select>${e.p?`<span class="msg">${e.p}</span>`:'<span class="hint">يدخل بنفس حسابه ويختار «مقرأة» أو «مجمع» عند الدخول</span>'}</div>`
+   :`<div class="fgrid" style="padding:0"><div class="f ${e.n?'bad':''}"><label>الاسم الكامل <em>*</em></label><input data-su="n" value="${u.n||''}">${e.n?`<span class="msg">${e.n}</span>`:''}</div><div class="f ${e.g?'bad':''}"><label>الجنس <em>*</em></label><div class="seg">${['ذكر','أنثى'].map(g=>`<button data-act="sug" data-v="${g}" aria-pressed="${u.g===g}">${g}</button>`).join('')}</div>${e.g?`<span class="msg">${e.g}</span>`:''}</div><div class="f"><label>رقم الجوال <em>*</em></label><input dir="ltr" placeholder="+966"></div><div class="f"><label>رقم الهوية <em>*</em></label><input dir="ltr"></div></div>`}
+   <div class="banner b-gray" style="font-size:12.5px">${ic('info')}<div>صلاحيات حساب المقرأة كاملة لكل مشرفيه. تصله رسالة بالدخول.</div></div></div>
+   <div class="mf"><button class="btn" data-act="sudo">إضافة</button><button class="btn2" data-act="close">إلغاء</button></div></div>`}
+  if(M.t==='sch'){const f=S.F.find(x=>x.id===M.id);h=`<div class="modal" style="width:480px"><div class="mh"><b>موعد الاختبار الختامي · ${f.n}</b><button class="x" data-act="close">${ic('x')}</button></div><div class="mb"><div class="fgrid" style="padding:0"><div class="f"><label>التاريخ <em>*</em></label><select><option>الأحد 1448/06/22</option><option>الإثنين 1448/06/23</option></select></div><div class="f"><label>الوقت (مكة) <em>*</em></label><select><option>5:00 م</option><option>6:00 م</option></select><span class="hint">4:00 م بتوقيت الطالب (القاهرة)</span></div></div><div class="banner b-gray" style="font-size:12.5px">${ic('info')}<div>يصل الطالب إشعار بالموعد داخل التطبيق فقط.</div></div></div><div class="mf"><button class="btn" data-act="schdo" data-v="${f.id}">حفظ الموعد</button><button class="btn2" data-act="close">إلغاء</button></div></div>`}
+  if(M.t==='pass'){const f=S.F.find(x=>x.id===M.id);h=`<div class="modal" style="width:540px"><div class="mh"><b>نجح ${f.n} · أصبح خريجًا</b><button class="x" data-act="close">${ic('x')}</button></div><div class="mb"><div class="banner b-ok">${ic('cap')}<div><b>تم التخرج من «${f.prog}»</b>بنتيجة ${M.pct}%</div></div><div style="font-size:13.5px;line-height:2.1">${ic('ok','width:15px;color:var(--okT)')} خرج من «${f.h}» وتحرر مقعده (${S.cap.used+1} ← ${S.cap.used} / ${S.cap.max})<br>${ic('ok','width:15px;color:var(--okT)')} صدرت شهادة «إتمام البرنامج» معتمدة تلقائيًا: <b style="direction:ltr;display:inline-block">MQR-2026-000015</b><br>${ic('ok','width:15px;color:var(--okT)')} أُرسلت رسالة «إشعار صدور شهادة» برابطها<br>${ic('ok','width:15px;color:var(--okT)')} أُضيف للخريجين وللسجل الأكاديمي</div></div><div class="mf"><button class="btn" data-act="go" data-v="grad">عرض الخريجين</button><button class="btn2" data-act="go" data-v="final">العودة للاختبارات</button></div></div>`}
+  if(M.t==='fail'){const f=S.F.find(x=>x.id===M.id),c=S.fail;h=`<div class="modal" style="width:600px"><div class="mh"><b>رسب ${f.n} · ماذا بعد؟</b><button class="x" data-act="close">${ic('x')}</button></div><div class="mb"><div class="banner b-warn">${ic('alert')}<div>النتيجة ${M.pct}%. يبقى الطالب في حلقته ومقعده.</div></div>
+   <div class="rlist"><label class="${c.k==='t'?'on':''}"><input type="radio" name="fl" data-act="flk" data-v="t" ${c.k==='t'?'checked':''}><div style="flex:1"><b>إعادة الاختبار بعد مدة</b>${c.k==='t'?`<div class="row" style="margin-top:8px"><select class="sel2" data-fl="d"><option>أسبوع</option><option selected>أسبوعان</option><option>شهر</option></select><span style="font-size:12.5px;color:var(--ink2)">تظهر للمعلم كمدة مقترحة حتى 1448/07/05</span></div>`:''}</div></label>
+   <label class="${c.k==='r'?'on':''}"><input type="radio" name="fl" data-act="flk" data-v="r" ${c.k==='r'?'checked':''}><div style="flex:1"><b>مراجعة مقررات محددة قبل الإعادة</b>${c.k==='r'?`<div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">${['البقرة 1 – 141','آل عمران 1 – 120','الكهف كاملة','يس – الملك'].map((x,i)=>`<label style="border:0;padding:0;font-size:13px"><input type="checkbox" data-act="flr" data-v="${i}" ${c.r.includes(i)?'checked':''}>${x}</label>`).join('')}<span style="font-size:12px;color:var(--ink3)">تُضاف للطالب في خطته، وتظهر للمعلم. زر «إعادة ترشيح» متاح للمعلم في أي وقت</span></div>`:''}</div></label></div>${c.e?'<span style="color:var(--errT);font-size:12.5px;font-weight:600">'+c.e+'</span>':''}</div>
+   <div class="mf"><button class="btn" data-act="faildo">حفظ</button><button class="btn2" data-act="close">إلغاء</button></div></div>`}
+  if(M.t==='absnew'){const a=S.absF;h=`<div class="modal" style="width:500px"><div class="mh"><b>تسجيل عذر غياب · سلمان ناصر العمري</b><button class="x" data-act="close">${ic('x')}</button></div><div class="mb"><div class="fgrid" style="padding:0"><div class="f ${a.e?'bad':''}"><label>من <em>*</em></label><select data-ab="from">${['1448/06/10','1448/06/14','1448/06/21','1448/06/28'].map(d=>`<option ${a.from===d?'selected':''}>${d}</option>`).join('')}</select>${a.e?`<span class="msg">${a.e}</span>`:'<span class="hint">ماضٍ حتى 7 أيام، أو مستقبلي بلا حد</span>'}</div><div class="f"><label>إلى <em>*</em></label><select><option>1448/06/21</option><option>1448/06/30</option></select></div><div class="f full"><label>السبب <em>*</em></label><input value="مرض"></div></div><span style="font-size:12.5px;color:var(--ink3)">اليوم 1448/06/21</span></div><div class="mf"><button class="btn" data-act="absdo">تسجيل «غائب بعذر»</button><button class="btn2" data-act="close">إلغاء</button></div></div>`}
+  h=`<div class="dim" data-act="close">${h.replace('<div class="modal"','<div class="modal" data-stop="1"')}</div>`;
+ }
+ if(S.toast)h+=`<div class="toast">${ic('ok')}${S.toast}</div>`;
+ return h;
+}
+function hformModal(){
+ const f=S.hf,e=f.err||{},TE=f.gender==='إناث'?[['أ. نورة السالم','أنثى'],['أ. أسماء العلوي','أنثى']]:[['أ. ماجد القحطاني','ذكر'],['أ. سعد الشهري','ذكر'],['أ. عبدالإله السبيعي','ذكر'],['أ. هند العتيبي','أنثى']];
+ const tg=(TE.find(t=>t[0]===f.teacher)||[])[1],need=tg&&(tg==='ذكر'?'ذكور':'إناث')!==f.gender;
+ const fld=(k,l,req,inp,hint,full)=>`<div class="f ${e[k]?'bad':''} ${full?'full':''}"><label>${l}${req?' <em>*</em>':''}</label>${inp}${e[k]?`<span class="msg">${e[k]}</span>`:hint?`<span class="hint">${hint}</span>`:''}</div>`;
+ return `<div class="modal" style="width:820px"><div class="mh"><b>إضافة حلقة</b><button class="x" data-act="close">${ic('x')}</button></div><div class="mb">${Object.keys(e).length?`<div class="banner b-err">${ic('alert')}<div>تعذّر الحفظ. راجع الحقول المظللة.</div></div>`:''}<div class="fgrid" style="padding:0">
+  ${fld('name','اسم الحلقة',1,`<input data-hf="name" value="${f.name}" placeholder="مثال: حلقة المغرب">`)}
+  ${fld('prog','البرنامج',1,`<select><option>حفظ القرآن الكريم كاملًا</option><option>تصحيح التلاوة</option></select>`)}
+  ${fld('gender','جنس الحلقة',1,`<div class="togs">${['ذكور','إناث'].map(g=>`<button data-act="hfset" data-k="gender" data-v="${g}" aria-pressed="${f.gender===g}">${g}</button>`).join('')}</div>`,'المقرأة للجنسين، والحلقة لجنس واحد')}
+  ${fld('teacher','المعلم',1,`<select data-hf="teacher"><option value="">اختر المعلم</option>${TE.map(([n])=>`<option ${f.teacher===n?'selected':''}>${n}</option>`).join('')}</select>`)}
+  ${need?fld('age','الحد الأقصى للعمر',1,`<input data-hf="age" type="number" value="${f.age||''}">`,'إلزامي لأن جنس المعلم يختلف عن الحلقة · لا يتجاوز 10'):'<div></div>'}
+  ${fld('hall','القاعة',1,`<select data-hf="hall"><option value="">اختر القاعة</option>${S.halls.map(h=>`<option value="${h.n}" ${f.hall===h.n?'selected':''} ${h.on&&h.u?'':'disabled'}>${h.n}${h.on&&h.u?'':' · غير متاحة'}</option>`).join('')}</select>`,'قاعة واحدة، ويمنع النظام التداخل')}
+  ${fld('rw','الرواية',1,`<div class="togs">${['حفص','شعبة','ورش','قالون'].map(r=>`<button data-act="hftog" data-k="rw" data-v="${r}" aria-pressed="${f.rw.includes(r)}">${r}</button>`).join('')}</div>`,'',1)}
+  ${fld('days','الأيام',1,`<div class="togs">${DAYS.map(d=>`<button data-act="hftog" data-k="days" data-v="${d}" aria-pressed="${f.days.includes(d)}">${d}</button>`).join('')}</div>`,'',1)}
+  ${fld('time','الوقت (مكة)',1,`<div class="row"><span>من</span><select data-hf="s">${[...Array(19)].map((_,i)=>i+5).map(x=>`<option value="${x}" ${+f.s===x?'selected':''}>${hr(x)}</option>`).join('')}</select><span>إلى</span><select data-hf="e">${[...Array(19)].map((_,i)=>i+6).map(x=>`<option value="${x}" ${+f.e===x?'selected':''}>${hr(x)}</option>`).join('')}</select></div>`,'بتوقيت مكة؛ المعلم والطالب يريان توقيتهما المحلي إن اختلف')}
+  ${fld('cap','السعة',1,`<input data-hf="cap" type="number" value="${f.cap}">`)}
+ </div></div><div class="mf"><button class="btn" data-act="hfsave">إضافة</button><button class="btn2" data-act="close">إلغاء</button></div></div>`;
+}
+function hfcheck(){const f=S.hf,e={},TG={'أ. هند العتيبي':'أنثى','أ. نورة السالم':'أنثى','أ. أسماء العلوي':'أنثى'},tg=f.teacher?(TG[f.teacher]||'ذكر'):null;
+ if(!f.name.trim())e.name='اسم الحلقة مطلوب';if(!f.teacher)e.teacher='اختر المعلم';if(!f.hall)e.hall='اختر القاعة';if(!f.rw.length)e.rw='اختر رواية واحدة على الأقل';if(!f.days.length)e.days='اختر يومًا';if(+f.e<=+f.s)e.time='النهاية بعد البداية';
+ if(tg&&tg==='ذكر'&&f.gender==='إناث')e.teacher='لا يُسند معلم لحلقة إناث';else if(tg==='أنثى'&&f.gender==='ذكور'){if(!(+f.age>0))e.age='الحد الأقصى للعمر إلزامي';else if(+f.age>10)e.age='لا يتجاوز سن استثناء الصغار (10)'}
+ const ov=S.H.filter(h=>h.days.some(d=>f.days.includes(d))&&+f.s<h.e&&+f.e>h.s),hc=ov.find(h=>h.hall===f.hall),tc=ov.find(h=>h.t===f.teacher);
+ if(f.hall&&hc)e.hall=`«${f.hall}» محجوزة لـ «${hc.n}» (${hc.days.join(' · ')} ${mk(hc.s)})`;if(f.teacher&&tc)e.teacher=`${f.teacher} مسند لـ «${tc.n}» في نفس الوقت`;return e}
+/* ---------- render & actions ---------- */
+function sups(){
+ return shell('sups','<b>المشرفين</b>','المشرفين','مشرفو المقرأة · يضيفهم مشرف المقرأة',`<button class="btn" data-act="supadd">${ic('plus')}إضافة مشرف</button>`,`
+ <div class="card"><table class="t"><thead><tr><th>الاسم</th><th>الجنس</th><th>رقم الجوال</th><th>المصدر</th><th>تاريخ الإضافة</th><th>الإجراء</th></tr></thead><tbody>
+ ${S.SU.map(u=>`<tr><td><b>${u.n}</b>${u.first?'<span class="s2">المشرف الأول · حدده مدير النظام</span>':''}</td><td>${u.g}</td><td style="direction:ltr;text-align:right">${u.ph}</td><td>${u.src}</td><td>${u.d}</td><td><button class="dots">${ic('dots')}</button></td></tr>`).join('')}
+ </tbody></table></div>`);
+}
+function visit(){
+ const h=S.H.find(x=>x.id===(S.vh||'h1')),same=h.g==='ذكور',run=!!h.st;
+ return shell('visit','إدارة الحلقات / <b>زيارة حلقة قرآنية</b>','زيارة حلقة قرآنية','','',`
+ <div class="card pad"><div class="fgrid" style="padding:0;grid-template-columns:1fr 1fr"><div class="f"><label>الحلقة</label><select data-vh="1">${S.H.map(o=>`<option value="${o.id}" ${o.id===h.id?'selected':''}>${o.n} — ${o.g} · ${o.t}</option>`).join('')}</select></div><div class="f"><label>التاريخ</label><input value="الثلاثاء 1448/06/21"></div></div></div>
+ <div class="sect"><div class="row between wrap"><div><h3>${ic('maqraa')}الجلسة المباشرة</h3><div class="sub2">${h.n} · ${h.t} · ${h.hall} · ${mk(h.s)}</div></div>
+  ${same?`<button class="btn" data-act="say" data-v="فُتحت القاعة في نافذة جديدة" ${run?'':'disabled'}>${ic('door')}دخول الجلسة المباشرة</button>`:`<button class="btn" disabled>${ic('lock')}دخول الجلسة المباشرة</button>`}</div>
+  ${same?`<div class="row" style="gap:16px;font-size:13px;color:var(--ink2)"><span class="st ${run?'s-ok':'s-off'}">${run?'جارية الآن':'لم تبدأ'}</span><span>${h.st||'يتاح الدخول بعد بدء المعلم للحلقة'}</span><span>تدخل زائرًا؛ لا يُسجَّل لك حضور</span></div>`
+  :`<div class="banner b-gray">${ic('lock')}<div><b>الدخول للجلسات المباشرة لنفس الجنس فقط</b>يمكنك تعبئة استمارة الزيارة من رصد الحلقة وحضورها وتقاريرها.</div></div>`}
+ </div>
+ <div class="card pad" style="color:var(--ink3);font-size:13.5px">استمارة زيارة الحلقة الحالية كما هي — بلا تغيير.</div>`);
+}
+const V={sups,login,home,wait,stu,sprof,grad,final,exam,sec,halls,cert,progs,pform,ins,mset,sub,visit};
+function render(){const d=document.getElementById('desk'),b=d.querySelector('#bd'),t=b?b.scrollTop:0;d.innerHTML=V[S.scr]();const nb=d.querySelector('#bd');if(nb&&S.keep)nb.scrollTop=t;S.keep=false;fit();sync()}
+let tt;function say(m){S.toast=m;S.keep=true;render();clearTimeout(tt);tt=setTimeout(()=>{S.toast=null;S.keep=true;render()},2400)}
+const K=()=>{S.keep=true;render()};
+const A={
+ go(d){S.scr=d.v;S.modal=null;S.menu=null;render()},say(d){S.menu=null;say(d.v)},
+ close(d,e){if(e&&e.target.closest('[data-stop]')&&!e.target.closest('[data-act="close"]'))return;S.modal=null;K()},
+ late(){S.modal={t:'late'};K()},
+ wmenu(d){S.menu=S.menu==='w'+d.v?null:'w'+d.v;K()},
+ sel(d){const id=+d.v,i=S.sel.indexOf(id);i<0?S.sel.push(id):S.sel.splice(i,1);K()},
+ selall(){S.sel=S.sel.length===S.W.length?[]:S.W.map(w=>w.id);K()},clrsel(){S.sel=[];K()},
+ accask(d){const w=S.W.find(x=>x.id===+d.v);S.menu=null;if(S.fullCap)return;if(olderOf(w).length){S.skipR=null;S.skipE=false;S.modal={t:'skip',id:w.id}}else{S.acc={id:w.id,step:1,h:null};S.modal={t:'acc'}}K()},
+ skr(d){S.skipR=d.v;S.skipE=false;K()},skipgo(){if(!S.skipR){S.skipE=true;K();return}S.acc={id:S.modal.id,step:1,h:null};S.modal={t:'acc'};K()},
+ pickh(d){S.acc.h=d.v;S.acc.err=null;K()},accnext(){S.acc.step++;K()},accback(){S.acc.step--;S.acc.err=null;K()},
+ accsave(){const a=S.acc,w=S.W.find(x=>x.id===a.id),h=S.H.find(x=>x.id===a.h);if(S.race&&h.id==='h1'){h.c=h.cap;a.step=1;a.h=null;a.err='race';S.race=false;K();return}if(S.raceCap){a.err='cap';K();return}
+  h.c++;S.cap.used++;S.W=S.W.filter(x=>x.id!==w.id);S.sel=S.sel.filter(x=>x!==w.id);S.modal=null;say(`قُبل ${w.n} في «${h.n}» بخطته، وأُرسلت رسالة القبول`)},
+ bulk(){if(!S.sel.length)return;S.bulk={step:1,h:null,pick:null};S.modal={t:'bulk'};K()},
+ bpick(d){S.bulk.h=d.v;S.bulk.pick=null;K()},bnext(){S.bulk.step=2;K()},bback(){S.bulk.step=1;S.bulk.pick=null;K()},
+ bpk(d){const id=+d.v,p=S.bulk.pick,i=p.indexOf(id);i<0?p.push(id):p.splice(i,1);K()},
+ bsave(){const p=S.bulk.pick,h=S.H.find(x=>x.id===S.bulk.h);h.c+=p.length;S.cap.used+=p.length;S.W=S.W.filter(w=>!p.includes(w.id));S.sel=S.sel.filter(x=>!p.includes(x));S.modal=null;say(`سُكّن ${p.length} طلاب في «${h.n}»، وبقي ${S.sel.length} محددين`)},
+ rejask(d){S.menu=null;S.rejR=null;S.rejE=false;S.modal={t:'rej',id:+d.v};K()},rjr(d){S.rejR=d.v;S.rejE=false;K()},
+ rejdo(){if(!S.rejR){S.rejE=true;K();return}S.W=S.W.filter(x=>x.id!==S.modal.id);S.modal=null;say('أُرسلت رسالة الرفض وحُذف الطلب')},
+ ptab(d){S.ptab=d.v;K()},
+ absok(d){S.ST.abs.find(a=>a.id===+d.v).st='ok';say('سُجّل «غائب بعذر» لكل أيام الطلب')},absno(d){S.ST.abs.find(a=>a.id===+d.v).st='no';say('رُفض الطلب')},
+ absnew(){S.absF={from:'1448/06/10',e:null};S.modal={t:'absnew'};K()},
+ absdo(){if(S.absF.from==='1448/06/10'){S.absF.e='لا يتجاوز التاريخ الماضي 7 أيام (أقدم تاريخ 1448/06/14)';K();return}S.modal=null;say('سُجّل «غائب بعذر»')},
+ ftab(d){S.ftab=d.v;K()},
+ schask(d){S.modal={t:'sch',id:+d.v};K()},schdo(d){const f=S.F.find(x=>x.id===+d.v);f.st='sch';f.when='الأحد 1448/06/22 · 5:00 م مكة';S.modal=null;say('حُدد الموعد وأُبلغ الطالب')},
+ exam(d){S.ex={id:+d.v,q:[10,9.5,9,9.75,10,9.5,10,9,10,9.75].slice(0,S.form.q)};S.scr='exam';render()},
+ examsave(){const f=S.F.find(x=>x.id===S.ex.id),q=S.ex.q,pct=Math.round(q.reduce((a,b)=>a+(+b||0),0)/q.length*10);
+  if(pct>=S.form.pass){f.st='pass';S.G.unshift({n:f.n,prog:f.prog,br:f.plan.split(' · ')[0],rw:'حفص',t:f.t,d:'1448/06/21',cty:'مصر',no:'MQR-2026-000015'});S.cap.used--;S.scr='final';S.modal={t:'pass',id:f.id,pct}}
+  else{S.fail={k:null,r:[],e:null};S.scr='final';S.modal={t:'fail',id:f.id,pct}}render()},
+ flk(d){S.fail.k=d.v;S.fail.e=null;K()},flr(d){const i=+d.v,r=S.fail.r,j=r.indexOf(i);j<0?r.push(i):r.splice(j,1);K()},
+ faildo(){const c=S.fail;if(!c.k){c.e='اختر أحد الخيارين';K();return}if(c.k==='r'&&!c.r.length){c.e='اختر مقررًا واحدًا على الأقل';K();return}const f=S.F.find(x=>x.id===S.modal.id);f.st=c.k==='t'?'failT':'failR';f.re='1448/07/05';f.rv='0 من '+c.r.length+' مقررات';S.modal=null;say(c.k==='t'?'حُدد موعد الإعادة 1448/07/05':'أُضيفت مقررات المراجعة لخطة الطالب')},
+ hform(){S.hf={name:'',gender:'ذكور',teacher:'',hall:'',rw:[],days:[],s:19,e:20,cap:12,age:'',err:{}};S.modal={t:'hform'};K()},
+ hfset(d){S.hf[d.k]=d.v;S.hf.teacher='';K()},hftog(d){const a=S.hf[d.k],i=a.indexOf(d.v);i<0?a.push(d.v):a.splice(i,1);delete S.hf.err[d.k];K()},
+ hfsave(){const e=hfcheck();S.hf.err=e;if(Object.keys(e).length){K();return}const f=S.hf;S.H.push({id:'h'+(S.H.length+1),n:f.name,t:f.teacher,g:f.gender,hall:f.hall,rw:[...f.rw],days:[...f.days],s:+f.s,e:+f.e,cap:+f.cap,c:0,prog:'حفظ القرآن الكريم كاملًا',age:f.age?+f.age:null});S.modal=null;say('أُضيفت الحلقة')},
+ hladd(){S.hl={n:'',u:'',on:true,err:{}};S.modal={t:'hl',i:null};K()},
+ hledit(d){const h=S.halls[+d.v];S.hl={n:h.n,u:h.u,on:h.on,err:{}};S.modal={t:'hl',i:+d.v};K()},
+ hlon(){S.hl.on=!S.hl.on;K()},
+ hlsave(){const f=S.hl,e={},i=S.modal.i;if(!f.n.trim())e.n='اسم القاعة مطلوب';else if(S.halls.some((h,j)=>h.n===f.n.trim()&&j!==i))e.n='يوجد قاعة بهذا الاسم';if(!f.u.trim())e.u='رابط القاعة مطلوب';else if(!/^https?:\/\/[^\s.]+\.[^\s]+/.test(f.u.trim()))e.u='أدخل رابطًا صالحًا يبدأ بـ https://';f.err=e;if(Object.keys(e).length){K();return}
+  if(i!=null)Object.assign(S.halls[i],{n:f.n.trim(),u:f.u.trim(),on:f.on,rep:0});else S.halls.push({n:f.n.trim(),u:f.u.trim(),on:f.on});S.emptyHalls=false;S.modal=null;say(i!=null?'حُفظت القاعة':'أُضيفت القاعة')},
+ hldel(d){S.modal={t:'hldel',i:+d.v};K()},hldeldo(d){S.halls.splice(+d.v,1);S.modal=null;say('حُذفت القاعة')},
+ repdone(d){S.halls[+d.v].rep=0;say('أُغلق البلاغ')},
+ preg(){S.pf.reg=!S.pf.reg;K()},
+ supadd(){S.su={k:'ex',err:{}};S.modal={t:'su'};K()},suk(d){S.su={k:d.v,err:{}};K()},sug(d){S.su.g=d.v;delete S.su.err.g;K()},
+ sudo(){const u=S.su,e={};if(u.k==='ex'){if(!u.p)e.p='اختر المشرف'}else{if(!(u.n||'').trim())e.n='الاسم مطلوب';if(!u.g)e.g='الجنس إلزامي للإسناد للمقرأة'}u.err=e;if(Object.keys(e).length){K();return}S.SU.push({n:u.k==='ex'?u.p:u.n,g:u.k==='ex'?'ذكر':u.g,ph:'+966 5•• ••• 100',src:u.k==='ex'?'من مشرفي المجمع':'مشرف جديد',d:'1448/06/21'});S.modal=null;say('أُضيف المشرف للمقرأة')},
+ formask(){S.modal={t:'form'};K()},
+ fdadd(){S.form.ded.push(['بند جديد',0.25]);K()},
+ formsave(){S.form.edited=true;if(S.ex)S.ex.q=[10,9.5,9,9.75,10,9.5,10,9,10,9.75].slice(0,S.form.q);S.modal=null;say('حُفظت استمارة الاختبار الختامي')},
+ formreset(){S.form={q:5,pass:70,appr:'فوري',ded:[['خطأ في الحفظ',1],['تردد',0.5],['خطأ في التجويد',0.25],['تنبيه',0.25]],edited:false};if(S.ex)S.ex.q=[10,9.5,9,9.75,10];S.modal=null;say('استُعيدت الاستمارة الافتراضية')},
+};
+const desk=()=>document.getElementById('desk');
+document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el||!desk().contains(el))return;A[el.dataset.act]&&A[el.dataset.act]({...el.dataset},e)});
+document.addEventListener('input',e=>{const t=e.target;if(!desk().contains(t))return;if(t.dataset.hl){S.hl[t.dataset.hl]=t.value}if(t.dataset.hf&&['name','cap','age'].includes(t.dataset.hf))S.hf[t.dataset.hf]=t.value;if(t.dataset.pf){S.pf[t.dataset.pf]=t.value;const b=desk().querySelector('.card .btn[disabled]');if(b)b.textContent=t.value||'التسجيل مغلق'}if(t.dataset.fm==='pass'){S.form.pass=+t.value||70}if(t.dataset.su==='n'){S.su.n=t.value}if(t.dataset.fd!=null){S.form.ded[+t.dataset.fd][0]=t.value}if(t.dataset.q!=null){S.ex.q[+t.dataset.q]=t.value;const q=S.ex.q,pc=Math.round(q.reduce((a,b)=>a+(+b||0),0)/q.length*10),r=desk().querySelector('#xres');desk().querySelector('#xpct').textContent=pc+'%';r.className='pill '+(pc>=S.form.pass?'p-ok':'p-err');r.textContent=pc>=S.form.pass?'ناجح':'راسب'}});
+document.addEventListener('change',e=>{const t=e.target;if(!desk().contains(t))return;if(t.dataset.hf&&!['name','cap','age'].includes(t.dataset.hf)){S.hf[t.dataset.hf]=t.value;delete S.hf.err[t.dataset.hf];K()}if(t.dataset.ab){S.absF.from=t.value;S.absF.e=null;K()}if(t.dataset.fm==='q'){S.form.q=+t.value}if(t.dataset.vh){S.vh=t.value;K()}if(t.dataset.su==='p'){S.su.p=t.value;delete S.su.err.p}if(t.dataset.fv!=null){S.form.ded[+t.dataset.fv][1]=+t.value}});
+function fit(){const f=document.getElementById('fit'),sc=Math.min(1,f.clientWidth/1366);desk().style.transform=`scale(${sc})`;f.style.height=820*sc+'px'}
+window.addEventListener('resize',fit);
+const st=o=>()=>{S=Object.assign(fresh(),o)};
+const SC=[
+ ['g','الدخول والرئيسية'],
+ ['اختيار الحساب عند الدخول',st({}),'لمن له حساب في المقرأة والمجمع. اختر «مقرأة النور الإلكترونية».'],
+ ['الرئيسية',st({scr:'home'}),'ست بطاقات تحتاج إجراء، ثم متابعة اليوم الحالية. القائمة الجانبية بترتيب D130.'],
+ ['حلقات لم تبدأ',st({scr:'home',modal:{t:'late'}}),''],
+ ['g','الانتظار والتسكين'],
+ ['قائمة الانتظار',st({scr:'wait'}),'حدد أكثر من طالب لتظهر «قبول وتسكين جماعي». الخطة من طلب الطالب في عمود البرنامج.'],
+ ['قبول فردي — اختيار الحلقة',st({scr:'wait',acc:{id:1,step:1,h:null},modal:{t:'acc'}}),''],
+ ['قبول فردي — خطة الطالب مختارة',st({scr:'wait',acc:{id:1,step:2,h:'h2'},modal:{t:'acc'}}),'الحقول تتبع هيكل الخطة (فئة ومسار، أو مستوى، أو مرحلة).'],
+ ['قبول فردي — امتلأت سعة المقرأة لحظيًا',st({scr:'wait',raceCap:true,acc:{id:1,step:3,h:'h2'},modal:{t:'acc'}}),'اضغط «قبول وتسكين».'],
+ ['قبول جماعي — اختيار الحلقة',st({scr:'wait',sel:[1,3,5,6,7],bulk:{step:1,h:null,pick:null},modal:{t:'bulk'}}),'حلقة واحدة لكل المحددين، مع عدد من يناسبها.'],
+ ['قبول جماعي — المقاعد أقل من المحددين',()=>{S=fresh();S.scr='wait';S.sel=[1,3,5,6,7];S.H[0].c=13;S.bulk={step:2,h:'h1',pick:null};S.modal={t:'bulk'}},'يناسب «حلقة الإتقان» 3 من 5 (مريم: الجنس، محمد أمين: الرواية)، والمقاعد 2 فقط: يُحدد الأقدم ويمكن التغيير.'],
+ ['تخطي الأسبقية',()=>{S=fresh();S.scr='wait';S.skipR=null;S.modal={t:'skip',id:4}},''],
+ ['رفض الطلب',st({scr:'wait',rejR:null,modal:{t:'rej',id:2}}),''],
+ ['سعة المقرأة ممتلئة',st({scr:'wait',fullCap:true,menu:'w1'}),''],
+ ['قائمة الانتظار فارغة',st({scr:'wait',emptyW:true}),''],
+ ['g','الطلاب والتخرج'],
+ ['قائمة الطلاب',st({scr:'stu'}),'الحالات: مرشح، مجدول، راسب بعد مدة، راسب بمراجعة، منقطع.'],
+ ['ملف الطالب — طلبات الغياب',st({scr:'sprof'}),'طلب بأثر رجعي (حتى 7 أيام) وطلب مستقبلي. جرّب «تسجيل عذر غياب» بتاريخ أقدم من 7 أيام.'],
+ ['ملف الطالب — السجل الأكاديمي',st({scr:'sprof',ptab:'acad'}),'تبويب جديد: سطر لكل برنامج.'],
+ ['الاختبارات الختامية',st({scr:'final'}),'الترشيح من المعلم (شاشة الرصد). سلمان «مرشح»: حدد موعدًا بتوقيت مكة أو أجرِ الاختبار مباشرة.'],
+ ['استمارة الاختبار الختامي',st({scr:'final',modal:{t:'form'}}),'الافتراضية من الاختبار المرحلي، ويعدّلها مشرف المقرأة: عدد الأسئلة، درجة النجاح، بنود الخصم.'],
+ ['إجراء الاختبار الختامي',()=>{S=fresh();S.ex={id:1,q:[10,9.5,9,9.75,10]};S.scr='exam'},'الاستمارة المستخدمة أعلى الصفحة مع «تعديل الاستمارة». «اعتماد النتيجة» بنجاح: يصبح خريجًا فورًا. غيّر الدرجات لأقل من 7 لترى الرسوب.'],
+ ['نجح — أصبح خريجًا',()=>{S=fresh();S.scr='final';S.F[0].st='pass';S.cap.used--;S.modal={t:'pass',id:1,pct:96}},'الشهادة تصدر معتمدة تلقائيًا لحظة النجاح.'],
+ ['رسب — خياران',()=>{S=fresh();S.scr='final';S.fail={k:'r',r:[0,2],e:null};S.modal={t:'fail',id:1,pct:62}},''],
+ ['راسب ينتظر إعادة الترشيح',st({scr:'final',ftab:'fail'}),'المدة مقترحة فقط؛ زر «إعادة ترشيح» يظهر للمعلم في أي وقت.'],
+ ['لا يوجد مرشحون',st({scr:'final',emptyF:true}),''],
+ ['الخريجون',st({scr:'grad'}),''],
+ ['الخريجون — فارغة',st({scr:'grad',emptyG:true}),''],
+ ['الشهادات — إتمام البرنامج',st({scr:'cert'}),'نوع خامس في وحدة الشهادات الحالية، يصدر معتمدًا تلقائيًا.'],
+ ['g','الحلقات والقاعات'],
+ ['قائمة الحلقات',st({scr:'sec'}),''],
+ ['إضافة حلقة',()=>{S=fresh();S.scr='sec';A.hform()},'جرّب: قاعة الفجر + ماجد + الأحد 7:00 م مكة لترى التعارض.'],
+ ['المشرفين',st({scr:'sups'}),'جديد: مشرف المقرأة يضيف المشرفين من حساب المقرأة. الأول يحدده مدير النظام (D140).'],
+ ['إضافة مشرف',()=>{S=fresh();S.scr='sups';S.su={k:'ex',err:{}};S.modal={t:'su'}},'من مشرفي المجمع الحاليين أو مشرف جديد (الجنس إلزامي).'],
+ ['زيارة حلقة قرآنية',st({scr:'visit'}),'مضافة لحساب المقرأة تحت «إدارة الحلقات». الجلسة المباشرة لنفس الجنس فقط.'],
+ ['زيارة حلقة — جنس مختلف',st({scr:'visit',vh:'h6'}),''],
+ ['القاعات + بلاغ رابط',st({scr:'halls'}),'بلاغ من المعلم أن الرابط لا يعمل (D131). «قاعة الاحتياط» بلا رابط.'],
+ ['قاعة — رابط فارغ أو غير صالح',()=>{S=fresh();S.scr='halls';S.hl={n:'قاعة العصر',u:'zoom/123',on:true,err:{u:'أدخل رابطًا صالحًا يبدأ بـ https://'}};S.modal={t:'hl',i:null}},''],
+ ['حذف قاعة مرتبطة',st({scr:'halls',modal:{t:'hldel',i:1}}),''],
+ ['القاعات — فارغة',st({scr:'halls',emptyHalls:true}),''],
+ ['g','الإعدادات'],
+ ['برامج المقرأة',st({scr:'progs'}),''],
+ ['برنامج مغلق — العبارة التسويقية',st({scr:'pform'}),'اكتب العبارة لترى المعاينة.'],
+ ['إعدادات المقرأة',st({scr:'mset'}),'مدينة المقرأة قابلة للتحديد، ولا جنس مستهدف.'],
+ ['تجديد الاشتراك — سعة المقرأة',st({scr:'sub'}),''],
+];
+let cur=1;
+function run(i){if(SC[i][0]==='g')return;cur=i;SC[i][1]();document.getElementById('cap').textContent=SC[i][2]||'';render()}
+function sync(){document.querySelectorAll('.sc').forEach(b=>b.setAttribute('aria-current',+b.dataset.i===cur));document.getElementById('msel').value=cur}
+document.getElementById('list').innerHTML=SC.map((s,i)=>s[0]==='g'?`<h2>${s[1]}</h2>`:`<button class="sc" data-i="${i}">${s[0]}</button>`).join('');
+document.getElementById('msel').innerHTML=SC.map((s,i)=>s[0]==='g'?`<option disabled>— ${s[1]} —</option>`:`<option value="${i}">${s[0]}</option>`).join('');
+document.getElementById('list').onclick=e=>{const b=e.target.closest('.sc');if(b)run(+b.dataset.i)};
+document.getElementById('msel').onchange=e=>run(+e.target.value);
+run(1);
+
+</script>
+
+</body></html>
